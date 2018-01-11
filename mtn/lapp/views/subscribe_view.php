@@ -828,7 +828,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								window.location.replace(url);	
 							}, 2000);
 
-						}else if(res.toUpperCase() == 'YOU HAVE AN ACTIVE SUBSCRIPTION SUBSCRIPTION. ENJOY COMEDY CLIPS ON LAFFHUB')
+						}else if(res.toUpperCase() == 'YOU HAVE AN ACTIVE SUBSCRIPTION. ENJOY COMEDY CLIPS ON LAFFHUB')
 						{
 							m=res;
 							bootstrap_alert.warning(m);					
