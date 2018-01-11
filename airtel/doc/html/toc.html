@@ -1,0 +1,1082 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+	<title>Healthy Living- Table of Contents</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.9.2.132">
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/silver-theme/jquery-ui-1.8.12.custom.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/dynatree/chm/ui.dynatree.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="css/toc.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#tabs .ui-widget-header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.8.17.custom.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/jquery.dynatree.min.js"></script>
+	<script type="text/javascript" src="js/hndjsse.js"></script>
+	<script type="text/javascript">
+	
+		window.bSearchDataLoaded = false;
+		var sHelpIdToActivate = '';
+	
+		$(document).ready(function()
+		{
+			var sAnchorName = '';
+			try { sAnchorName = top.location.href.substring(top.location.href.lastIndexOf("#") + 1, top.location.href.length); }
+			catch(err) { sAnchorName = ''; }
+			var nSelectedTab = 0;
+			if (sAnchorName == '_index') nSelectedTab = 1
+			else if (sAnchorName == '_search') nSelectedTab = 2;			
+			$("#tabs").tabs({
+				selected: nSelectedTab,
+				select: function(event, ui) { HideKwPopup(); }
+			});
+			
+			// Toc
+			if ($("#tab-toc").length) {
+				$("#tab-toc").dynatree({
+					clickFolderMode: 1,
+					debugLevel: 0,
+					imagePath: 'css/dynatree/chm/',
+					onActivate: function(node){
+						if ($("#tab-keywords").length && $("#tab-keywords").dynatree && $("#tab-keywords").dynatree("getTree") && $("#tab-keywords").dynatree("getTree").activateKey)
+							$("#tab-keywords").dynatree("getTree").activateKey(null);
+						if(node.data.href && node.data.href != '#'){
+							window.open(node.data.href, node.data.target);
+						}
+					}
+				});
+				// Expand all nodes if required
+				$("#tab-toc").dynatree("getRoot").visit(function(node){
+						node.expand(true);
+					});
+				// Select the active help id
+				if (sHelpIdToActivate != '') $("#tab-toc").dynatree("getTree").activateKey(sHelpIdToActivate);
+			}
+			
+			// Keywords
+			
+			if ($("#tab-keywords").length) {
+				$("#tab-keywords").dynatree({
+					clickFolderMode: 1,
+					debugLevel: 0,
+					imagePath: 'css/dynatree/chm/',
+					onClick: function(node, event){
+						HideKwPopup();
+						if (node.data && node.data.click)
+						{
+							var aRefList = null;
+							eval('aRefList=' + node.data.click);
+							if (ShowKwPopup(node.li, aRefList))
+							{
+								if ($("#tab-toc") && $("#tab-toc").dynatree && $("#tab-toc").dynatree("getTree") && $("#tab-toc").dynatree("getTree").activateKey)
+									$("#tab-toc").dynatree("getTree").activateKey(null);
+								if(node.data.href && node.data.href != '#'){
+									window.open(node.data.href, node.data.target);
+								}
+							}
+						}
+					}
+				});
+				// Expand all nodes if required
+				$("#tab-keywords").dynatree("getRoot").visit(function(node){
+						node.expand(true);
+					});
+				}
+			
+			// Load search data
+			(function() {
+				var se = document.createElement('script'); se.type = 'text/javascript'; se.async = true;
+				se.src = 'js/hndsd.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(se, s);
+			})();
+		});
+		
+		$('body').click(function() {
+			HideKwPopup();
+		});
+		
+		function SelectTocItem(sHelpId)
+		{
+			if ($("#tab-toc").length && $("#tab-toc").dynatree && $("#tab-toc").dynatree("getTree") && $("#tab-toc").dynatree("getTree").getNodeByKey) {
+				$("#tab-toc").dynatree("getTree").getNodeByKey(sHelpId).activateSilently();
+			}
+			else {
+				sHelpIdToActivate = sHelpId;
+			}
+		}
+		
+		function HideKwPopup()
+		{
+			if($("#popupMenu")) $("#popupMenu").remove();
+		}
+		
+		function ShowKwPopup(oSender, aLinks)
+		{
+			HideKwPopup();
+			if (!aLinks || !aLinks.length || aLinks.length == 0) return false
+			else if (aLinks.length == 1) return true
+			else
+			{
+				var oParentDiv = document.createElement("DIV");
+				oParentDiv.id = "popupMenu";
+				var oLink = null;
+				// Close button
+				oLink = document.createElement("SPAN");
+				oLink.className = "close-button";
+				oLink.innerHTML = "X";
+				oLink.href = "#";
+				oLink.onclick = HideKwPopup;
+				oParentDiv.appendChild(oLink);
+				// Items
+				for (var nCnt=0; nCnt<aLinks.length; nCnt++)
+				{
+					oLink = document.createElement("A");
+					oLink.innerHTML = aLinks[nCnt][0];
+					oLink.href = aLinks[nCnt][1];
+					oLink.target = "FrameMain";
+					oLink.onclick = HideKwPopup;
+					oParentDiv.appendChild(oLink);
+				}
+				document.body.appendChild(oParentDiv);
+				var pos = $(oSender).offset(); 
+				var height = $(oSender).height();
+				$(oParentDiv).css({
+					"left": (pos.left+20) + "px",
+					"top": (pos.top + height + 5) + "px"
+				});
+				$(oParentDiv).show();
+				return false;
+			}
+		}
+		
+		function PerformSearch()
+		{
+			if (!window.bSearchDataLoaded) {
+				$("#search_results").html("Search engine data hasn't been fully loaded yet or an error occurred while loading it. This usually happens when documentation is browsed locally.");
+				return;
+			}
+			sValue = $("#search_value").val();
+			$("#search_results").html('Searching...');
+			var oSearchEngine = new HndJsSe;
+			oSearchEngine.ParseInput(sValue);			
+			oSearchEngine.PerformSearch();
+			if (!oSearchEngine.aResults || !oSearchEngine.aResults.length)
+			{
+				$("#search_results").html('No results found.');
+			}
+			else
+			{
+				$("#search_results").html('<div id="search_results_content"></div>');
+				var oUl = $("#search_results_content").append("<ul id='lr'></ul>").find("ul");
+				for (var nCnt = 0; nCnt < oSearchEngine.aResults.length; nCnt++)
+				{
+					if (oSearchEngine.aResults[nCnt][0] < aTl.length)
+					{
+						oUl.append("<li><a href='" + aTl[oSearchEngine.aResults[nCnt][0]][0] + "?search=" + escape(sValue) + "' target='FrameMain'>" + unescape(aTl[oSearchEngine.aResults[nCnt][0]][1]) + "</a></li>");
+					}
+				}
+				// Tree
+				$("#search_results_content").dynatree({
+					clickFolderMode: 1,
+					debugLevel: 0,
+					imagePath: 'css/dynatree/chm/',
+					onActivate: function(node){
+						if ($("#search_results_content") && $("#search_results_content").dynatree && $("#search_results_content").dynatree("getTree") && $("#search_results_content").dynatree("getTree").activateKey)
+							$("#search_results_content").dynatree("getTree").activateKey(null);
+						if(node.data.href && node.data.href != '#'){
+							window.open(node.data.href, node.data.target);
+						}
+					}
+				});
+			}
+		}
+	</script>
+</head>
+
+<body>
+
+	<div id="tabs">
+		<ul>
+			<li><a href="#tab-toc">Contents</a></li>
+			<li><a href="#tab-keywords">Index</a></li>
+			<li><a href="#tab-search">Search</a></li>
+			</ul>
+		<div id="tab-toc">
+			<ul id="toc" class="">
+
+				<li class="" id="AboutHealthyLiving" data="">
+							<a
+							href="AboutHealthyLiving.html"
+							target="FrameMain">
+								About Healthy Living</a>
+
+				</li><li class="" id="Login" data="">
+							<a
+							href="Login.html"
+							target="FrameMain">
+								Login</a>
+
+				</li><li class="" id="QuickVideoStreamingProcess" data="">
+							<a
+							href="QuickVideoStreamingProcess.html"
+							target="FrameMain">
+								Quick Video Streaming Process</a>
+
+				</li><li class="" id="Dashboard" data="">
+							<a
+							href="Dashboard.html"
+							target="FrameMain">
+								Dashboard</a>
+
+				</li><li class="folder" id="EditUserInformation" data="">
+							<a
+							href="EditUserInformation.html"
+							target="FrameMain">
+								Edit User Information</a>
+
+				<ul><li class="" id="EditProfile" data="">
+							<a
+							href="EditProfile.html"
+							target="FrameMain">
+								Edit Profile</a>
+
+				</li><li class="" id="ChangePassword" data="">
+							<a
+							href="ChangePassword.html"
+							target="FrameMain">
+								 Change Password</a>
+
+				</li></ul></li><li class="folder" id="MainTasks" data="">
+							<a
+							href="MainTasks.html"
+							target="FrameMain">
+								Main Tasks</a>
+
+				<ul><li class="" id="RSSFeeds" data="">
+							<a
+							href="RSSFeeds.html"
+							target="FrameMain">
+								RSS Feeds</a>
+
+				</li><li class="folder" id="Videos" data="">
+							<a
+							href="Videos.html"
+							target="FrameMain">
+								Videos</a>
+
+				<ul><li class="" id="UploadVideos" data="">
+							<a
+							href="UploadVideos.html"
+							target="FrameMain">
+								Upload Videos</a>
+
+				</li><li class="" id="AddVideoDetails" data="">
+							<a
+							href="AddVideoDetails.html"
+							target="FrameMain">
+								Add Video Details</a>
+
+				</li><li class="" id="EncodeVideo" data="">
+							<a
+							href="EncodeVideo.html"
+							target="FrameMain">
+								Encode Video</a>
+
+				</li></ul></li><li class="" id="Subscribers" data="">
+							<a
+							href="Subscribers.html"
+							target="FrameMain">
+								Subscribers</a>
+
+				</li><li class="" id="AuditTrail" data="">
+							<a
+							href="AuditTrail.html"
+							target="FrameMain">
+								Audit Trail</a>
+
+				</li></ul></li><li class="folder" id="SettingsUsers" data="">
+							<a
+							href="SettingsUsers.html"
+							target="FrameMain">
+								Settings/Users</a>
+
+				<ul><li class="" id="VideoCategories" data="">
+							<a
+							href="VideoCategories.html"
+							target="FrameMain">
+								Video Categories</a>
+
+				</li><li class="" id="SetVideoDistribution" data="">
+							<a
+							href="SetVideoDistribution.html"
+							target="FrameMain">
+								Set Video Distribution</a>
+
+				</li><li class="" id="PortalSettings" data="">
+							<a
+							href="PortalSettings.html"
+							target="FrameMain">
+								Portal Settings</a>
+
+				</li><li class="" id="UserAccount" data="">
+							<a
+							href="UserAccount.html"
+							target="FrameMain">
+								User Account</a>
+
+				</li></ul></li></ul>
+		</div>
+		
+		<div id="tab-keywords">
+			<ul id="keywords">
+
+				<li class="file" data="click:'[[\'Edit Profile\',\'EditProfile.html\']]'">
+							<a
+								href="EditProfile.html"
+								target="FrameMain"
+								onClick="[['Edit Profile','EditProfile.html']]"
+								>
+								Account</a>
+
+				</li><li class="file" data="click:'[[\'RSS Feeds\',\'RSSFeeds.html\']]'">
+							<a
+								href="RSSFeeds.html"
+								target="FrameMain"
+								onClick="[['RSS Feeds','RSSFeeds.html']]"
+								>
+								Active Feed</a>
+
+				</li><li class="file" data="click:'[[\'Add Video Details\',\'AddVideoDetails.html\']]'">
+							<a
+								href="AddVideoDetails.html"
+								target="FrameMain"
+								onClick="[['Add Video Details','AddVideoDetails.html']]"
+								>
+								Add Video Details</a>
+
+				</li><li class="file" data="click:'[[\'Set Video Distribution\',\'SetVideoDistribution.html\']]'">
+							<a
+								href="SetVideoDistribution.html"
+								target="FrameMain"
+								onClick="[['Set Video Distribution','SetVideoDistribution.html']]"
+								>
+								Amazon distribution</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Amazon S3 Image Thumbnail Bucket</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Amazon S3 Input Bucket</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Amazon S3 Output Bucket</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Amazon Web Service Key</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Amazon Web Service Secret</a>
+
+				</li><li class="file" data="click:'[[\'Main Tasks\',\'MainTasks.html\'],[\'Audit Trail\',\'AuditTrail.html\']]'">
+							<a
+								href="MainTasks.html"
+								target="FrameMain"
+								onClick="[['Main Tasks','MainTasks.html'],['Audit Trail','AuditTrail.html']]"
+								>
+								Audit Trail</a>
+
+				</li><li class="file" data="click:'[[\'Audit Trail\',\'AuditTrail.html\']]'">
+							<a
+								href="AuditTrail.html"
+								target="FrameMain"
+								onClick="[['Audit Trail','AuditTrail.html']]"
+								>
+								Audit Trail</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Bulk Account Sms Url</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Bulk Sms Account Password</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Bulk Sms Acount Username</a>
+
+				</li><li class="file" data="click:'[[\'Video Categories\',\'VideoCategories.html\']]'">
+							<a
+								href="VideoCategories.html"
+								target="FrameMain"
+								onClick="[['Video Categories','VideoCategories.html']]"
+								>
+								Categories</a>
+
+				</li><li class="file" data="click:'[[\' Change Password\',\'ChangePassword.html\']]'">
+							<a
+								href="ChangePassword.html"
+								target="FrameMain"
+								onClick="[[' Change Password','ChangePassword.html']]"
+								>
+								Change Password</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Company Email</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Company Logo</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Company Name</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Company Phone</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Company Website</a>
+
+				</li><li class="file" data="click:'[[\' Change Password\',\'ChangePassword.html\']]'">
+							<a
+								href="ChangePassword.html"
+								target="FrameMain"
+								onClick="[[' Change Password','ChangePassword.html']]"
+								>
+								Confirm Password</a>
+
+				</li><li class="file" data="click:'[[\'Dashboard\',\'Dashboard.html\']]'">
+							<a
+								href="Dashboard.html"
+								target="FrameMain"
+								onClick="[['Dashboard','Dashboard.html']]"
+								>
+								Dashboard</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Default Network</a>
+
+				</li><li class="file" data="click:'[[\'Set Video Distribution\',\'SetVideoDistribution.html\']]'">
+							<a
+								href="SetVideoDistribution.html"
+								target="FrameMain"
+								onClick="[['Set Video Distribution','SetVideoDistribution.html']]"
+								>
+								Distribution</a>
+
+				</li><li class="file" data="click:'[[\' Change Password\',\'ChangePassword.html\']]'">
+							<a
+								href="ChangePassword.html"
+								target="FrameMain"
+								onClick="[[' Change Password','ChangePassword.html']]"
+								>
+								Edit Password</a>
+
+				</li><li class="file" data="click:'[[\'Edit User Information\',\'EditUserInformation.html\']]'">
+							<a
+								href="EditUserInformation.html"
+								target="FrameMain"
+								onClick="[['Edit User Information','EditUserInformation.html']]"
+								>
+								Edit User</a>
+
+				</li><li class="file" data="click:'[[\'About Healthy Living\',\'AboutHealthyLiving.html\']]'">
+							<a
+								href="AboutHealthyLiving.html"
+								target="FrameMain"
+								onClick="[['About Healthy Living','AboutHealthyLiving.html']]"
+								>
+								eFluzx</a>
+
+				</li><li class="file" data="click:'[[\'Encode Video\',\'EncodeVideo.html\']]'">
+							<a
+								href="EncodeVideo.html"
+								target="FrameMain"
+								onClick="[['Encode Video','EncodeVideo.html']]"
+								>
+								Elastic Transcoder</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Emergency Emails</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Emergency Numbers</a>
+
+				</li><li class="file" data="click:'[[\'Encode Video\',\'EncodeVideo.html\']]'">
+							<a
+								href="EncodeVideo.html"
+								target="FrameMain"
+								onClick="[['Encode Video','EncodeVideo.html']]"
+								>
+								Encode Video</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Google</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Google Url Shortener</a>
+
+				</li><li class="file" data="click:'[[\'About Healthy Living\',\'AboutHealthyLiving.html\']]'">
+							<a
+								href="AboutHealthyLiving.html"
+								target="FrameMain"
+								onClick="[['About Healthy Living','AboutHealthyLiving.html']]"
+								>
+								Health</a>
+
+				</li><li class="file" data="click:'[[\'About Healthy Living\',\'AboutHealthyLiving.html\']]'">
+							<a
+								href="AboutHealthyLiving.html"
+								target="FrameMain"
+								onClick="[['About Healthy Living','AboutHealthyLiving.html']]"
+								>
+								LaffHub</a>
+
+				</li><li class="file" data="click:'[[\'About Healthy Living\',\'AboutHealthyLiving.html\']]'">
+							<a
+								href="AboutHealthyLiving.html"
+								target="FrameMain"
+								onClick="[['About Healthy Living','AboutHealthyLiving.html']]"
+								>
+								Healthy</a>
+
+				</li><li class="file" data="click:'[[\'About Healthy Living\',\'AboutHealthyLiving.html\']]'">
+							<a
+								href="AboutHealthyLiving.html"
+								target="FrameMain"
+								onClick="[['About Healthy Living','AboutHealthyLiving.html']]"
+								>
+								Healthy Living</a>
+
+				</li><li class="file" data="click:'[[\'About Healthy Living\',\'AboutHealthyLiving.html\']]'">
+							<a
+								href="AboutHealthyLiving.html"
+								target="FrameMain"
+								onClick="[['About Healthy Living','AboutHealthyLiving.html']]"
+								>
+								Healthy Tips</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Input Bucket</a>
+
+				</li><li class="file" data="click:'[[\'Encode Video\',\'EncodeVideo.html\']]'">
+							<a
+								href="EncodeVideo.html"
+								target="FrameMain"
+								onClick="[['Encode Video','EncodeVideo.html']]"
+								>
+								Job</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								JWPlayer Api Key</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								JWPlayer Api Secret</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								JWPlayer Id</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								JWplayer Key</a>
+
+				</li><li class="file" data="click:'[[\'Login\',\'Login.html\']]'">
+							<a
+								href="Login.html"
+								target="FrameMain"
+								onClick="[['Login','Login.html']]"
+								>
+								Login</a>
+
+				</li><li class="file" data="click:'[[\'Main Tasks\',\'MainTasks.html\']]'">
+							<a
+								href="MainTasks.html"
+								target="FrameMain"
+								onClick="[['Main Tasks','MainTasks.html']]"
+								>
+								Main Tasks</a>
+
+				</li><li class="file" data="click:'[[\' Change Password\',\'ChangePassword.html\']]'">
+							<a
+								href="ChangePassword.html"
+								target="FrameMain"
+								onClick="[[' Change Password','ChangePassword.html']]"
+								>
+								New Password</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Number Of Videos/Day</a>
+
+				</li><li class="file" data="click:'[[\' Change Password\',\'ChangePassword.html\']]'">
+							<a
+								href="ChangePassword.html"
+								target="FrameMain"
+								onClick="[[' Change Password','ChangePassword.html']]"
+								>
+								Old Password</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Output Bucket</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Parameters</a>
+
+				</li><li class="file" data="click:'[[\'Login\',\'Login.html\']]'">
+							<a
+								href="Login.html"
+								target="FrameMain"
+								onClick="[['Login','Login.html']]"
+								>
+								Password</a>
+
+				</li><li class="file" data="click:'[[\' Change Password\',\'ChangePassword.html\']]'">
+							<a
+								href="ChangePassword.html"
+								target="FrameMain"
+								onClick="[[' Change Password','ChangePassword.html']]"
+								>
+								Password</a>
+
+				</li><li class="file" data="click:'[[\'Encode Video\',\'EncodeVideo.html\']]'">
+							<a
+								href="EncodeVideo.html"
+								target="FrameMain"
+								onClick="[['Encode Video','EncodeVideo.html']]"
+								>
+								Pipeline</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Portal Settings</a>
+
+				</li><li class="file" data="click:'[[\'Quick Video Streaming Process\',\'QuickVideoStreamingProcess.html\']]'">
+							<a
+								href="QuickVideoStreamingProcess.html"
+								target="FrameMain"
+								onClick="[['Quick Video Streaming Process','QuickVideoStreamingProcess.html']]"
+								>
+								Process Summary</a>
+
+				</li><li class="file" data="click:'[[\'Edit User Information\',\'EditUserInformation.html\']]'">
+							<a
+								href="EditUserInformation.html"
+								target="FrameMain"
+								onClick="[['Edit User Information','EditUserInformation.html']]"
+								>
+								Profile</a>
+
+				</li><li class="file" data="click:'[[\'Edit Profile\',\'EditProfile.html\']]'">
+							<a
+								href="EditProfile.html"
+								target="FrameMain"
+								onClick="[['Edit Profile','EditProfile.html']]"
+								>
+								Profile</a>
+
+				</li><li class="file" data="click:'[[\'Quick Video Streaming Process\',\'QuickVideoStreamingProcess.html\']]'">
+							<a
+								href="QuickVideoStreamingProcess.html"
+								target="FrameMain"
+								onClick="[['Quick Video Streaming Process','QuickVideoStreamingProcess.html']]"
+								>
+								Quick Start</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Refresh Duration</a>
+
+				</li><li class="file" data="click:'[[\'Encode Video\',\'EncodeVideo.html\']]'">
+							<a
+								href="EncodeVideo.html"
+								target="FrameMain"
+								onClick="[['Encode Video','EncodeVideo.html']]"
+								>
+								Resolution</a>
+
+				</li><li class="file" data="click:'[[\'RSS Feeds\',\'RSSFeeds.html\']]'">
+							<a
+								href="RSSFeeds.html"
+								target="FrameMain"
+								onClick="[['RSS Feeds','RSSFeeds.html']]"
+								>
+								RSS Feed</a>
+
+				</li><li class="file" data="click:'[[\'Main Tasks\',\'MainTasks.html\']]'">
+							<a
+								href="MainTasks.html"
+								target="FrameMain"
+								onClick="[['Main Tasks','MainTasks.html']]"
+								>
+								RSS Feed</a>
+
+				</li><li class="file" data="click:'[[\'RSS Feeds\',\'RSSFeeds.html\']]'">
+							<a
+								href="RSSFeeds.html"
+								target="FrameMain"
+								onClick="[['RSS Feeds','RSSFeeds.html']]"
+								>
+								Set Active Feed</a>
+
+				</li><li class="file" data="click:'[[\'Set Video Distribution\',\'SetVideoDistribution.html\']]'">
+							<a
+								href="SetVideoDistribution.html"
+								target="FrameMain"
+								onClick="[['Set Video Distribution','SetVideoDistribution.html']]"
+								>
+								Set Video Distribution</a>
+
+				</li><li class="file" data="click:'[[\'Settings/Users\',\'SettingsUsers.html\']]'">
+							<a
+								href="SettingsUsers.html"
+								target="FrameMain"
+								onClick="[['Settings/Users','SettingsUsers.html']]"
+								>
+								Settings</a>
+
+				</li><li class="file" data="click:'[[\'Login\',\'Login.html\']]'">
+							<a
+								href="Login.html"
+								target="FrameMain"
+								onClick="[['Login','Login.html']]"
+								>
+								Sign in</a>
+
+				</li><li class="file" data="click:'[[\'Subscribers\',\'Subscribers.html\']]'">
+							<a
+								href="Subscribers.html"
+								target="FrameMain"
+								onClick="[['Subscribers','Subscribers.html']]"
+								>
+								Subscriber</a>
+
+				</li><li class="file" data="click:'[[\'Main Tasks\',\'MainTasks.html\']]'">
+							<a
+								href="MainTasks.html"
+								target="FrameMain"
+								onClick="[['Main Tasks','MainTasks.html']]"
+								>
+								Subscribers</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Thumbnail Bucket</a>
+
+				</li><li class="file" data="click:'[[\'Dashboard\',\'Dashboard.html\']]'">
+							<a
+								href="Dashboard.html"
+								target="FrameMain"
+								onClick="[['Dashboard','Dashboard.html']]"
+								>
+								Transactions</a>
+
+				</li><li class="file" data="click:'[[\'Encode Video\',\'EncodeVideo.html\']]'">
+							<a
+								href="EncodeVideo.html"
+								target="FrameMain"
+								onClick="[['Encode Video','EncodeVideo.html']]"
+								>
+								Transcode</a>
+
+				</li><li class="file" data="click:'[[\'Portal Settings\',\'PortalSettings.html\']]'">
+							<a
+								href="PortalSettings.html"
+								target="FrameMain"
+								onClick="[['Portal Settings','PortalSettings.html']]"
+								>
+								Update Portal</a>
+
+				</li><li class="file" data="click:'[[\'Edit Profile\',\'EditProfile.html\']]'">
+							<a
+								href="EditProfile.html"
+								target="FrameMain"
+								onClick="[['Edit Profile','EditProfile.html']]"
+								>
+								Update Profile</a>
+
+				</li><li class="file" data="click:'[[\'Upload Videos\',\'UploadVideos.html\']]'">
+							<a
+								href="UploadVideos.html"
+								target="FrameMain"
+								onClick="[['Upload Videos','UploadVideos.html']]"
+								>
+								Upload Videos</a>
+
+				</li><li class="file" data="click:'[[\'Upload Videos\',\'UploadVideos.html\']]'">
+							<a
+								href="UploadVideos.html"
+								target="FrameMain"
+								onClick="[['Upload Videos','UploadVideos.html']]"
+								>
+								Upload Videos</a>
+
+				</li><li class="file" data="click:'[[\'User Account\',\'UserAccount.html\']]'">
+							<a
+								href="UserAccount.html"
+								target="FrameMain"
+								onClick="[['User Account','UserAccount.html']]"
+								>
+								User Data</a>
+
+				</li><li class="file" data="click:'[[\'Dashboard\',\'Dashboard.html\']]'">
+							<a
+								href="Dashboard.html"
+								target="FrameMain"
+								onClick="[['Dashboard','Dashboard.html']]"
+								>
+								User Home</a>
+
+				</li><li class="file" data="click:'[[\'Login\',\'Login.html\']]'">
+							<a
+								href="Login.html"
+								target="FrameMain"
+								onClick="[['Login','Login.html']]"
+								>
+								Username</a>
+
+				</li><li class="file" data="click:'[[\'Settings/Users\',\'SettingsUsers.html\']]'">
+							<a
+								href="SettingsUsers.html"
+								target="FrameMain"
+								onClick="[['Settings/Users','SettingsUsers.html']]"
+								>
+								Users</a>
+
+				</li><li class="file" data="click:'[[\'User Account\',\'UserAccount.html\']]'">
+							<a
+								href="UserAccount.html"
+								target="FrameMain"
+								onClick="[['User Account','UserAccount.html']]"
+								>
+								Users Accounts</a>
+
+				</li><li class="file" data="click:'[[\'Video Categories\',\'VideoCategories.html\']]'">
+							<a
+								href="VideoCategories.html"
+								target="FrameMain"
+								onClick="[['Video Categories','VideoCategories.html']]"
+								>
+								Video Categories</a>
+
+				</li><li class="file" data="click:'[[\'Upload Videos\',\'UploadVideos.html\'],[\'Add Video Details\',\'AddVideoDetails.html\']]'">
+							<a
+								href="UploadVideos.html"
+								target="FrameMain"
+								onClick="[['Upload Videos','UploadVideos.html'],['Add Video Details','AddVideoDetails.html']]"
+								>
+								Video Description</a>
+
+				</li><li class="file" data="click:'[[\'Add Video Details\',\'AddVideoDetails.html\']]'">
+							<a
+								href="AddVideoDetails.html"
+								target="FrameMain"
+								onClick="[['Add Video Details','AddVideoDetails.html']]"
+								>
+								Video Details</a>
+
+				</li><li class="file" data="click:'[[\'Add Video Details\',\'AddVideoDetails.html\']]'">
+							<a
+								href="AddVideoDetails.html"
+								target="FrameMain"
+								onClick="[['Add Video Details','AddVideoDetails.html']]"
+								>
+								Video Title</a>
+
+				</li><li class="file" data="click:'[[\'Videos\',\'Videos.html\']]'">
+							<a
+								href="Videos.html"
+								target="FrameMain"
+								onClick="[['Videos','Videos.html']]"
+								>
+								Videos</a>
+
+				</li><li class="file" data="click:'[[\'Main Tasks\',\'MainTasks.html\']]'">
+							<a
+								href="MainTasks.html"
+								target="FrameMain"
+								onClick="[['Main Tasks','MainTasks.html']]"
+								>
+								Videos</a>
+
+				</li><li class="file" data="click:'[[\'User Account\',\'UserAccount.html\']]'">
+							<a
+								href="UserAccount.html"
+								target="FrameMain"
+								onClick="[['User Account','UserAccount.html']]"
+								>
+								View Users</a>
+
+				</li><li class="file" data="click:'[[\'RSS Feeds\',\'RSSFeeds.html\']]'">
+							<a
+								href="RSSFeeds.html"
+								target="FrameMain"
+								onClick="[['RSS Feeds','RSSFeeds.html']]"
+								>
+								Xml</a>
+
+				</li></ul>
+		</div>
+		
+		<div id="tab-search">
+			<form onsubmit="PerformSearch(); return false;">
+				<label for="search_value">Search:</label>
+				<input id="search_value" name="search_value"></input>
+				<input type="submit" value="Search"/>
+			</form>
+			<div id="search_results"></div>
+		</div>
+		
+		</div>
+    
+</body>
+
+</html>
+

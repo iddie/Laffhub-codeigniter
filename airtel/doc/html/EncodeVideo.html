@@ -1,0 +1,137 @@
+﻿<html>
+	
+<head>
+	<title>Encode Video</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.9.2.132">
+	<meta name="keywords" content="Encode Video, Transcode, Elastic Transcoder, Resolution, Pipeline, Job">
+	
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#topic_header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/hnd.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			if (top.frames.length == 0)
+			{
+				var sTopicUrl = top.location.href.substring(top.location.href.lastIndexOf("/") + 1, top.location.href.length);
+				top.location.href = "Healthy Living.html?" + sTopicUrl;
+			}
+			else
+			{
+				var bTocSelected = false;
+				(function waitForTOC()
+				{
+					if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
+					{
+						top.FrameTOC.SelectTocItem("EncodeVideo");
+						bTocSelected = true;
+					}
+					if (!bTocSelected) setTimeout(function() { waitForTOC(); }, 300);
+				})();
+			}
+		});
+	</script>
+	
+	</head>
+
+<body>
+
+<div id="topic_header">
+			<div id="topic_header_content">
+				<h1 id="topic_header_text">Encode Video</h1>
+				
+				<div id="topic_breadcrumb">
+					<a href="MainTasks.html">Main Tasks</a> &rsaquo;&rsaquo; <a href="Videos.html">Videos</a> &rsaquo;&rsaquo; </div>
+				</div>
+			<div id="topic_header_nav">
+				<a href="Videos.html"><img src="img/arrow_up.png" alt="Parent"/></a>
+				
+				<a href="AddVideoDetails.html"><img src="img/arrow_left.png" alt="Previous"/></a>
+				
+				<a href="Subscribers.html"><img src="img/arrow_right.png" alt="Next"/></a>
+				
+				</div>
+			<div class="clear"></div>
+		</div>
+	<div id="topic_content">
+		
+<p></p>
+<p class="rvps2"><span class="rvts6">Videos must be transcoded before they can be streamed in the video player. The Encode Video module enables transcoding of videos.</span></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts6">Video encoding on this platform involves two processed - </span><span class="rvts16">Creation Of Pipeline</span><span class="rvts6"> and </span><span class="rvts16">Creation Of Job</span><span class="rvts6">.</span></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps9"><span class="rvts18">(a) </span><span class="rvts11">Creation Of Pipeline</span></p>
+<p class="rvps2"><img alt="" style="padding : 1px;" src="lib/NewItem19.png"></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts6">Amazon Web Service (AWS) Pipeline is a web service that is used to automate the movement and transformation of data (videos). As a result of its critical nature in video processing, a pipeline is first create before any form of transcoding can take place. You don't have to create a pipeline every time you want to transcode a video file.</span></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts6">A single pipeline can be used to transcode as many video files as possible. Each pipeline is linked with an input bucket from where video files are selected, and an output bucket where transcoded files are stored. For this implementation, we will use a single pipeline for each category of videos (and related categories). Creating a pipeline has been greatly simplified by the portal.</span></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps4"><span class="rvts11">HOW TO CREATE A PIPELINE</span></p>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: decimal;">
+<li value="1" class="rvps2"><span class="rvts6">Click on the </span><span class="rvts16">Videos</span><span class="rvts6"> menu item under </span><span class="rvts18">Main Tasks</span><span class="rvts6"> menu.</span></li>
+</ol>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: decimal;">
+<li value="1" class="rvps2"><span class="rvts6">Select the </span><span class="rvts16">Video Category</span><span class="rvts6"> from the drop down.</span></li>
+<li value="2" class="rvps2"><span class="rvts6">Click on </span><span class="rvts16">Encode Video </span><span class="rvts6">button to load the screen above. Below the </span><span class="rvts16">Video Category</span><span class="rvts6"> field are two tabs: </span><span class="rvts16">Create Pipeline</span><span class="rvts6"> and </span><span class="rvts16">Create Job</span><span class="rvts6">. </span><span class="rvts16">Create Pipeline</span><span class="rvts6"> tab is selected by default. It is the tab that is used to create a pipeline.</span></li>
+<li value="3" class="rvps2"><span class="rvts6">Enter the </span><span class="rvts16">Pipeline Name</span><span class="rvts6">. Pipeline name must not exceed 40 characters and cannot be changed after creation.</span></li>
+<li value="4" class="rvps2"><span class="rvts6">Click on </span><span class="rvts16">Create Pipeline</span><span class="rvts6"> button to create the pipeline. A confirmation prompt (below) appears.</span></li>
+</ol>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps8"><img alt="" style="padding : 1px;" src="lib/NewItem20.png"></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: decimal;">
+<li value="5" class="rvps2"><span class="rvts6">Click on </span><span class="rvts18">OK</span><span class="rvts6"> button to continue with the pipeline creation or </span><span class="rvts18">CANCEL</span><span class="rvts6"> button to abort the action.</span></li>
+</ol>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps9"><span class="rvts18">(b) </span><span class="rvts11">Creation Of Job</span></p>
+<p class="rvps2"><img alt="" style="padding : 1px;" src="lib/NewItem21.png"></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts6">In Amazon Web Service (AWS) the actual transcoding is carried out by a process called </span><span class="rvts16">Job</span><span class="rvts6">. Creating of Job is done after the pipeline to be used has been created. You DON'T create different pipelines for different jobs. A single pipeline is used for related video files (for example, files in the same category or related categories). The portal has greatly simplified the process of creating a job.</span></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps4"><span class="rvts11">HOW TO CREATE A JOB</span></p>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: decimal;">
+<li value="1" class="rvps2"><span class="rvts6">Click on the </span><span class="rvts16">Videos</span><span class="rvts6"> menu item under </span><span class="rvts18">Main Tasks</span><span class="rvts6"> menu.</span></li>
+</ol>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: decimal;">
+<li value="1" class="rvps2"><span class="rvts6">Select the </span><span class="rvts16">Video Category</span><span class="rvts6"> from the drop down.</span></li>
+<li value="2" class="rvps2"><span class="rvts6">Click on </span><span class="rvts16">Encode Video </span><span class="rvts6">button to load the screen above.</span></li>
+<li value="3" class="rvps2"><span class="rvts6">Select the </span><span class="rvts16">Create Job</span><span class="rvts6"> tab.</span></li>
+<li value="4" class="rvps2"><span class="rvts6">Select the </span><span class="rvts16">Pipeline Name</span><span class="rvts6">. This will load the names of all the uploaded videos (</span><span class="rvts16">Input Filename</span><span class="rvts6">) in the input bucket linked with the selected pipeline.</span></li>
+<li value="5" class="rvps2"><span class="rvts6">Select the </span><span class="rvts16">Input Filename</span><span class="rvts6">. The format of the filename is </span><span class="rvts16">[Category Name]/[Video File Name]</span><span class="rvts6">. The names of the 3 output files for the 3 resolutions (</span><span class="rvts18">360p</span><span class="rvts6">, </span><span class="rvts18">480p</span><span class="rvts6"> and </span><span class="rvts18">720p</span><span class="rvts6">) are displayed. The names are preceded by the video category name in the format </span><span class="rvts16">[Category Name]/[Video File Name]_[Resolution].mp4</span><span class="rvts6">.</span></li>
+<li value="6" class="rvps2"><span class="rvts6">Click on </span><span class="rvts16">Create Job</span><span class="rvts6"> button to create the job. A confirmation prompt (below) appears.</span></li>
+</ol>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps8"><img alt="" style="padding : 1px;" src="lib/NewItem22.png"></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: decimal;">
+<li value="7" class="rvps2"><span class="rvts6">Click on </span><span class="rvts18">OK</span><span class="rvts6"> button to continue with the job creation or </span><span class="rvts18">CANCEL</span><span class="rvts6"> button to abort the action.</span></li>
+</ol>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p></p>
+
+</div>
+	
+	<div id="topic_footer">
+
+			<div id="topic_footer_content">
+				Copyright &copy; 2016 by eFluzx. All Rights Reserved.</div>
+		</div>
+	</body>
+	
+</html>
+

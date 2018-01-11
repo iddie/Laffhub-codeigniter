@@ -1,0 +1,114 @@
+﻿<html>
+	
+<head>
+	<title>Videos</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.9.2.132">
+	<meta name="keywords" content="Videos">
+	
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#topic_header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/hnd.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			if (top.frames.length == 0)
+			{
+				var sTopicUrl = top.location.href.substring(top.location.href.lastIndexOf("/") + 1, top.location.href.length);
+				top.location.href = "Healthy Living.html?" + sTopicUrl;
+			}
+			else
+			{
+				var bTocSelected = false;
+				(function waitForTOC()
+				{
+					if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
+					{
+						top.FrameTOC.SelectTocItem("Videos");
+						bTocSelected = true;
+					}
+					if (!bTocSelected) setTimeout(function() { waitForTOC(); }, 300);
+				})();
+			}
+		});
+	</script>
+	
+	</head>
+
+<body>
+
+<div id="topic_header">
+			<div id="topic_header_content">
+				<h1 id="topic_header_text">Videos</h1>
+				
+				<div id="topic_breadcrumb">
+					<a href="MainTasks.html">Main Tasks</a> &rsaquo;&rsaquo; </div>
+				</div>
+			<div id="topic_header_nav">
+				<a href="MainTasks.html"><img src="img/arrow_up.png" alt="Parent"/></a>
+				
+				<a href="RSSFeeds.html"><img src="img/arrow_left.png" alt="Previous"/></a>
+				
+				<a href="UploadVideos.html"><img src="img/arrow_right.png" alt="Next"/></a>
+				
+				</div>
+			<div class="clear"></div>
+		</div>
+	<div id="topic_content">
+		
+<p></p>
+<p class="rvps2"><img alt="" style="padding : 1px;" src="lib/NewItem33.png"></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts6">This module handles all video related activities from uploading to encoding.</span></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts6">Videos are uploaded to Amazon Web Services (AWS) from where the are streamed to subscribers. The following services are used in Amazon for the streaming process:</span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: disc;">
+<li class="rvps2"><span class="rvts18">Simple Storage Service (S3):</span><span class="rvts6"> This service is responsible for the storage of the video files. Both the original and encoded files are stored in S3. Files are stored in folders called&nbsp;</span><span class="rvts16"> Buckets</span><span class="rvts6">. Two of the buckets created on healthy living Amazon account are used for file storage by the portal. </span><span class="rvts18">healthytips-videos</span><span class="rvts6"> is used for storing the original files (uploaded files) while </span><span class="rvts18">healthytips-output</span><span class="rvts6"> is used for storing the encoded files. Files are stored in sub-folders based on their categories. Each sub-folder name represents a category. For example files in a category called HEALTH will be stored in a sub-folder called HEALTH in S3. The sub-folders are created automatically during video upload from the portal. Uploaded files are in </span><span class="rvts18">mp4</span><span class="rvts6"> format.</span></li>
+</ul>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: disc;">
+<li class="rvps2"><span class="rvts18">Elastic Transcoder:</span><span class="rvts6"> This service encodes uploaded video files into formats suitable for streaming. Each uploaded (input) file is transcoded into 3 output (encoded) files with 3 different resolutions. The resolutions are </span><span class="rvts18">360p (Standard Definition - SD)</span><span class="rvts6">, </span><span class="rvts18">480p</span><span class="rvts6"> &nbsp;</span><span class="rvts18">(Standard Definition - SD)</span><span class="rvts6"> and </span><span class="rvts18">720p</span><span class="rvts6"> &nbsp;</span><span class="rvts18">(High Definition - HD)</span><span class="rvts6">. The 360p SD resolution enables users of older devices to stream videos on their phones, while the 720p HD resolution enables new devices to stream in a better resolution. Users can, however, select any resolution they want from the video player (JWPlayer) during streaming. Output files are also in </span><span class="rvts18">mp4</span><span class="rvts6"> format.</span></li>
+</ul>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: disc;">
+<li class="rvps2"><span class="rvts18">CloudFront</span><span class="rvts6">: This service creates a streaming (distribution) platform from the transcoded files. A single distribution is used for streaming videos in a particular output bucket.</span></li>
+</ul>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps4"><span class="rvts11">HOW TO VIDEO UPLOADED VIDEOS</span></p>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: decimal;">
+<li value="1" class="rvps2"><span class="rvts6">Click on the </span><span class="rvts16">Videos</span><span class="rvts6"> menu item under </span><span class="rvts18">Main Tasks</span><span class="rvts6"> menu (the screen above will be loaded).</span></li>
+<li value="2" class="rvps2"><span class="rvts6">Select the </span><span class="rvts16">Video Category</span><span class="rvts6"> from the drop down.</span></li>
+<li value="3" class="rvps2"><span class="rvts6">Click on </span><span class="rvts16">Load Videos</span><span class="rvts6">. All the available videos in the select category will be displayed in the table on the screen.</span></li>
+</ol>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts6">Videos can be previewed. The image (</span><img width="19" height="14" alt="" style="padding : 1px;" src="lib/NewItem17.png"><span class="rvts6">) in the last column (</span><span class="rvts16">PREVIEW</span><span class="rvts6">) of each row contains a link to preview the video description in each row. Clicking on the icon will load the video in a pop-up screen.</span></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts16">NOTE</span><span class="rvts17">: </span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: disc;">
+<li class="rvps2"><span class="rvts17">Only videos with status </span><span class="rvts16">Encoded</span><span class="rvts17"> can be previewed. Uploaded but not transcoded videos cannot be previewed.</span></li>
+<li class="rvps2"><span class="rvts17">Necessary permissions are required to access this module</span></li>
+</ul>
+<p></p>
+
+</div>
+	
+	<div id="topic_footer">
+
+			<div id="topic_footer_content">
+				Copyright &copy; 2016 by eFluzx. All Rights Reserved.</div>
+		</div>
+	</body>
+	
+</html>
+

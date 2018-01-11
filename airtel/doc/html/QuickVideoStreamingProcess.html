@@ -1,0 +1,91 @@
+﻿<html>
+	
+<head>
+	<title>Quick Video Streaming Process</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.9.2.132">
+	<meta name="keywords" content=", , Quick Start, Process Summary">
+	
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#topic_header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/hnd.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			if (top.frames.length == 0)
+			{
+				var sTopicUrl = top.location.href.substring(top.location.href.lastIndexOf("/") + 1, top.location.href.length);
+				top.location.href = "Healthy Living.html?" + sTopicUrl;
+			}
+			else
+			{
+				var bTocSelected = false;
+				(function waitForTOC()
+				{
+					if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
+					{
+						top.FrameTOC.SelectTocItem("QuickVideoStreamingProcess");
+						bTocSelected = true;
+					}
+					if (!bTocSelected) setTimeout(function() { waitForTOC(); }, 300);
+				})();
+			}
+		});
+	</script>
+	
+	</head>
+
+<body>
+
+<div id="topic_header">
+			<div id="topic_header_content">
+				<h1 id="topic_header_text">Quick Video Streaming Process</h1>
+				
+				</div>
+			<div id="topic_header_nav">
+				<a href="Login.html"><img src="img/arrow_left.png" alt="Previous"/></a>
+				
+				<a href="Dashboard.html"><img src="img/arrow_right.png" alt="Next"/></a>
+				
+				</div>
+			<div class="clear"></div>
+		</div>
+	<div id="topic_content">
+		
+<p></p>
+<p class="rvps4"><span class="rvts6">The summary of how to start the portal is given below.</span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: disc;">
+<li class="rvps7"><span class="rvts17">Create Input and output buckets on the Amazon Web Service (AWS), from the S3 &nbsp;console.</span></li>
+<li class="rvps7"><span class="rvts17">Set portal settings/parameters through the </span><span class="rvts16">Portal Setting</span><span class="rvts17"> module. These values include Amazon S3 input and output buckets.</span></li>
+<li class="rvps7"><span class="rvts17">Upload videos to the S3 input using the </span><span class="rvts16">Videos</span><span class="rvts17"> module. Each video must not exceed 60MB in size. A maximum of 10 files can be uploaded at once. Uploaded files MUST be in mp4 format.</span></li>
+<li class="rvps7"><span class="rvts17">Add each video's title and description to the uploaded video records.</span></li>
+<li class="rvps7"><span class="rvts17">Create a pipeline on the AWS Elastic Transcoder through the portal's </span><span class="rvts16">Videos</span><span class="rvts17"> module to control movement of data between the services.</span></li>
+<li class="rvps7"><span class="rvts17">Create jobs for each of the uploaded video file through the portal's </span><span class="rvts16">Videos</span><span class="rvts17"> module. Each job produces 3 output files with 3 resolutions. the resolutions are 360p (SD), 480p (SD) and 720p (HD)</span></li>
+<li class="rvps7"><span class="rvts17">Create a streaming distribution on the AWS from the Cloudfront console.</span></li>
+<li class="rvps7"><span class="rvts17">Set the active distribution to use in streaming the videos. This is done in the Set Video Distribution module.</span></li>
+<li class="rvps7"><span class="rvts17">Set Active RSS feed through the portal's RSS Feed module. This process creates a file </span><span class="rvts16">rss.xml</span><span class="rvts17"> which is used by the telecommunications companies to make the videos available to subscribers.</span></li>
+</ul>
+<p></p>
+
+</div>
+	
+	<div id="topic_footer">
+
+			<div id="topic_footer_content">
+				Copyright &copy; 2016 by eFluzx. All Rights Reserved.</div>
+		</div>
+	</body>
+	
+</html>
+

@@ -1,0 +1,13 @@
+/**
+ * This theme is an example to show how you can add triangles to the dropdowns.
+ */
+.triangle-theme .pika-label:after {
+    content:" \25be";
+}
+
+.pika-single.dark-theme {
+    color: #fff;
+    background: #333;
+    border: 1px solid #666;
+    border-bottom-color: #999;
+}

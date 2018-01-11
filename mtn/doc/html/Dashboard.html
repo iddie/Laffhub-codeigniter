@@ -1,0 +1,96 @@
+﻿<html>
+	
+<head>
+	<title>Dashboard</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.9.2.132">
+	<meta name="keywords" content="Dashboard, User Home, Transactions">
+	
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#topic_header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/hnd.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			if (top.frames.length == 0)
+			{
+				var sTopicUrl = top.location.href.substring(top.location.href.lastIndexOf("/") + 1, top.location.href.length);
+				top.location.href = "Healthy Living.html?" + sTopicUrl;
+			}
+			else
+			{
+				var bTocSelected = false;
+				(function waitForTOC()
+				{
+					if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
+					{
+						top.FrameTOC.SelectTocItem("Dashboard");
+						bTocSelected = true;
+					}
+					if (!bTocSelected) setTimeout(function() { waitForTOC(); }, 300);
+				})();
+			}
+		});
+	</script>
+	
+	</head>
+
+<body>
+
+<div id="topic_header">
+			<div id="topic_header_content">
+				<h1 id="topic_header_text">Dashboard</h1>
+				
+				</div>
+			<div id="topic_header_nav">
+				<a href="QuickVideoStreamingProcess.html"><img src="img/arrow_left.png" alt="Previous"/></a>
+				
+				<a href="EditUserInformation.html"><img src="img/arrow_right.png" alt="Next"/></a>
+				
+				</div>
+			<div class="clear"></div>
+		</div>
+	<div id="topic_content">
+		
+<p></p>
+<p class="rvps2"><img alt="" style="padding : 1px;" src="lib/NewItem30.png"></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts6">The dashboard is the landing page after successful sign in. It displays the transactions that have taken place on the platform. These transactions are the requests for the health videos made by subscribers.</span></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts6">The displayed transactions can be filtered based </span><span class="rvts18">Year Of Transaction</span><span class="rvts6">, </span><span class="rvts18">Month Of Transaction</span><span class="rvts6">, </span><span class="rvts18">Telecommunication Network</span><span class="rvts6"> through which the requests came, </span><span class="rvts18">Video Category</span><span class="rvts6">, </span><span class="rvts18">Start Date</span><span class="rvts6"> and </span><span class="rvts18">End Date</span><span class="rvts6">.</span></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts6">The only required filter parameter is the </span><span class="rvts18">Year Of Transaction</span><span class="rvts6">. When the dashboard is initially opened, the default Year and Month are the current system year and month. Default Telecommunication Network can also be set from the Portal Settings module so that initial loading will consist of transactions from through the default network.</span></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps4"><span class="rvts11">HOW TO DISPLAY TRANSACTIONS</span></p>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: decimal;">
+<li value="1" class="rvps2"><span class="rvts6">Click on the </span><span class="rvts16">Dashboard</span><span class="rvts6"> menu item (if dashboard is not the displayed menu).</span></li>
+<li value="2" class="rvps2"><span class="rvts6">Select the filter parameters as desired. Year selection is mandatory.</span></li>
+<li value="3" class="rvps2"><span class="rvts6">Click on </span><span class="rvts16">Display</span><span class="rvts6"> button. </span></li>
+</ol>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts17"><br/></span></p>
+<p class="rvps2"><img width="21" height="20" alt="" style="padding : 1px;" src="lib/NewItem43.png"><span class="rvts17"> Note that the displayed transactions can be exported as PDF, Excel and CSV documents. The transactions can also be copied to system clipboard or sent to external printer.</span></p>
+<p></p>
+
+</div>
+	
+	<div id="topic_footer">
+
+			<div id="topic_footer_content">
+				Copyright &copy; 2016 by eFluzx. All Rights Reserved.</div>
+		</div>
+	</body>
+	
+</html>
+
