@@ -813,6 +813,32 @@ class Getdata_model extends CI_Model
 			return false;
 		}
 	}
+
+    public function CurrentStatus($email,$phone)
+    {
+        $sql="SELECT * FROM subscriptions WHERE (TRIM(msisdn)='".$this->db->escape_str($phone)."')";
+
+        $query = $this->db->query($sql);
+
+        if ( $query->num_rows()> 0 )
+        {
+            $row = $query->row();
+
+            if ($row->subscriptionstatus) $subscriptionstatus = $row->subscriptionstatus;
+
+            if ($subscriptionstatus == 1) {
+
+                return true;
+            }
+            else{
+                return false;
+            }
+        }else
+        {
+            return false;
+        }
+    }
+
 	
 	public function GetSubscriptionDate($email,$phone)
 	{

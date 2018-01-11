@@ -577,45 +577,18 @@ class V extends CI_Controller {
 					if (!$subscription_status) $subscription_status='0';
 					
 					#Check if Subscription is active
-					$result=$this->getdata_model->GetSubscriptionDate('',$phone);
-									
-					if (is_array($result))
-					{
-						foreach($result as $rw)
-						{
-							if ($rw->subscribe_date) $dt = date('F d, Y',strtotime($rw->subscribe_date));
-							
-							$data['subscribe_date'] = $dt;
-							
-							if ($rw->exp_date) $edt = date('F d, Y',strtotime($rw->exp_date));
-							$data['exp_date'] = $edt;
-							
-							if ($tdt > date('Y-m-d H:i:s',strtotime($rw->exp_date)))
-							{
-								if ($rw->subscriptionstatus==1)
-								{
-									#Update Subscription Date
-									$this->getdata_model->UpdateSubscriptionStatus($data['subscriber_email'],$phone,'0');
-									$data['SubscribeStatus'] = '0';
-								}
-							}else
-							{
-								if (!$rw->subscriptionstatus)
-								{
-									$this->getdata_model->UpdateSubscriptionStatus($data['subscriber_email'],$phone,'1');
-									$data['subscriptionstatus'] = '<span style="color:#099E11;">Active</span>';
-									$data['SubscribeStatus'] = '1';
-								}else
-								{
-									$data['subscriptionstatus'] = '<span style="color:#099E11;">Active</span>';
-									$data['SubscribeStatus'] = '1';
-								}
-							}
-		
-							break;
-						}
-					}
-					
+                    $result=$this->getdata_model->CurrentStatus('',$phone);
+
+
+                    if($result == true) {
+
+                        $data['subscriptionstatus'] = '<span style="color:#099E11;">Active</span>';
+                        $data['SubscribeStatus'] = '1';
+                    }
+                    else{
+                        $data['SubscribeStatus'] = '0';
+                    }
+
 					#Get Video Lists
 					$sql = "SELECT videolist FROM watchlists WHERE (TRIM(subscriptionId)='".$this->db->escape_str($subscriptionId)."')";
 		
