@@ -22,8 +22,19 @@ class Category extends CI_Controller {
 			redirect('Categories');
 		}else
 		{
-			$data['Network']=$this->getdata_model->GetNetwork();
-			$data['Phone']=$this->getdata_model->GetMSISDN();
+            $data['Network']='';
+            $data['Phone']='';
+
+            if (($_SERVER['HTTP_HOST'] == 'localhost') or ($_SERVER['HTTP_HOST'] == 'localhost:8888'))  {
+
+                $data['Network']=getenv('MTN_NETWORK');
+                $data['Phone']=getenv('MTN_MSISDN');
+
+            }else{
+
+                $data['Network']=$this->getdata_model->GetNetwork();
+                $data['Phone']=$this->getdata_model->GetMSISDN();
+            }
 				
 			if ((!$data['Network']) or (!$data['Phone']))
 			{
@@ -183,9 +194,20 @@ class Category extends CI_Controller {
 	{
 		redirect('Categories');
 	}else
-	{		
-		$data['Network']=$this->getdata_model->GetNetwork();
-		$data['Phone']=$this->getdata_model->GetMSISDN();
+	{
+        $data['Network']='';
+        $data['Phone']='';
+
+        if (($_SERVER['HTTP_HOST'] == 'localhost') or ($_SERVER['HTTP_HOST'] == 'localhost:8888'))  {
+
+            $data['Network']=getenv('MTN_NETWORK');
+            $data['Phone']=getenv('MTN_MSISDN');
+
+        }else{
+
+            $data['Network']=$this->getdata_model->GetNetwork();
+            $data['Phone']=$this->getdata_model->GetMSISDN();
+        }
 			
 		if ((!$data['Network']) or (!$data['Phone']))
 		{
@@ -322,8 +344,19 @@ class Category extends CI_Controller {
 		
 	public function index()
 	{
-		$data['Network']=$this->getdata_model->GetNetwork();
-		$data['Phone']=$this->getdata_model->GetMSISDN();
+        $data['Network']='';
+        $data['Phone']='';
+
+        if (($_SERVER['HTTP_HOST'] == 'localhost') or ($_SERVER['HTTP_HOST'] == 'localhost:8888'))  {
+
+            $data['Network']=getenv('MTN_NETWORK');
+            $data['Phone']=getenv('MTN_MSISDN');
+
+        }else{
+
+            $data['Network']=$this->getdata_model->GetNetwork();
+            $data['Phone']=$this->getdata_model->GetMSISDN();
+        }
 			
 		if ((!$data['Network']) or (!$data['Phone']))
 		{

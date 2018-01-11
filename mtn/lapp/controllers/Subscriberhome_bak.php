@@ -15,9 +15,20 @@ class Subscriberhome extends CI_Controller {
 		$category='';
 		
 		if ($this->uri->segment(3)) $category=$this->uri->segment(3,'');
-		
-		$data['Network']=$this->getdata_model->GetNetwork();
-		$data['Phone']=$this->getdata_model->GetMSISDN();
+
+        $data['Network']='';
+        $data['Phone']='';
+
+        if (($_SERVER['HTTP_HOST'] == 'localhost') or ($_SERVER['HTTP_HOST'] == 'localhost:8888'))  {
+
+            $data['Network']=getenv('MTN_NETWORK');
+            $data['Phone']=getenv('MTN_MSISDN');
+
+        }else{
+
+            $data['Network']=$this->getdata_model->GetNetwork();
+            $data['Phone']=$this->getdata_model->GetMSISDN();
+        }
 		
 		$this->getdata_model->CheckSubscriptionDate('',$data['Phone']);
 		

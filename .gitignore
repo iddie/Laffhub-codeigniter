@@ -14,5 +14,14 @@ incomingsms/messages.txt.zip
 incomingsms/messages.txt
 incomingsms/messages1.txt
 error_log
+.env.development
+.env.production
+.env.testing
+/airtel/.env.testing
+/airtel/.env.production
+/airtel/.env.development
+/mtn/.env.development
+/mtn/.env.production
+/mtn/.env.testing
 
 

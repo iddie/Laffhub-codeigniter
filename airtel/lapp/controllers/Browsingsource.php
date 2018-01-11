@@ -62,9 +62,19 @@ class Browsingsource extends CI_Controller {
 	}
 	
 	public function DetermineSource()
-	{		
-		$ret=$this->getdata_model->GetNetwork();
-		
+	{
+
+        $ret ='';
+
+	    if (($_SERVER['HTTP_HOST'] == 'localhost') or ($_SERVER['HTTP_HOST'] == 'localhost:8888')) {
+
+            $ret= getenv('AIRTEL_NETWORK');
+
+        }else{
+
+            $ret=$this->getdata_model->GetNetwork();
+        }
+
 		$_SESSION['InternetSource']=$ret;
 
 		#$file = fopen('aaa_ISP.txt',"a"); fwrite($file, "ISP=".$ret."\nMSISDN=".$this->getdata_model->GetMSISDN()."\n"); fclose($file);
@@ -76,9 +86,10 @@ class Browsingsource extends CI_Controller {
 		{
 			$this->LoadSession();
 	#$file = fopen('aaa.txt',"a"); fwrite($file,$host); fclose($file);
-			if ($host=='localhost')
+			if (($host=='localhost') || ($host == 'localhost:8888'))
 			{
-				redirect('http://localhost/airtellaffhub/Subscriberhome', 'refresh');
+				redirect('http://localhost:8888/laffhub/public_html/airtel/Subscriberhome', 'refresh');
+
 			}elseif ($host=='192.168.43.165')
 			{
 				redirect('http://192.168.43.165/airtellaffhub/Subscriberhome', 'refresh');
@@ -90,25 +101,25 @@ class Browsingsource extends CI_Controller {
 			#redirect('Subscriberhome', 'refresh');
 		}elseif (strtolower(trim($ret))=='mtn')
 		{
-			if ($host=='localhost')
+			if (($host=='localhost') || ($host == 'localhost:8888'))
 			{
-				redirect('http://localhost/mtnlaffhub/Subscriberhome', 'refresh');
+				redirect('http://localhost:8888/laffhub/public_html/mtn/Subscriberhome', 'refresh');
 			}else
 			{
 				redirect('http://mtn.laffhub.com/Subscriberhome', 'refresh');
 			}
 		}elseif (strtolower(trim($ret))=='wifi')
 		{
-			if ($host=='localhost')
+			if (($host=='localhost') || ($host == 'localhost:8888'))
 			{
-				redirect('http://localhost/laffhub/Home', 'refresh');
+				redirect('http://localhost:8888/laffhub/public_html/Subscriberhome', 'refresh');
 			}else
 			{
 				redirect('https://laffhub.com/Home', 'refresh');
 			}
 		}else
 		{
-			if ($host=='localhost')
+			if (($host=='localhost') || ($host == 'localhost:8888'))
 			{
 				redirect('http://localhost/laffhub/Home', 'refresh');
 			}else

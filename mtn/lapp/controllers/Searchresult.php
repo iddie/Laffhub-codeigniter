@@ -52,9 +52,20 @@ class Searchresult extends CI_Controller {
 				$data['SearchResult']=$query->result();
 				
 				if ($_SESSION['subscriber_email']) $data['subscriber_email'] = $_SESSION['subscriber_email'];
-		
-				$data['Network']=$this->getdata_model->GetNetwork();
-				$data['Phone']=$this->getdata_model->GetMSISDN();
+
+                $data['Network']='';
+                $data['Phone']='';
+
+                if (($_SERVER['HTTP_HOST'] == 'localhost') or ($_SERVER['HTTP_HOST'] == 'localhost:8888'))  {
+
+                    $data['Network']=getenv('MTN_NETWORK');
+                    $data['Phone']=getenv('MTN_MSISDN');
+
+                }else{
+
+                    $data['Network']=$this->getdata_model->GetNetwork();
+                    $data['Phone']=$this->getdata_model->GetMSISDN();
+                }
 					
 				$_SESSION['Network']=$data['Network'];
 				$_SESSION['Phone']=$data['Phone'];
@@ -108,8 +119,20 @@ class Searchresult extends CI_Controller {
 				
 			}else
 			{
-				$data['Network']=$this->getdata_model->GetNetwork();
-				$data['Phone']=$this->getdata_model->GetMSISDN();
+                $data['Network']='';
+                $data['Phone']='';
+
+                if (($_SERVER['HTTP_HOST'] == 'localhost') or ($_SERVER['HTTP_HOST'] == 'localhost:8888'))  {
+
+                    $data['Network']=getenv('MTN_NETWORK');
+                    $data['Phone']=getenv('MTN_MSISDN');
+
+                }else{
+
+                    $data['Network']=$this->getdata_model->GetNetwork();
+                    $data['Phone']=$this->getdata_model->GetMSISDN();
+                }
+
 				if ($_SESSION['subscriber_email']) $data['subscriber_email'] = $_SESSION['subscriber_email'];
 				
 				$data['ActiveAdverts']=$this->getdata_model->GetActiveAdverts();

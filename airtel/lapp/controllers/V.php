@@ -433,16 +433,24 @@ class V extends CI_Controller {
 		$VideosWatched=0; $SubscriberEmail=''; $DurationInSeconds='0'; $Plan=''; $CurrentVideoCount=0;
 		$SubscriberName=''; $phone=''; $network=''; $CommentsCount='0'; $videolist=''; $CanPlayVideo=false;
 		$NoPlayReason=''; $CanPlayNew=false; $lang=''; $useragent='';
-		
-		$phone=$this->getdata_model->GetMSISDN();
-		$network=$this->getdata_model->GetNetwork();
-		
+
+        if(($_SERVER['SERVER_NAME'] == 'localhost') || ($_SERVER['SERVER_NAME'] == 'localhost:8888')) {
+
+            $network =getenv('AIRTEL_NETWORK');
+            $phone = getenv('AIRTEL_MSISDN');
+
+        }else{
+            $network=$this->getdata_model->GetNetwork();
+            $phone=$this->getdata_model->GetMSISDN();
+        }
+
 		$data['Phone']=$phone;
 		$data['Network']=$network;
+
 		$ret=$network;
 		
 		$this->getdata_model->CheckSubscriptionDate('',$data['Phone']);
-		$host=strtolower(trim($_SERVER['HTTP_HOST']));
+		$host=strtolower(trim($_SERVER['SERVER_NAME']));
 				
 		#Check network
 				
@@ -1011,7 +1019,7 @@ class V extends CI_Controller {
 			}
 		}elseif (strtolower(trim($ret))=='mtn')
 		{
-			if ($host=='localhost')
+			if (($host=='localhost') or ($host =='localhost:8888'))
 			{
 				redirect('http://localhost/mtnlaffhub/Subscriberhome', 'refresh');
 			}else
@@ -1020,7 +1028,7 @@ class V extends CI_Controller {
 			}
 		}elseif (strtolower(trim($ret))=='wifi')
 		{
-			if ($host=='localhost')
+			if (($host=='localhost') or ($host =='localhost:8888'))
 			{
 				redirect('http://localhost/laffhub/Home', 'refresh');
 			}else
@@ -1029,7 +1037,7 @@ class V extends CI_Controller {
 			}				
 		}else
 		{
-			if ($host=='localhost')
+			if (($host=='localhost') or ($host =='localhost:8888'))
 			{
 				redirect('http://localhost/laffhub/Home', 'refresh');
 			}else

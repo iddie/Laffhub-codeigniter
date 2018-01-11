@@ -152,13 +152,13 @@ $db['default'] = array(
 
 	'dsn'	=> '',
 
-	'hostname' => '127.0.0.1',
+    'hostname' => getenv('DB_HOSTNAME'),
 
-	'username' => 'laffhub_laffuser',
+    'username' => getenv('DB_USERNAME'),
 
-	'password' => 'vUzm6Nh^^y*v',
+    'password' => getenv('DB_PASSWORD'),
 
-	'database' => 'laffhub_laffhubdb',
+    'database' => getenv('DB_DATABASE'),
 
 	'dbdriver' => 'mysqli',
 

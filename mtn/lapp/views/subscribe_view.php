@@ -828,16 +828,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								window.location.replace(url);	
 							}, 2000);
 
-						}else
+						}else if(res.toUpperCase() == 'YOU HAVE AN ACTIVE SUBSCRIPTION SUBSCRIPTION. ENJOY COMEDY CLIPS ON LAFFHUB')
 						{
 							m=res;
 							bootstrap_alert.warning(m);					
 							alert(m, 'LaffHub Message');
 							setTimeout(function() {
-                                var url="<?php echo site_url('Subscribe/confirm'); ?>";
-                                window.location.replace(url);	;
+                                var url="<?php echo site_url('Subscriberhome'); ?>";
+                                window.location.replace(url);
 							}, 2000);
-						}
+
+						}else{
+
+                            m=res;
+                            bootstrap_alert.warning(m);
+                            alert(m, 'LaffHub Message');
+                            setTimeout(function() {
+                                var url="<?php echo site_url('Subscribe/confirm'); ?>";
+                                window.location.replace(url);
+                            }, 2000);
+
+                        }
 					}else
 					{
 						$.msg('unblock');

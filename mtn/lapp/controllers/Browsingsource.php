@@ -63,17 +63,27 @@ class Browsingsource extends CI_Controller {
 	
 	public function DetermineSource()
 	{
-		$ret=$this->getdata_model->GetNetwork();
-		
+
+        $ret ='';
+
+        if (($_SERVER['HTTP_HOST'] == 'localhost') or ($_SERVER['HTTP_HOST'] == 'localhost:8888'))  {
+
+            $ret= getenv('MTN_NETWORK');
+
+        }else{
+
+            $ret=$this->getdata_model->GetNetwork();
+        }
+
 		$_SESSION['InternetSource']=$ret;
 
 		$host=strtolower(trim($_SERVER['HTTP_HOST']));
 		
 		if (strtolower(trim($ret))=='airtel')
-		{	
-			if ($host=='localhost')
+        {
+			if ($host=='localhost' or $host == 'localhost:8888')
 			{
-				redirect('http://localhost/airtellaffhub/Home', 'refresh');
+				redirect('http://localhost:8888/laffhub/public_html/airtel/Subscriberhome', 'refresh');
 			}else
 			{
 				redirect('http://airtel.laffhub.com/Subscriberhome', 'refresh');
@@ -82,9 +92,10 @@ class Browsingsource extends CI_Controller {
 		{
 			$this->LoadSession();
 			
-			if ($host=='localhost')
+			if ($host=='localhost' or $host == 'localhost:8888')
 			{
-				redirect('http://localhost/mtnlaffhub/Subscriberhome', 'refresh');
+				redirect('http://localhost:8888/laffhub/public_html/mtn/Subscriberhome', 'refresh');
+
 			}elseif ($host=='192.168.43.165')
 			{
 				redirect('http://192.168.43.165/mtnlaffhub/Subscriberhome', 'refresh');

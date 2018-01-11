@@ -140,8 +140,22 @@ class Unsubscribe extends CI_Controller {
 	
 	public function index()
 	{
-		$data['Network']=$this->getdata_model->GetNetwork();
-		$data['Phone']=$this->getdata_model->GetMSISDN();
+        $data['Network']='';
+        $data['Phone'] ='';
+
+        $data['Network']='';
+        $data['Phone']='';
+
+        if (($_SERVER['HTTP_HOST'] == 'localhost') or ($_SERVER['HTTP_HOST'] == 'localhost:8888'))  {
+
+            $data['Network']=getenv('AIRTEL_NETWORK');
+            $data['Phone']=getenv('AIRTEL_MSISDN');
+
+        }else{
+
+            $data['Network']=$this->getdata_model->GetNetwork();
+            $data['Phone']=$this->getdata_model->GetMSISDN();
+        }
 		
 		$this->getdata_model->LoadSubscriberSession($data['Phone']);
 				
@@ -249,6 +263,8 @@ class Unsubscribe extends CI_Controller {
 		
 		$data['Categories']=$this->getdata_model->GetCategories();
 		#$this->load->view('unsubscribe_view',$data);#Fail Page
+
+        $host = strtolower(trim($_SERVER['HTTP_HOST']));
 		
 		$ret=$data['Network'];
 		
@@ -258,7 +274,7 @@ class Unsubscribe extends CI_Controller {
 			$this->load->view('unsubscribe_view',$data);			
 		}elseif (strtolower(trim($ret))=='mtn')
 		{
-			if ($host=='localhost')
+			if (($host=='localhost') || ($host == 'localhost:8888'))
 			{
 				redirect('http://localhost/mtnlaffhub/Subscriberhome', 'refresh');
 			}else

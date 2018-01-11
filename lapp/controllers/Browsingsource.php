@@ -18,7 +18,7 @@ class Browsingsource extends CI_Controller {
 	{		
 		$ret=$this->getdata_model->GetNetwork();
 		
-		$host=strtolower(trim($_SERVER['HTTP_HOST']));
+		$host=strtolower(trim($_SERVER['SERVER_NAME']));
 		
 		#$file = fopen('aaa_ISP.txt',"w"); fwrite($file, "\nISP=".$ret."\nMSISDN=".$this->getdata_model->GetMSISDN()."\nIP=".$ip."\nHost=".$host); fclose($file);
 

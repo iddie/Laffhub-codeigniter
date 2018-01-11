@@ -435,12 +435,22 @@ class V extends CI_Controller {
 		$NoPlayReason=''; $CanPlayNew=false; $lang=''; $useragent=''; $canwatch=false;
 		$data['subscriptionstatus'] = '<span style="color:#9E0911;">Not Active</span>';
 		$data['SubscribeStatus'] = '1';	
-		
-		$phone=$this->getdata_model->GetMSISDN();
-		$network=$this->getdata_model->GetNetwork();
-		
-		$data['Phone']=$phone;
+
+
+        if (($_SERVER['HTTP_HOST'] == 'localhost') or ($_SERVER['HTTP_HOST'] == 'localhost:8888'))  {
+
+            $network=getenv('MTN_NETWORK');
+            $phone=getenv('MTN_MSISDN');
+
+        }else{
+
+            $network=$this->getdata_model->GetNetwork();
+            $phone=$this->getdata_model->GetMSISDN();
+        }
+
+        $data['Phone']=$phone;
 		$data['Network']=$network;
+
 		$ret=$network;
 		
 		$this->getdata_model->CheckSubscriptionDate('',$data['Phone']);

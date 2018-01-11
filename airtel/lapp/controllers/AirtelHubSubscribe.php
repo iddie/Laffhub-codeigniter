@@ -1081,9 +1081,21 @@ class AirtelHubSubscribe extends CI_Controller {
         $_SESSION['ad_id'] = $this->security->xss_clean($ad_id);
         $_SESSION['zone_id'] = $this->security->xss_clean($zone_id);
         $_SESSION['sid'] = $this->security->xss_clean($sid);
-        
-        $data['Network']=$this->getdata_model->GetNetwork();
-		$data['Phone']=$this->getdata_model->GetMSISDN();
+
+        $data['Network']='';
+        $data['Phone']='';
+
+        if (($_SERVER['HTTP_HOST'] == 'localhost') or ($_SERVER['HTTP_HOST'] == 'localhost:8888'))  {
+
+            $data['Network']=getenv('AIRTEL_NETWORK');
+            $data['Phone']=getenv('AIRTEL_MSISDN');
+
+        }else{
+
+            $data['Network']=$this->getdata_model->GetNetwork();
+            $data['Phone']=$this->getdata_model->GetMSISDN();
+        }
+
 
         $this->getdata_model->LoadSubscriberSession($data['Phone']);
 
@@ -1157,35 +1169,38 @@ class AirtelHubSubscribe extends CI_Controller {
 
         $data['Categories']=$this->getdata_model->GetCategories();
 
+        $host=strtolower(trim($_SERVER['HTTP_HOST']));
+
         $ret=$data['Network'];
 
         #$this->load->view('subscribe_view',$data);#Fail Page
         if (strtolower(trim($ret))=='airtel')
         {
             $this->load->view('airtelhubsubscribe_view',$data);
+
         }elseif (strtolower(trim($ret))=='mtn')
         {
-            if ($host=='localhost')
+            if (($host=='localhost') or ($host =='localhost:8888'))
             {
-                redirect('http://localhost/mtnlaffhub/Subscriberhome', 'refresh');
+                redirect('http://localhost:8888/laffhub/public_html/mtn/Subscriberhome', 'refresh');
             }else
             {
                 $this->load->view('buyairtelsim_view',$data);
             }
         }elseif (strtolower(trim($ret))=='wifi')
         {
-            if ($host=='localhost')
+            if (($host=='localhost') or ($host =='localhost:8888'))
             {
-                redirect('http://localhost/laffhub/Home', 'refresh');
+                redirect('http://localhost:8888/laffhub/public_html/Home', 'refresh');
             }else
             {
                 $this->load->view('buyairtelsim_view',$data);
             }
         }else
         {
-            if ($host=='localhost')
+            if (($host=='localhost') or ($host =='localhost:8888'))
             {
-                redirect('http://localhost/laffhub/Home', 'refresh');
+                redirect('http://localhost:8888/laffhub/public_html/Home', 'refresh');
             }else
             {
                 $this->load->view('buyairtelsim_view',$data);

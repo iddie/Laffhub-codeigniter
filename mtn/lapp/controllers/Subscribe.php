@@ -152,6 +152,8 @@ class Subscribe extends CI_Controller {
                 }elseif(trim(strtoupper($result)) === 'PENDING REQUEST') {
                     $ret = "You currently have a pending subscription request. Complete your subscription by dialing <span><b> *560*1# </b><span> then click on Continue ";
 
+                }elseif(trim(strtoupper($result)) === 'ALREADY ACTIVE'){
+                    $ret = "You have an active subscription. Enjoy comedy clips on Laffhub";
                 } else#Failed
                 {
                     $ret = "Sorry, subscription was not successful, please try again";
@@ -181,8 +183,20 @@ class Subscribe extends CI_Controller {
 
     public function index()
     {
-        $data['Network']=$this->getdata_model->GetNetwork();
-        $data['Phone']=$this->getdata_model->GetMSISDN();
+        $data['Network']='';
+        $data['Phone']='';
+
+        if (($_SERVER['HTTP_HOST'] == 'localhost') or ($_SERVER['HTTP_HOST'] == 'localhost:8888'))  {
+
+            $data['Network']=getenv('MTN_NETWORK');
+            $data['Phone']=getenv('MTN_MSISDN');
+
+        }else{
+
+            $data['Network']=$this->getdata_model->GetNetwork();
+            $data['Phone']=$this->getdata_model->GetMSISDN();
+        }
+
         $host='';
 
         $this->getdata_model->LoadSubscriberSession($data['Phone']);
@@ -264,7 +278,7 @@ class Subscribe extends CI_Controller {
         {
             if ($host=='localhost')
             {
-                redirect('http://localhost/airtellaffhub/Subscriberhome', 'refresh');
+                redirect('http://localhost:8888/laffhub/public_html/airtel/Subscriberhome', 'refresh');
             }else
             {
                 redirect('http://airtel.laffhub.com/Subscriberhome', 'refresh');
@@ -272,11 +286,12 @@ class Subscribe extends CI_Controller {
         }elseif (strtolower(trim($ret))=='mtn')
         {
             $this->load->view('subscribe_view',$data);
+
         }elseif (strtolower(trim($ret))=='wifi')
         {
             if ($host=='localhost')
             {
-                redirect('http://localhost/laffhub/Home', 'refresh');
+                redirect('http://localhost:8888/laffhub/public_html/Home', 'refresh');
             }else
             {
                 redirect('https://laffhub.com/Home', 'refresh');
@@ -285,7 +300,7 @@ class Subscribe extends CI_Controller {
         {
             if ($host=='localhost')
             {
-                redirect('http://localhost/laffhub/Home', 'refresh');
+                redirect('http://localhost:8888/laffhub/public_html/Home', 'refresh');
             }else
             {
                 redirect('https://laffhub.com/Home', 'refresh');
