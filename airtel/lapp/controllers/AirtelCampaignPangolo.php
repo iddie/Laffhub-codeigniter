@@ -1181,7 +1181,7 @@ class AirtelCampaignPangolo extends CI_Controller {
         {
             if (($host=='localhost') or ($host =='localhost:8888'))
             {
-                redirect('http://localhost:8888/laffhub/public_html/mtn/Subscriberhome', 'refresh');
+                $this->load->view('buyairtelsim_view',$data);
             }else
             {
                 $this->load->view('buyairtelsim_view',$data);
@@ -1190,7 +1190,7 @@ class AirtelCampaignPangolo extends CI_Controller {
         {
             if (($host=='localhost') or ($host =='localhost:8888'))
             {
-                redirect('http://localhost:8888/laffhub/public_html/Home', 'refresh');
+                $this->load->view('buyairtelsim_view',$data);
             }else
             {
                 $this->load->view('buyairtelsim_view',$data);
@@ -1199,7 +1199,7 @@ class AirtelCampaignPangolo extends CI_Controller {
         {
             if (($host=='localhost') or ($host =='localhost:8888'))
             {
-                redirect('http://localhost:8888/laffhub/public_html/Home', 'refresh');
+                $this->load->view('buyairtelsim_view',$data);
             }else
             {
                 $this->load->view('buyairtelsim_view',$data);

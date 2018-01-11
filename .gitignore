@@ -23,5 +23,3 @@ error_log
 /mtn/.env.development
 /mtn/.env.production
 /mtn/.env.testing
-
-
