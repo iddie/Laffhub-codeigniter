@@ -15,7 +15,8 @@ function AirtelUSSDDisplayMenu()
 	$ussd_text .= " \n";
 	$ussd_text .= "[Select 1, 2, 3, 4 or 5]";
 	 
-	ussd_proceed($ussd_text);  
+
+	ussd_proceed($ussd_text);
 }
 
 function ussd_proceed($ussd_text)
@@ -432,7 +433,7 @@ function SubscribeAirtelUser($email,$network,$msisdn,$plan,$subscriptiondays,$am
 		}
 		
 		if (!$sentmessage) $sentmessage='You have been charged N'.$amount.' for '.$plan.' Laffhub service. Visit www.laffhub.com. NO DATA COST. To opt out, text OUT to 2001.';
-		
+
 		#Send Message - Success
 		 $result_msg=SendAirtelSms($msisdn,$sentmessage,$db);
 		 
