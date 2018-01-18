@@ -1,7 +1,6 @@
 <?php
 
-#$db = new mysqli('localhost', 'root', '', 'laffhubdb');
-$db = new mysqli('localhost', 'laffhub_laffuser', 'vUzm6Nh^^y*v', 'laffhub_laffhubdb');
+$db = new mysqli('127.0.0.1', 'laffhub_laffuser', 'vUzm6Nh^^y*v', 'laffhub_laffhubdb');
 
 if($db->connect_errno > 0)
 {
