@@ -66,7 +66,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                                     <br>
                                     <div class="img-responsive">
-                                        <img src="<?php echo base_url(); ?>acss/images/landingbanner.png" class="img-responsive" id="imgSubscribe"/>
+                                        <img src="<?php echo base_url(); ?>acss/images/activate.png" class="img-responsive" id="imgSubscribe"/>
                                     </div>
                                     <br>
 
