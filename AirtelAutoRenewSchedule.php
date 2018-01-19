@@ -49,7 +49,7 @@ function AutoRenewSubscriptions($network,$db)
 
         $dt = date('Y-m-d H:i:s');
 
-        $sql = "SELECT msisdn,plan,duration,amount,email,subscribe_date,exp_date,videos_cnt_to_watch,autobilling FROM subscriptions WHERE (TRIM(network)='" . $db->escape_string($network) . "') AND ((DATE_FORMAT(`exp_date`,'%Y-%m-%d %H:%i:%s') <= '" . $dt . "') OR (subscriptionstatus=0)) LIMIT $limitFrom, $portionSize";
+        $sql = "SELECT msisdn,plan,duration,amount,email,subscribe_date,exp_date,videos_cnt_to_watch,autobilling FROM subscriptions WHERE (TRIM(network)='" . $db->escape_string($network) . "') AND ((DATE_FORMAT(`exp_date`,'%Y-%m-%d %H:%i:%s') <= '" . $dt . "') OR (subscriptionstatus=0)) ORDER BY exp_date ASC LIMIT $limitFrom, $portionSize";
 
         if (!$qry = $db->query($sql)) die('There was an error running the query [' . $db->error . ']');
 
