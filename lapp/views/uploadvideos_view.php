@@ -429,6 +429,72 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							});
 				}
 			}
+
+			function LoadVideoDetailsComedians()
+            {
+                try
+                {
+                    $('#VideoDetailsComedian').empty();
+
+                    $.blockUI({message: '<img src="<?php echo base_url();?>images/loader.gif" /><p>Loading Comedians. Please Wait...</p>',theme: true,baseZ: 2000});
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: 'json',
+                        url: '<?php echo site_url('Uploadvideos/GetComedians'); ?>',
+                        complete: function(xhr, textStatus) {
+                            $.unblockUI;
+                        },
+                        success: function(data,status,xhr) //we're calling the response json array 'cntry'
+                        {
+                            if ($(data).length > 0)
+                            {
+                                $('#VideoDetailsComedian').append( new Option('[SELECT]','') );
+
+                                $.each($(data), function(i,e)
+                                {
+                                    if (e.comedian)
+                                    {
+                                        $('#VideoDetailsComedian').append( new Option(e.comedian,e.comedian) );
+                                    }
+                                });
+                            }
+
+                            $.unblockUI();
+                        },
+                        error:  function(xhr,status,error) {
+                            $.unblockUI();
+                            m='Error '+ xhr.status + ' Occurred: ' + error;
+
+                            bootstrap_alert.warning(m);
+                            bootbox.alert({
+                                size: 'small', message: m, title:Title,
+                                buttons: { ok: { label: "Close", className: "btn-danger" } },
+                                callback:function(){
+                                    setTimeout(function() {
+                                        $('#divAlert').fadeOut('fast');
+                                    }, 10000);
+                                }
+                            });
+                        }
+                    }); //end AJAX
+                }catch(e)
+                {
+                    $.unblockUI();
+                    m='LoadComedians Module ERROR:\n'+e;
+
+                    bootstrap_alert.warning(m);
+                    bootbox.alert({
+                        size: 'small', message: m, title:Title,
+                        buttons: { ok: { label: "Close", className: "btn-danger" } },
+                        callback:function(){
+                            setTimeout(function() {
+                                $('#divAlert').fadeOut('fast');
+                            }, 10000);
+                        }
+                    });
+                }
+            }
 						
 			function LoadValues()
 			{
@@ -984,7 +1050,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						$('#cboComedian').focus(); return false;
 					}
 					
-					
+					LoadValues();
+
 					//Confirm Upload
 					if (!confirm('This process may take some time depending on your internet bandwidth and/or the total size of video(s) you are uploading. Are you sure you want to upload?  Click "OK" to proceed or "CANCEL" to abort!'))
 					{
@@ -1156,6 +1223,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					var fn=$('#lblFilename').html();
 					var tit=$('#txtTitle').val();
 					var desc=$('#txtDescription').val();
+					var comedian= $('#VideoDetailsComedian').val();
 					
 					if (!cat)
 					{
@@ -1273,7 +1341,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						return false;
 					}
 										
-					var mydata={category:cat, filename:fn,video_title:tit,description:desc,publisher_email:PublisherEmail,publisher_name:PublisherName};
+					var mydata={category:cat, filename:fn,video_title:tit,description:desc,publisher_email:PublisherEmail,publisher_name:PublisherName,comedian:comedian};
 										
 					$.ajax({
 						url: "<?php echo site_url('Uploadvideos/UpdateVideo');?>",
@@ -1486,8 +1554,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 try
 				{
 					$('#divAlert').html('');
-					
+					LoadVideoDetailsComedians();
 					AddMovieDetails('');
+
 				}catch(e)
 				{
 					$.unblockUI();
@@ -1973,6 +2042,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
            <input type="text" placeholder="Video Title" id="txtTitle" class="form-control" required>
         </div>
       </div>
+
+	  <div class="form-group" title="Comedian">
+         <label style="width:140px" class="col-sm-2 control-label size-12" for="VideoDetailsComedian">Comedian<span class="redtext">*</span></label>
+        <div class="col-sm-10">
+            <select id="VideoDetailsComedian" class="form-control" required></select>
+        </div>
+     </div>
       
       <div class="form-group" title="Videoss Description">
         <label style="margin-left:50px;" class="col-sm-1 control-label size-12" for="txtDescription">Description</label>
