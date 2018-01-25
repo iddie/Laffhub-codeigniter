@@ -581,7 +581,7 @@ class Uploadvideos extends CI_Controller {
 	
 	public function UpdateVideo()
 	{
-		$category=''; $filename=''; $video_title=''; $description=''; $publisher_email=''; $publisher_name='';
+		$category=''; $filename=''; $video_title=''; $description=''; $publisher_email=''; $publisher_name=''; $comedian='';
 		
 		if ($this->input->post('category')) $category = trim($this->input->post('category'));
 		if ($this->input->post('filename')) $filename = trim($this->input->post('filename'));
@@ -589,6 +589,7 @@ class Uploadvideos extends CI_Controller {
 		if ($this->input->post('description')) $description = trim($this->input->post('description'));
 		if ($this->input->post('publisher_email')) $publisher_email = trim($this->input->post('publisher_email'));
 		if ($this->input->post('publisher_name')) $publisher_name = trim($this->input->post('publisher_name'));
+		if ($this->input->post('comedian')) $comedian = trim($this->input->post('comedian'));
 		
 		#Update Video
 		$sql = "SELECT * FROM videos WHERE (TRIM(category)='".$this->db->escape_str($category)."') AND (TRIM(filename)='".$this->db->escape_str($filename)."') AND (TRIM(publisher_email)='".$this->db->escape_str($publisher_email)."')";
@@ -602,7 +603,8 @@ class Uploadvideos extends CI_Controller {
 		{			
 			$dat=array(
 				'video_title' => $this->db->escape_str($video_title),
-				'description' => $this->db->escape_str($description)
+				'description' => $this->db->escape_str($description),
+				'comedian' => $this->db->escape_str($comedian)
 				);
 				
 			$this->db->where(array('category'=>$category,'filename'=>$filename,'publisher_email'=>$publisher_email));
