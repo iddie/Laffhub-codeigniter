@@ -495,6 +495,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     });
                 }
             }
+
+			LoadVideoDetailsComedians();
 						
 			function LoadValues()
 			{
@@ -1193,7 +1195,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							$('#txtVideos').fileinput('clear');
 							uploadcategory='';
 							bucket='';
-							
+							LoadVideoDetailsComedians();
 							AddMovieDetails(response.UploadFiles);
 						}
 					}
@@ -1554,7 +1556,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 try
 				{
 					$('#divAlert').html('');
-					LoadVideoDetailsComedians();
 					AddMovieDetails('');
 
 				}catch(e)
