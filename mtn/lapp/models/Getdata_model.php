@@ -1451,7 +1451,17 @@ class Getdata_model extends CI_Model
 		
 		return $query->result();
 	}
-	
+
+
+    public function GetPublishers()
+    {
+        $sql = "SELECT * FROM publishers WHERE (publisher_status=1) ORDER BY publisher_name";
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
 	public function GetVideoComments($videocode)
 	{
 		$arrParents=array(); $results=array();
