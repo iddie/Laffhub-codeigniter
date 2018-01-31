@@ -893,6 +893,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					//Make Ajax Request	
 					var tit=$.trim($('#txtTitle').val());
 					var desc=$.trim($('#txtDescription').val());
+					var url = $.trim($('#txtURL').val());
 					var sdt=ChangeDateFrom_dMY_To_Ymd($('#txtStartDate').val(),'-',' ');
 					var edt=ChangeDateFrom_dMY_To_Ymd($('#txtEndDate').val(),'-',' ');					
 					var sta=$.trim($('#cboStatus').val());
@@ -958,6 +959,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					fd.append('enddate', edt);
 					fd.append('ads_status', sta);
 					fd.append('id', id);
+					fd.append('url', url);
 
 					xhr.send(fd);
 				}catch(e)
@@ -993,13 +995,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					var desc=$.trim($('#txtDescription').val());
 					var sdt=ChangeDateFrom_dMY_To_Ymd($('#txtStartDate').val(),'-',' ');
 					var edt=ChangeDateFrom_dMY_To_Ymd($('#txtEndDate').val(),'-',' ');					
-					var sta=$.trim($('#cboStatus').val());				
-					
-					//Initiate POST
+					var sta=$.trim($('#cboStatus').val());
+                    var url=$.trim($('#txtURL').val());
+
+                    //Initiate POST
 					var uri = "<?php echo site_url('Ads/AddAdvert');?>";
 					var xhr = new XMLHttpRequest();
 					var fd = new FormData();
-					
+
 					xhr.open("POST", uri, true);
 					
 					xhr.onreadystatechange = function() {
@@ -1053,7 +1056,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					fd.append('startdate', sdt);
 					fd.append('enddate', edt);
 					fd.append('ads_status', sta);
-
+					fd.append('url', url);
 					xhr.send(fd);
 					
 					//$.unblockUI();
@@ -1086,7 +1089,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					var tdt='<?php echo date('Y-m-d'); ?>';
 					var p=$.trim($('#txtStartDate').val());
 					var d=$.trim($('#txtEndDate').val());
-					
+					var url=$.trim($('#txtURL').val());
 					var tit=$.trim($('#txtTitle').val());
 					var sta=$.trim($('#cboStatus').val());
 					
@@ -1139,7 +1142,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						
 						$('#txtTitle').focus(); activateTab('tabData'); return false;
 					}
-							
+
+                     if (!url)
+                     {
+                         m='You have not entered the link for the advert.';
+
+                         bootstrap_alert.warning(m);
+                         bootbox.alert({
+                             size: 'small', message: m, title:Title,
+                             buttons: { ok: { label: "Close!", className: "btn-danger" } },
+                             callback:function(){
+                                 setTimeout(function() {
+                                     $('#divAlert').fadeOut('fast');
+                                 }, 10000);
+                             }
+                         });
+
+                         $('#txtURL').focus(); activateTab('tabData'); return false;
+                     }
+
 					if ($.isNumeric(tit))
 					{
 						m="Advert title field must not be a number.";
@@ -1454,6 +1475,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			{
 				$('#txtTitle').val('');
 				$('#txtDescription').val('');
+                $('#txtURL').val('');
 				$('#txtStartDate').val('');
 				$('#txtEndDate').val('');
 				$('#cboStatus').val('');
@@ -1611,6 +1633,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                              <input style="text-transform:none;" type="text" class="form-control" id="txtDescription" placeholder="Enter Advert Description" required>
                           </div>
                     	</div>
+
+                        <div class="form-group" title="Advert Description">
+                            <label for="txtURL" class="col-sm-2 control-label ">Advert URL<span class="redtext">*</span></label>
+
+                            <div class="col-sm-10">
+                                <input style="text-transform:none;" type="text" class="form-control" id="txtURL" placeholder="Enter comedian's page. e.g. Comedian/ShowComedian/3" required>
+                            </div>
+                        </div>
                         
                         <!--Advert Start Date/End Date-->
                         <div class="form-group" title="Advert Duration">
