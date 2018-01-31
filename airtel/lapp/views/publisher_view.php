@@ -222,6 +222,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 									<div class="video-preview__quality">HD</div>
 								  </div>
 								</div>
+								<h4 class="video-preview__comedianName">'.$row->comedian.'</h4>
+                                <h4 class="video-preview__comedianName">'.$row->video_title.'</h4>
 								<h5 class="video-preview__descr">'.trim($row->description).'</h5>
 							  </a>
 							</div>		

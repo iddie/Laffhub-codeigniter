@@ -15,6 +15,7 @@
                             if (file_exists('ads_pix/'.trim($row->pix)))
                             {
                                 $pix=base_url().'ads_pix/'.trim($row->pix);
+
                             }else
                             {
                                 $pix=base_url().'images/nophoto.jpg';
@@ -27,9 +28,9 @@
                         echo '
          <div class="col-lg-3 col-sm-6">
             <div class="bnr-container">
-              <a href="#" title="'.$tit.'">
+              <a onClick= "RedirectAd(\''.$row->url.'\');" title="'.$tit.'">
                 <div class="lazy-img banner-image">
-                  <img data-original="'.$pix.'" src="#" alt="banner image"> </div>
+                  <<img data-original="'.$pix.'" src="#" alt="banner image"> </div>
               </a>
             </div>
           </div>				

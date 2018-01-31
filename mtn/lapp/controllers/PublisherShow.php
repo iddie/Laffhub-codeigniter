@@ -360,6 +360,8 @@ class Publishershow extends CI_Controller {
                         $data['Categories']=$this->getdata_model->GetCategories();
                         $data['Comedians']=$this->getdata_model->GetComedians();
                         $data['PublisherId']=$id;
+                        $data['current_url'] = $_SERVER['HTTP_HOST'];
+                        $data['ActiveAdverts']=$this->getdata_model->GetActiveAdverts();
                         $this->load->view('publisher_view',$data);
                     }
                 }

@@ -117,7 +117,7 @@ class Ads extends CI_Controller {
 	
 	public function EditAdvert()
 	{
-		$title=''; $ret=''; $AdvImg=''; $description=''; $startdate=''; $enddate=''; $ads_status=''; $id='';
+		$title=''; $ret=''; $AdvImg=''; $description=''; $startdate=''; $enddate=''; $ads_status=''; $id=''; $url='';
 		
 		if (isset($_FILES['logo_pix'])) $AdvImg = $_FILES['logo_pix'];
 		
@@ -127,8 +127,10 @@ class Ads extends CI_Controller {
 		if ($this->input->post('enddate')) $enddate = $this->input->post('enddate');
 		if ($this->input->post('ads_status')) $ads_status = $this->input->post('ads_status');
 		if ($this->input->post('id')) $id = $this->input->post('id');
-		
-		//Check if record exists
+        if ($this->input->post('url')) $url = $this->input->post('url');
+
+
+        //Check if record exists
 		$sql = "SELECT * FROM ads WHERE id=".$id;
 		$query = $this->db->query($sql);
 		
@@ -144,6 +146,7 @@ class Ads extends CI_Controller {
 			if ($row->enddate) $edt=$row->enddate;
 			if ($row->pix) $oldpix=$row->pix;
 			if ($row->ads_status==1) $sta='1';
+			if ($row->url) $url=$row->url;
 			
 			$OldValues='Title='.$tit.'; Description='.$de.'; Start Date='.$sdt.'; End Date='.$edt.'; Status='.$sta;
 			$NewValues='Title='.$title.'; Description='.$description.'; Start Date='.$startdate.'; End Date='.$enddate.'; Status='.$ads_status;
@@ -182,7 +185,9 @@ class Ads extends CI_Controller {
 				'description' => $this->db->escape_str($description),
 				'startdate' => $this->db->escape_str($startdate),
 				'enddate' => $this->db->escape_str($enddate),
-				'ads_status' => $this->db->escape_str($ads_status)
+				'ads_status' => $this->db->escape_str($ads_status),
+                'url' => $this->db->escape_str($url)
+
 			);
 
 			$this->db->where('id', $id);
@@ -225,7 +230,7 @@ class Ads extends CI_Controller {
 	
 	public function AddAdvert()
 	{
-		$title=''; $ret=''; $AdvImg=''; $description=''; $startdate=''; $enddate=''; $ads_status='';
+		$title=''; $ret=''; $AdvImg=''; $description=''; $startdate=''; $enddate=''; $ads_status=''; $url='';
 		
 		if (isset($_FILES['logo_pix'])) $AdvImg = $_FILES['logo_pix'];
 		
@@ -234,7 +239,8 @@ class Ads extends CI_Controller {
 		if ($this->input->post('startdate')) $startdate = $this->input->post('startdate');
 		if ($this->input->post('enddate')) $enddate = $this->input->post('enddate');
 		if ($this->input->post('ads_status')) $ads_status = $this->input->post('ads_status');
-		
+		if ($this->input->post('url')) $url = $this->input->post('url');
+
 		if (!$ads_status) $ads_status='0';
 				
 		$Lpix='';
@@ -281,7 +287,8 @@ class Ads extends CI_Controller {
 				'description' => $this->db->escape_str($description),
 				'startdate' => $this->db->escape_str($startdate),
 				'enddate' => $this->db->escape_str($enddate),
-				'ads_status' => $this->db->escape_str($ads_status)
+				'ads_status' => $this->db->escape_str($ads_status),
+                'url' => $this->db->escape_str($url)
 				);		
 								
 			$this->db->insert('ads', $dat);
