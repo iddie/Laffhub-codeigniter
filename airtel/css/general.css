@@ -135,7 +135,7 @@ a.pagination:hover {
     width: 120px;
     font-size: 15px;
     border-radius: 10%;
-    background-color: #0C648D;
+    background-color: red;
     box-shadow: 5px 3px 8px 10px #888888
 }
 
