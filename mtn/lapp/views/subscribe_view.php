@@ -77,7 +77,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	var m='';
 	var table;
 	var self;
-	
+
 	bootstrap_alert = function() {}
 	bootstrap_alert.warning = function(message) 
 	{
@@ -103,7 +103,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 overlayBlur: 2 //Set false to disable it or interger for pixle
             });
 				
-		$('#lblSubscriptionId').html(SubscriptionId);
+		$('#lblSubscriptionId').val(SubscriptionId);
 		
 		var pickerstart = new Pikaday(
 		{
@@ -234,107 +234,41 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		}
 		
 		LoadPlans(Network);
-			
-		function LoadPlans(network)
-		{
-			var self;
-			
-			try
-			{				
-				$.msg(
-					{
-						autoUnblock : false ,
-						clickUnblock : false,
-						afterBlock : function() {self = this;/* store 'this' for other scope to use*/},
-						klass : 'mtn-custom-theme',
-						bgPath : '<?php echo base_url();?>images/',
-						content: '<center><img src="<?php echo base_url();?>images/loader.gif" /><p style="color:#fff; font-size:20px; margin-top:10px;"><b>Loading Plans. Please Wait...</b></p></center>'
-					}
-				);
-				
-				//$.blockUI({message: '<img src="<?php #echo base_url();?>images/loader.gif" /><p style="color:#fff; font-size:20px;"><b>Loading Plans. Please Wait...</b></p>',theme: true,baseZ: 2000});
-				
-				$('#cboPlan').empty();
-				
-				$.ajax({
-					url: "<?php echo site_url('Prices/LoadPlans');?>",
-					type: 'POST',
-					data:{network:network},
-					dataType: 'json',
-					complete: function(xhr, textStatus) {
-						//$.msg('unblock');
-					},
-					success: function(data,status,xhr) {
-                		$.msg('unblock');
-													
-						if ($(data).length > 0)
-						{
-							$('#cboPlan').append( new Option('[SELECT]','') );
-							
-							$.each($(data), function(i,e)
-							{
-								if (e.plan) $('#cboPlan').append( new Option($.trim(e.plan),$.trim(e.plan)) );
-							});
-						}
-					},
-					error:  function(xhr,status,error) {
-							$.msg('unblock');
-							
-							m='Error '+ xhr.status + ' Occurred: ' + error;
-							alert(m, 'LaffHub Message');
-							bootstrap_alert.warning(m);
-							setTimeout(function() {
-								$('#divAlert').fadeOut('fast');
-							}, 10000);
-						}
-				});				
-				
-			}catch(e)
-			{
-				$.msg('unblock');
-				m='LoadPlans Module ERROR:\n'+e;
-				
-				bootstrap_alert.warning(m);					
-				alert(m, 'LaffHub Message');
-				setTimeout(function() {
-					$('#divAlert').fadeOut('fast');
-				}, 10000);
-			}
-		}
-		
-		$('#cboPlan').change(function(e) {
-			try
-			{
-				$('#lblDuration').html('');
-				$('#lblVideoCount').html('');					
-				$('#lblAmount').html('');
-				$('#lblSubscriptionDate').html('');					
-				$('#lblExpiryDate').html('');
-								
-				document.getElementById('btnSubscribe').disabled=true;
-								
-				var nt=$('#lblNetwork').html();					
-				var pl=$(this).val();
-				
-				if (nt && pl) LoadPlanDetails(nt,pl);
-			}catch(e)
-			{
-				m="Service Plan Changed Changed ERROR:\n"+e;
-				bootstrap_alert.warning(m);					
-				alert(m, 'LaffHub Message');
-				setTimeout(function() {
-					$('#divAlert').fadeOut('fast');
-				}, 10000);
-			}
-		});
-		
+
+        function LoadPlans(Network)
+        {
+            var plan;
+
+            if(Network === 'mtn') {
+                plan = $('#cboPlan').val("Weekly");
+            }
+
+            if( plan.val() === 'Weekly') {
+                $('#lblDuration').html('');
+                $('#lblVideoCount').html('');
+                $('#lblAmount').html('');
+                $('#lblSubscriptionDate').html('');
+                $('#lblExpiryDate').html('');
+
+                document.getElementById('buttonSubscribe').disabled=true;
+
+                var nt= $('#lblNetwork').val();
+
+                console.log (nt);
+
+                var pl= $('#cboPlan').val();
+
+                if (nt && pl) LoadPlanDetails(nt,pl);
+            }
+        }
+
 		function LoadPlanDetails(network,plan)
 		{
 			var self;
 			
 			try
 			{
-				$('#lblDuration').html('');
+				$('#lblDuration').val('');
 				$('#lblVideoCount').html('');					
 				$('#lblAmount').html('');
 				$('#lblSubscriptionDate').html('');					
@@ -347,9 +281,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						autoUnblock : false ,
 						clickUnblock : false,
 						afterBlock : function() {self = this;/* store 'this' for other scope to use*/},
-						klass : 'mtn-custom-theme',
 						bgPath : '<?php echo base_url();?>images/',
-						content: '<center><img src="<?php echo base_url();?>images/loader.gif" /><p style="color:#fff; font-size:20px; margin-top:10px;"><b>Loading Plan Details. Please Wait...</b></p></center>'
+						content: '<span class="gifloading"> <span></span> <span></span> <span></span> <span></span> </span>'
 					}
 				);
 				
@@ -371,29 +304,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							
 							$.each($(data), function(i,e)
 							{
-								if (e.amount) $('#lblAmount').html($.trim(e.amount));
+							    if (e.amount) $('#lblAmount').val($.trim(e.amount));
 								if (e.duration)
 								{
-									$('#lblDuration').html($.trim(e.duration));
+									$('#lblDuration').val($.trim(e.duration));
 									
 									var subdate='<?php echo date('d M Y'); ?>';
 									var sdt=ChangeDateFrom_dMY_To_Ymd(subdate,'-',' ');
 									var expdate=moment(sdt.replace(new RegExp('-', 'g'), '/')).add(parseInt(e.duration,10), 'days').format("DD MMM YYYY");
 									
-									$('#lblSubscriptionDate').html(subdate);
-									$('#lblExpiryDate').html(expdate);
+									$('#lblSubscriptionDate').val(subdate);
+									$('#lblExpiryDate').val(expdate);
 								}
 								
-								if (e.no_of_videos) $('#lblVideoCount').html($.trim(e.no_of_videos));
-								
-								
-								
-								//var edt=ChangeDateFrom_dMY_To_Ymd($('#txtEndDate').val(),'-',' ');
+								if (e.no_of_videos) $('#lblVideoCount').val($.trim(e.no_of_videos));
 								
 								return false;
 							});
 							
-							document.getElementById('btnSubscribe').disabled=false;
+							document.getElementById('buttonSubscribe').disabled=false;
 						}
 					},
 					error:  function(xhr,status,error) {
@@ -461,6 +390,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			try
 			{
 				var nt=$('#lblNetwork').html();
+				console.log(nt);
+
 				var startdt=ChangeDateFrom_dMY_To_Ymd($('#txtStartDate').val(),'-',' ');
 				var enddt=ChangeDateFrom_dMY_To_Ymd($('#txtEndDate').val(),'-',' ');
 				var pdt = moment(startdt.replace(new RegExp('-', 'g'), '/'));
@@ -471,7 +402,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				//Network
 				if (!nt)
 				{
-					m='Network has not been displayed. Please make sure you have active internet connection. You may also sign out and sign in again. If this persists, contact our support at <a href="mailto:support@laffhub.com">support@laffhub.com</a>.';
+					m='Network has not been displayed. Please make sure you have active internet connection. If this persists, contact our support at <a href="mailto:support@laffhub.com">support@laffhub.com</a>.';
 					alert(m, 'LaffHub Message');
 					bootstrap_alert.warning(m);
 					setTimeout(function() {
@@ -753,7 +684,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			if (colIndex==0) SelectRow(editdata);
 		} );
 				
-		$('#btnSubscribe').click(function(e) {
+		$('#buttonSubscribe').click(function(e) {
 			try
 			{
 				checkForm();				
@@ -769,7 +700,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							
 				return false;
 			}
-		});//btnSubscribe.click
+		});//buttonSubscribe.click
 		
 		function Subscribe(input)
 		{
@@ -790,18 +721,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				);
 				
 				//Make Ajax Request
-				var nt=$('#lblNetwork').html();
-				var ph=$('#lblPhone').html();
-				var em=$('#lblEmail').html();
-				var du=$('#lblDuration').html();
-				var sid=$('#lblSubscriptionId').html();
+				var nt=$('#lblNetwork').val();
+				var ph=$('#lblPhone').val();
+				var em=$('#lblEmail').val();
+				var du=$('#lblDuration').val();
+				var sid=$('#lblSubscriptionId').val();
 				var pl=$('#cboPlan').val();
 				var au=$('#cboAutoBilling').val();
-				var vid=$('#lblVideoCount').html();			
-				var amt=$('#lblAmount').html().replace(new RegExp(',', 'g'), '');				
+				var vid=$('#lblVideoCount').val();
+				var amt=$('#lblAmount').val().replace(new RegExp(',', 'g'), '');
 				var sdt=ChangeDateFrom_dMY_To_Ymd($('#lblSubscriptionDate').html(),'-',' ');
 				var edt=ChangeDateFrom_dMY_To_Ymd($('#lblExpiryDate').html(),'-',' ');				
-				
+
+
 				//Initiate POST
 				var uri = "<?php echo site_url('Subscribe/SubscribeUser');?>";
 				var xhr = new XMLHttpRequest();
@@ -884,21 +816,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		{
 			try
 			 {
-				var nt=$('#lblNetwork').html();
-				var ph=$('#lblPhone').html();
-				var du=$('#lblDuration').html();
-				var sid=$('#lblSubscriptionId').html();
+				var nt=$('#lblNetwork').val();
+				var ph=$('#lblPhone').val();
+				var du=$('#lblDuration').val();
+				var sid=$('#lblSubscriptionId').val();
 				var pl=$('#cboPlan').val();
-				var vid=$('#lblVideoCount').html();			
-				var amt=$('#lblAmount').html().replace(new RegExp(',', 'g'), '');
+				var vid=$('#lblVideoCount').val();
+				var amt=$('#lblAmount').val().replace(new RegExp(',', 'g'), '');
 				
-				var startdt=ChangeDateFrom_dMY_To_Ymd($('#lblSubscriptionDate').html(),'-',' ');
+				var startdt=ChangeDateFrom_dMY_To_Ymd($('#lblSubscriptionDate').val(),'-',' ');
 				var enddt=ChangeDateFrom_dMY_To_Ymd($('#lblExpiryDate').html(),'-',' ');
 				var pdt = moment(startdt.replace(new RegExp('-', 'g'), '/'));
 				var ddt = moment(enddt.replace(new RegExp('-', 'g'), '/'));
 				
-				var s=$.trim($('#lblSubscriptionDate').html());
-				var e=$.trim($('#lblExpiryDate').html());
+				var s=$.trim($('#lblSubscriptionDate').val());
+				var e=$.trim($('#lblExpiryDate').val());
 				 
 				//Network
 				if (!nt)
@@ -940,23 +872,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				}
 				
 				//Plan
-				if ($('#cboPlan > option').length < 2)
-				{
-					m='No service plan record was captured. Please contact our support at <a href="mailto:support@laffhub.com">support@laffhub.com</a>.';
-					alert(m, 'LaffHub Message');
-					bootstrap_alert.warning(m);
-					setTimeout(function() {
-						$('#divAlert').fadeOut('fast');
-					}, 10000);
-					
-					 activateTab('tabData'); return false;
-				}
-				
+
 				if (!pl)
 				{
 					m="Please select a service plan.";
-					
-					
+
 					alert(m, 'LaffHub Message');
 					bootstrap_alert.warning(m);
 					setTimeout(function() {
@@ -1034,9 +954,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				}
 			//confirm('Confirm Message', 'Confirm title', callback_function, null, {ok : 'textForOkButton', cancel : 'textForCancelButton'});
 			//confirm('Confirm Message', 'Confirm title', function(input){var str = input === true ? 'Ok' : 'Cancel'; alert('You clicked ' + str, 'Simple Alert');});"
-				m='Are you sure you want to subscribe to '+nt.toUpperCase()+' '+pl.toUpperCase()+' plan? (Click "Yes" to proceed or "No" to abort)?';
-				
-				confirm(m, 'LaffHub Message', Subscribe,null,{ok : 'Yes', cancel : 'No'});		
+                 Subscribe(true);
+
+//                 m='Are you sure you want to subscribe to '+nt.toUpperCase()+' '+pl.toUpperCase()+' plan? (Click "Yes" to proceed or "No" to abort)?';
+//
+//				confirm(m, 'LaffHub Message', Subscribe,null,{ok : 'Yes', cancel : 'No'});
+
 			 }catch(e)
 			 {
 				m='CHECK FORM ERROR:\n'+e; 
@@ -1067,7 +990,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				$('#lblSubscriptionDate').html('');					
 				$('#lblExpiryDate').html('');
 							
-				document.getElementById('btnSubscribe').disabled=false;
+				document.getElementById('buttonSubscribe').disabled=false;
 				
 				activateTab('tabData');
 			}else
@@ -1091,7 +1014,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			SubscriptionId='<?php echo strtoupper(substr(md5(uniqid(mt_rand(), true)) , 0, 10)); ?>';
 			$('#lblSubscriptionId').html(SubscriptionId);	
 			
-			if (document.getElementById('btnSubscribe')) document.getElementById('btnSubscribe').disabled=true;
+			if (document.getElementById('buttonSubscribe')) document.getElementById('buttonSubscribe').disabled=true;
 		}catch(e)
 		{
 			m="ResetControls ERROR:\n"+e;
@@ -1124,51 +1047,58 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           
                   <div class="panel-body">    
                 <!--Tab-->
-                    <ul class="nav nav-tabs " style="font-weight:bold;">
-                      <li  role="presentation" class="active"><a data-toggle="tab" href="#tabData"><i class="glyphicon glyphicon-list-alt"></i> Subscription Details</a></li>
-                      <li role="presentation"><a data-toggle="tab" href="#tabReport"><i class="fa fa-eye"></i> View Subscription History</a></li>
-                    </ul>
+<!--                    <ul class="nav nav-tabs " style="font-weight:bold;">-->
+<!--                      <li  role="presentation" class="active"><a data-toggle="tab" href="#tabData"><i class="glyphicon glyphicon-list-alt"></i> Subscription Details</a></li>-->
+<!--                      <li role="presentation"><a data-toggle="tab" href="#tabReport"><i class="fa fa-eye"></i> View Subscription History</a></li>-->
+<!--                    </ul>-->
                     <!--Tab Ends-->
                     
                      <div class="tab-content">
                         <div id="tabData" class="row tab-pane fade in active ">
-                             
-                             
-                             <div align="center" id="txtInfo" style="font-weight:bold; font-style:italic; color: #BBBBBB; margin-top:10px; margin-bottom:10px; " class=" size-14">Fields With <span class="redtext">*</span> Are Required!</div>
-                             
-                             <form class="form-horizontal"> 
+
+                             <form class="form-horizontal">
+
+                                 <br>
+                                 <div class="img-responsive">
+                                     <img src="<?php echo base_url(); ?>acss/images/subscribe.jpg" class="img-responsive" id="imgSubscribe"/>
+                                 </div>
+                                 <br>
+
                                 <!--Network/Phone Number-->
                                 <div class="form-group">
                                   <!--Network-->
-                                  <label for="lblNetwork" class="col-sm-2 control-label " title="<?php echo $Network; ?>">Network<span class="redtext">*</span></label>
-                
-                                  <div class="col-sm-3" title="<?php echo $Network; ?>">
-                                     <label style="text-transform:none; color:#E5B400;" class="form-control" id="lblNetwork"><?php echo $Network; ?></label>
-                                  </div>
+
+                                    <div class="col-sm-3" title="<?php echo $Network; ?>">
+                                        <input type="hidden" style="text-transform:none; color:#EC1D22;" class="form-control" id="lblNetwork" value="<?php echo $Network; ?>">
+                                    </div>
                                   
                                   <!--Phone Number-->
-                                  <label for="lblPhone" class="col-sm-3 control-label" title="Subscriber Phone Number">Phone No</label>
-                
-                                  <div class="col-sm-3" title="Subscriber Phone Number" > 
-                                     <label id="lblPhone" class="form-control nobold" title="Phone Number"><?php echo $Phone; ?></label>
-                                  </div>
+
+                                    <div class="col-sm-3" title="Subscriber Phone Number" >
+                                        <input type="hidden" id="lblPhone" class="form-control nobold" title="Phone Number" value="<?php echo $Phone; ?>">
+                                    </div>
+
                                 </div>
+
+                              <!-- Subscribe button ---->
+                             <div class="form-group" style="margin-top:30px;">
+                                 <div class="col-sm-offset-2 col-sm-7">
+                                     <button title="Add Subscription" id="buttonSubscribe" type="button" class="btn btn-success" role="button" style="text-align:center;"><i class="fa fa-credit-card-alt"></i> Subscribe</button>
+                                 </div>
+                             </div>
                                 
                                 
                                 <!--Service Plan Duration/Service Plan-->
                                 <div class="form-group">
                                     <!--Service Plan-->
-                                  <label for="cboPlan" class="col-sm-2 control-label" title="Service Plan">Service Plan<span class="redtext">*</span></label>
-                
-                                  <div class="col-sm-3" title="Service Plan" > 
-                                     <select id="cboPlan" class="form-control"></select>
-                                  </div>
-                                
+                                    <div class="col-sm-3" title="Service Plan" >
+                                        <input type="hidden" id="cboPlan" class="form-control" title="Service Plan">
+                                    </div>
+
+
                                     <!--Service Plan Duration-->
-                                  <label for="lblDuration" class="col-sm-3 control-label" title="Service Plan Duration">Service Plan Duration</label>
-                
                                   <div class="col-sm-3" title="Service Plan Duration"> 
-                                     <label class="form-control nobold" id="lblDuration"></label>
+                                     <input type="hidden" class="form-control nobold" id="lblDuration" title="Service Plan Duration" >
                                   </div>                                      
                                 </div>
                                 
@@ -1176,44 +1106,40 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <!--No Of Videos/Amount-->
                                 <div class="form-group">
                                 <!--No Of Videos-->
-                              <label for="lblVideoCount" class="col-sm-2 control-label" title="No Of Videos To Watch">No Of Videos</label>
-            
+
                               <div class="col-sm-3"> 
-                                 <label class="form-control nobold" id="lblVideoCount" title="No Of Videos To Watch"></label>
+                                 <input type="hidden" class="form-control nobold" id="lblVideoCount" title="No Of Videos To Watch">
                               </div>
                             
                                 <!--Amount-->
-                              <label for="lblAmount" class="col-sm-3 control-label" title="Subscription Amount">Subscription Amount (&#8358;)</label>
-            
+
                               <div class="col-sm-3"> 
-                                 <label class="form-control nobold" id="lblAmount" title="Subscription Amount"></label>
+                                 <input type="hidden" class="form-control nobold" id="lblAmount" title="Subscription Amount">
                               </div>
                             </div>
                             
                             <!--Subscription Date/Expiry Date-->
                             <div class="form-group">
                                 <!--Subscription Date-->
-                              <label for="lblSubscriptionDate" class="col-sm-2 control-label" title="Subscription Date">Subscription Date</label>
-            
+
                               <div class="col-sm-3"> 
-                                 <label class="form-control nobold" id="lblSubscriptionDate" title="Subscription Date"></label>
+                                 <input type="hidden" class="form-control nobold" id="lblSubscriptionDate" title="Subscription Date">
                               </div>
                             
                                 <!--Expiry Date-->
-                              <label for="lblExpiryDate" class="col-sm-3 control-label" title="Subscription Expiry Date">Subscription Expiry Date</label>
-            
+
                               <div class="col-sm-3"> 
-                                 <label class="form-control nobold" id="lblExpiryDate" title="Subscription Expiry Date"></label>
+                                 <input type="hidden" class="form-control nobold" id="lblExpiryDate" title="Subscription Expiry Date">
                               </div>
                             </div>
                             
                             <!--Enable Auto-Billing/Email-->
                             <div class="form-group">
                                <!--Email-->
-                               <label for="lblEmail" class="col-sm-2 control-label" title="Subscriber Email">Email</label>
+<!--                               <label for="lblEmail" class="col-sm-2 control-label" title="Subscriber Email">Email</label>-->
                 
                                   <div class="col-sm-3" title="Subscriber Email" > 
-                                     <label id="lblEmail" class="form-control nobold"><?php echo $subscriber_email; ?></label>
+                                     <input type="hidden" id="lblEmail" class="form-control nobold"><?php echo $subscriber_email; ?></input>
                                   </div>
 
                             <!--Enable Auto-Billing/Email-->
@@ -1228,31 +1154,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                             <!--Subscription ID-->
                             <div class="form-group">
-                               <label for="lblSubscriptionId" class="col-sm-2 control-label" title="Subscription ID">Subscription ID</label>
-                
+<!--                               <label for="lblSubscriptionId" class="col-sm-2 control-label" title="Subscription ID">Subscription ID</label>-->
+
                                   <div class="col-sm-3" title="Subscription ID" > 
-                                     <label style="background-color:#C5522D; color:#ffffff;" id="lblSubscriptionId" class="form-control"><?php echo $subscriptionId; ?></label>
+                                     <input type="hidden" style="background-color:#C5522D; color:#ffffff;" id="lblSubscriptionId" class="form-control" title="subscription button"><?php echo $subscriptionId; ?>
                                   </div>                                  
                             </div>
                                         
                         <div align="center">
                             <div id = "divAlert"></div>
                        </div>
-               
-                <center>
-                <div class="form-group" style="margin-top:30px;">
-                    <div class="col-sm-offset-2 col-sm-7">
-                        <button title="Add Subscription" id="btnSubscribe" type="button" class="btn btn-primary" role="button" style="text-align:center; width:120px;"><i class="fa fa-credit-card-alt"></i> Subscribe</button>
-                                                    
-                        <button onClick="window.location.reload(true);" title="Refresh Form" id="btnRefresh" type="button" class="btn btn-info" role="button" style="width:120px;  margin-left:10px;" ><i class="fa fa-refresh"></i> Refresh</button>
-                    </div>
-                    
-                  
-                    
-        
-                </div>
-                </center>
-                
+
                 </form>   
                         <br>
                        

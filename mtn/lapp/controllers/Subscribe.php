@@ -155,6 +155,7 @@ class Subscribe extends CI_Controller {
                 }elseif(trim(strtoupper($result)) === 'ALREADY ACTIVE'){
                     $ret = "You have an active subscription. Enjoy comedy clips on Laffhub";
                 } else#Failed
+
                 {
                     $ret = "Sorry, subscription was not successful, please try again";
                 }

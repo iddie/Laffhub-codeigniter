@@ -549,7 +549,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 {
                     try
                     {
-                        var nt=$('#lblNetwork').html();
+                        var nt=$('#lblNetwork').val();
                         var startdt=ChangeDateFrom_dMY_To_Ymd($('#txtStartDate').val(),'-',' ');
                         var enddt=ChangeDateFrom_dMY_To_Ymd($('#txtEndDate').val(),'-',' ');
                         var pdt = moment(startdt.replace(new RegExp('-', 'g'), '/'));
