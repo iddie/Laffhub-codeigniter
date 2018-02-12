@@ -262,7 +262,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <div>
                                 <div class="form-group" style="margin-top:10px;">
                                     <div class="col-sm-offset-2 col-sm-7">
-                                        <p id="instruction">Confirm your subscription via the Pop-up window on your mobile phone or dial *560*1# before clicking on "Continue"</p>
+                                        <p id="instruction">A POP-Up will appear on your phone screen to confirm your subscription. After confirming your subscription request via the POP-UP, click Continue button below.</p>
+                                        <p id="instructions">Otherwise dial *560*1# to confirm your subscription request if the POP-UP doesn't appear.</p>
                                     </div>
                                 </div>
                             </div>
