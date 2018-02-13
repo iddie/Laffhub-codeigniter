@@ -960,7 +960,7 @@ $(document).ready(function(e) {
 			
 			var mydata={email:'<?php echo $subscriber_email; ?>', phone:Phone, videocode:cd, videotitle:vt};
 				 				  
-						
+
 			$.ajax({
 				type: "POST",
 				dataType: 'text',
@@ -1027,7 +1027,7 @@ $(document).ready(function(e) {
 					if ($(data).length > 0)
 					{
 						var cnt=0;
-//pos,parentid,commentid,author,comment,datecreated,likes												
+                    //pos,parentid,commentid,author,comment,datecreated,likes
 						$.each($(data), function(i,e)
 						{							
 							if (e.commentid && e.author)

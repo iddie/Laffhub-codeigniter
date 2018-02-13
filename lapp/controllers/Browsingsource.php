@@ -45,20 +45,20 @@ class Browsingsource extends CI_Controller {
 		{
 			if ($host=='localhost')
 			{
-				redirect('Home', 'refresh');
+				redirect('Subscriberhome', 'refresh');
 			}else
 			{
-				redirect('https://laffhub.com/Home', 'refresh');
+				redirect('https://laffhub.com/Subscriberhome', 'refresh');
 				
 			}
 		}else
 		{
 			if ($host=='localhost')
 			{
-				redirect('Home', 'refresh');
+				redirect('Subscriberhome', 'refresh');
 			}else
 			{
-				redirect('https://laffhub.com/Home', 'refresh');
+				redirect('https://laffhub.com/Subscriberhome', 'refresh');
 			}
 		}
 	}

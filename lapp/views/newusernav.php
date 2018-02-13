@@ -205,9 +205,9 @@ function Ask()
                   <a style="cursor:pointer;" onClick="NewPage('Subscribe')" class="header__nav-link "> Subscribe </a>
                 </li>
                 
-                <li class="header__nav-item">
-                  <a class="header__nav-link "><span style="color:#5F5F5F; font-size:16px;"><span style="color:#000000;"><b>Email:</b></span> <?php echo $subscriber_email; ?> </span></a>
-                </li>
+<!--                <li class="header__nav-item">-->
+<!--                  <a class="header__nav-link "><span style="color:#5F5F5F; font-size:16px;"><span style="color:#000000;"><b>Email:</b></span> --><?php //echo $subscriber_email; ?><!-- </span></a>-->
+<!--                </li>-->
               </ul>
             </nav>
           </div>
@@ -218,7 +218,7 @@ function Ask()
               <a href="#" class="dropdown__toggle" data-toggle="dropdown">
                 <span>My Account</span>
               </a>
-              
+
               <ul class="dropdown-menu">
               	<li><a style="cursor:pointer;" onClick="NewPage('Subscriberhome')"><span>Dashboard</span></a></li>
                 <li><a style="cursor:pointer;" onClick="NewPage('Profile')"><span>Profile</span></a></li>
