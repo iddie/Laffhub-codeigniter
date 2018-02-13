@@ -249,9 +249,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						autoUnblock : false ,
 						clickUnblock : false,
 						afterBlock : function() {self = this;/* store 'this' for other scope to use*/},
-						klass : 'custom-theme',
 						bgPath : '<?php echo base_url();?>images/',
-						content: '<center><img src="<?php echo base_url();?>images/loader.gif" /><p style="color:#fff; font-size:20px; margin-top:10px;"><b>Loading Plans. Please Wait...</b></p></center>'
+                        content: '<span class="gifloading"> <span></span> <span></span> <span></span> <span></span> </span>'
 					}
 				);
 				
@@ -350,9 +349,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						autoUnblock : false ,
 						clickUnblock : false,
 						afterBlock : function() {self = this;/* store 'this' for other scope to use*/},
-						klass : 'custom-theme',
 						bgPath : '<?php echo base_url();?>images/',
-						content: '<center><img src="<?php echo base_url();?>images/loader.gif" /><p style="color:#fff; font-size:20px; margin-top:10px;"><b>Loading Plan Details. Please Wait...</b></p></center>'
+                        content: '<span class="gifloading"> <span></span> <span></span> <span></span> <span></span> </span>'
 					}
 				);
 				
@@ -622,9 +620,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						autoUnblock : false ,
 						clickUnblock : false,
 						afterBlock : function() {self = this;/* store 'this' for other scope to use*/},
-						klass : 'custom-theme',
 						bgPath : '<?php echo base_url();?>images/',
-						content: '<center><img src="<?php echo base_url();?>images/loader.gif" /><p style="color:#fff; font-size:20px; margin-top:10px;"><b>Retrieving Subscription History. Please Wait...</b></p></center>'
+                        content: '<span class="gifloading"> <span></span> <span></span> <span></span> <span></span> </span>'
 					}
 				);
 		
@@ -783,9 +780,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						autoUnblock : false ,
 						clickUnblock : false,
 						afterBlock : function() {self = this;/* store 'this' for other scope to use*/},
-						klass : 'custom-theme',
 						bgPath : '<?php echo base_url();?>images/',
-						content: '<center><img src="<?php echo base_url();?>images/loader.gif" /><p style="color:#fff; font-size:20px; margin-top:10px;"><b>Subscribing User. Please Wait...</b></p></center>'
+                        content: '<span class="gifloading"> <span></span> <span></span> <span></span> <span></span> </span>'
 					}
 				);
 				
@@ -1109,9 +1105,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					autoUnblock : false ,
 					clickUnblock : false,
 					afterBlock : function() {self = this;/* store 'this' for other scope to use*/},
-					klass : 'custom-theme',
 					bgPath : '<?php echo base_url();?>images/',
-					content: '<center><img src="<?php echo base_url();?>images/loader.gif" /><p style="color:#fff; font-size:20px; margin-top:10px;"><b>Verifying Payment. Please Wait...</b></p></center>'
+                    content: '<span class="gifloading"> <span></span> <span></span> <span></span> <span></span> </span>'
 				}
 			);
 			

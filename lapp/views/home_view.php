@@ -58,6 +58,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	
 	var Network='<?php echo $Network;?>';
 	var Phone='<?php echo $Phone;?>';
+	var previousURL = '<?php echo $referrer;?>';
+
+	console.log(previousURL);
+
 	var Title='<font color="#AF4442">Subscriber Login Help</font>';
 	var m='';
 
@@ -101,8 +105,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						$.unblockUI;
 							
 						if ($.trim(data.toUpperCase())=='OK')
-						{							
-							window.location.href='<?php echo site_url("Subscriberhome"); ?>';
+						{
+						    if (previousURL.indexOf('Subscribe') !== -1){
+
+                                window.location.href= window.location.href.split('/').slice(0, 3).join('/') + previousURL;
+
+                            } else{
+
+                                window.location.href='<?php echo site_url("Subscriberhome"); ?>';
+                            }
 						}else
 						{
 							m=data;

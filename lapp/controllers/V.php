@@ -1264,7 +1264,7 @@ class V extends CI_Controller {
             redirect("Subscriberhome");
         }
     }
-    
+
 	public function GetComments()
 	{
 		$videocode='';

@@ -12,8 +12,7 @@ class Browsingsource extends CI_Controller {
 		$this->load->model('getdata_model');
 		
 	 }
-	 
-	
+
 	public function DetermineSource()
 	{		
 		$ret=$this->getdata_model->GetNetwork();
@@ -49,7 +48,7 @@ class Browsingsource extends CI_Controller {
 			}else
 			{
 				redirect('https://laffhub.com/Subscriberhome', 'refresh');
-				
+
 			}
 		}else
 		{
