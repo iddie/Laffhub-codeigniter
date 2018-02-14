@@ -38,6 +38,6 @@ class Subscriberlogout extends CI_Controller {
 		
 		session_destroy();
 		
-		redirect('Home');
+		redirect('Subscriberhome');
 	}
 }

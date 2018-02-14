@@ -8,6 +8,7 @@ class Home extends CI_Controller {
 		parent::__construct();
 		$this->load->helper('url'); 	
 		$this->load->model('getdata_model');
+        $this->load->library('user_agent');
 		
 		#$file = fopen('aaa_ISP.txt',"a"); fwrite($file, "\n\nAFTER MODEL"); fclose($file);
 	 }
@@ -439,7 +440,7 @@ class Home extends CI_Controller {
 	public function index()
 	{
 		#if (!isset($_SESSION['InternetSource'])) redirect('Browsingsource');
-		
+
 		$data['Network']=$this->getdata_model->GetNetwork();
 		$data['Phone']=$this->getdata_model->GetMSISDN();	
 		
@@ -467,9 +468,11 @@ class Home extends CI_Controller {
 		}
 				
 		$data['Categories']=$this->getdata_model->GetCategories();
-		
-		
-		
+
+		$data['referrer'] = $_SESSION['subscribe_url'];
+
+        $_SESSION['subscribe_url']='';
+
 		#Determine Site To Launch
 		$ret=$data['Network'];
 		

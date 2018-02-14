@@ -103,9 +103,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				autoUnblock : true ,
 				clickUnblock : true,
 				afterBlock : function() {self = this;/* store 'this' for other scope to use*/},
-				klass : 'custom-theme',
 				bgPath : '<?php echo base_url();?>images/',
-				content: '<center><img src="<?php echo base_url();?>images/loader.gif" /><p style="color:#fff; font-size:20px; margin-top:10px;"><b>Loading '+Category+'\'s Videos. Please Wait...</b></p></center>'
+                content: '<span class="gifloading"> <span></span> <span></span> <span></span> <span></span> </span>'
 			}
 		);
 		
@@ -270,6 +269,8 @@ function ShowVideo(code)
 									</div>
 								  </div>
 								  <h4 class="video-preview__comedianName">'.$comedian.'</h4>
+                                  <h4 class="video-preview__comedianName">'.$row->video_title.'</h4>
+                                  <h5 class="video-preview__views">'.$views.'</h5>
 								  <h5 class="video-preview__descr">'.trim($row->description).'</h5>
 								</a>
 							  </div>	

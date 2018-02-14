@@ -611,12 +611,12 @@ $file = fopen('aaa.txt',"w"); fwrite($file, $sql); fclose($file);
 			 $sub=stristr($isp,'mtn');
 			 
 			 if ($sub !== FALSE) return 'MTN'; else return 'WIFI';
-		 }elseif (($countryCode=='ng') and ($isp=='emts limited / etisalat nigeria'))#Etisalat
+		 }elseif (($countryCode=='ng') and ($isp=='etisalat nigeria'))#Etisalat
 		 {
-			 #$sub=stristr($isp,'etisalat');
-			 
-			 #if ($sub !== FALSE) return 'Etisalat'; else return 'WIFI';
-			 return 'WIFI';
+			 $sub=stristr($isp,'etisalat');
+
+			 if ($sub !== FALSE) return 'Etisalat'; else return 'WIFI';
+
 		 }elseif (($countryCode=='ng') and ($isp=='globacom limited'))#GLO
 		 {
 			 return 'WIFI';

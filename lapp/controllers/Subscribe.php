@@ -627,8 +627,11 @@ class Subscribe extends CI_Controller {
 	}#End Of LoadMessages functions
 	
 	public function index()
-	{	
-		if ($_SESSION['subscriber_email'])
+	{
+
+		$_SESSION['subscribe_url'] = $_SERVER['REQUEST_URI'];
+
+	    if ($_SESSION['subscriber_email'])
 		{
 			$data['subscriber_email']=$_SESSION['subscriber_email'];
 			

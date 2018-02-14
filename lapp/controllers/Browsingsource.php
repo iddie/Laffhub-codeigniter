@@ -12,8 +12,7 @@ class Browsingsource extends CI_Controller {
 		$this->load->model('getdata_model');
 		
 	 }
-	 
-	
+
 	public function DetermineSource()
 	{		
 		$ret=$this->getdata_model->GetNetwork();
@@ -45,20 +44,20 @@ class Browsingsource extends CI_Controller {
 		{
 			if ($host=='localhost')
 			{
-				redirect('Home', 'refresh');
+				redirect('Subscriberhome', 'refresh');
 			}else
 			{
-				redirect('https://laffhub.com/Home', 'refresh');
-				
+				redirect('https://laffhub.com/Subscriberhome', 'refresh');
+
 			}
 		}else
 		{
 			if ($host=='localhost')
 			{
-				redirect('Home', 'refresh');
+				redirect('Subscriberhome', 'refresh');
 			}else
 			{
-				redirect('https://laffhub.com/Home', 'refresh');
+				redirect('https://laffhub.com/Subscriberhome', 'refresh');
 			}
 		}
 	}
