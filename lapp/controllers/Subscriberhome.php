@@ -142,6 +142,7 @@ class Subscriberhome extends CI_Controller {
                 $data['StandUpComedy']=$this->getdata_model->GetStandUpComedy();
                 $data['ComedyNews']=$this->getdata_model->GetComedyNews();
                 $data['FeaturedVideos']=$this->getdata_model->GetFeaturedVideos();
+
 				
 				#Determine Site To Launch
 				$ret=$data['Network'];

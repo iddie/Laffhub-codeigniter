@@ -4,6 +4,7 @@
 <script type="text/javascript" src="<?php echo base_url();?>js/jquery.center.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>js/jquery.msg.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>js/jquery.redirect.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109230973-1"></script>
@@ -129,23 +130,24 @@ function SubscriberSignOut(input)
 		window.location.href='<?php echo site_url('Subscriberlogout'); ?>';
 	} else
 	{
-		m='Sign Out Cancelled';
-		alert(m, 'LaffHub Message');
-		bootstrap_alert.warning(m);
-		setTimeout(function() {
-			$('#divAlert').fadeOut('fast');
-		}, 10000);
+        swal("Sign Out Cancelled!", {
+            buttons: false,
+            timer: 2000,
+        });
 	}
 }
 
 function Ask()
 {
-	confirm('Do you want to sign out? (Click <b>Yes</b> to proceed or <b>No</b> to abort)', 'LaffHub Message', SubscriberSignOut,null,{ok : 'Yes', cancel : 'No'});
+    swal({
+        title: "Are you sure about this?",
+        icon: "warning",
+        buttons: [true, "Do it!"],
+        dangerMode: true,
+    })
+        .then(SubscriberSignOut);
 }
-
 </script>
-
-
  
  <header class="page__header header ">
  	 	 <div class="container">
@@ -215,17 +217,29 @@ function Ask()
           
           <div class="header__right" style="margin-top:20px;">
             <div class="dropdown lng-dropdown">
-              <a href="#" class="dropdown__toggle" data-toggle="dropdown">
-                <span>My Account</span>
-              </a>
+            <?php
+            if (empty($subscriber_email)) {
 
-              <ul class="dropdown-menu">
-              	<li><a style="cursor:pointer;" onClick="NewPage('Subscriberhome')"><span>Dashboard</span></a></li>
-                <li><a style="cursor:pointer;" onClick="NewPage('Profile')"><span>Profile</span></a></li>
-                <li><a style="cursor:pointer;" onClick="NewPage('Unsubscribe')"><span>Unsubscribe</span></a></li>
-               	<li><a style="cursor:pointer;" onClick="Ask();"><span>Sign Out</span></a></li>
-              </ul>
-	
+                echo '<a class="dropdown__toggle" style="cursor:pointer;" onClick="NewPage(\'Home\')">
+                <span>Sign In</span>
+              </a>';
+
+            } else {
+
+                echo ' 
+                <a href="#" class="dropdown__toggle" data-toggle="dropdown">
+                    <span>My Account</span>
+                </a>   
+                  <ul class="dropdown-menu">
+                    <li><a style="cursor:pointer;" onClick="NewPage(\'Subscriberhome\')"><span>Dashboard</span></a></li>
+                    <li><a style="cursor:pointer;" onClick="NewPage(\'Profile\')"><span>Profile</span></a></li>
+                    <li><a style="cursor:pointer;" onClick="NewPage(\'Unsubscribe\')"><span>Unsubscribe</span></a></li>
+                    <li><a style="cursor:pointer;" onClick="Ask();"><span>Sign Out</span></a></li>
+                  </ul>';
+            }
+
+            ?>
+
             </div>
 
             <a title="Search For Video" href="#" class="search-open"></a>

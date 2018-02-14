@@ -98,9 +98,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				autoUnblock : true ,
 				clickUnblock : true,
 				afterBlock : function() {self = this;/* store 'this' for other scope to use*/},
-				klass : 'custom-theme',
 				bgPath : '<?php echo base_url();?>images/',
-				content: '<center><img src="<?php echo base_url();?>images/loader.gif" /><p style="color:#fff; font-size:20px; margin-top:10px;"><b>Loading '+Comedian+'\'s Videos. Please Wait...</b></p></center>'
+                content: '<span class="gifloading"> <span></span> <span></span> <span></span> <span></span> </span>'
 			}
 		);
 		
@@ -213,7 +212,7 @@ function ShowVideo(code)
 									}
 									
 									echo '
-							<div class="col-xxl-2 col-xl-3 col-lg-3 col-sm-6">
+							<div class="col-xxl-2 col-xl-3 col-lg-3 col-sm-3">
 							  <a title="Click to watch '.strtoupper($row->video_title).'" style="cursor:pointer;" onClick="ShowVideo(\''.$videourl.'\');" class="video-preview video-preview--sm">
 							  
 								<div class="video-preview__image">
@@ -224,13 +223,15 @@ function ShowVideo(code)
 									<div class="video-preview__quality">HD</div>
 								  </div>
 								</div>
+								<h4 class="video-preview__comedianName">'.$comedian.'</h4>
+                                <h4 class="video-preview__comedianName">'.$row->video_title.'</h4>
+                                <h5 class="video-preview__views">'.$views.'</h5>
 								<h5 class="video-preview__descr">'.trim($row->description).'</h5>
 							  </a>
 							</div>		
 									';		
 								}
 							endforeach;
-							
 						}
 					?>
                     

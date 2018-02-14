@@ -202,143 +202,136 @@ class Comedian extends CI_Controller {
 				redirect('Comedianslist');
 			}else
 			{
-				if (!$_SESSION['subscriber_email'])
-				{
-					redirect('Home');
-				}else
-				{
-					$data['subscriber_email']=$_SESSION['subscriber_email'];
-					
-					#Get comedian videos
-					$sql = "SELECT * FROM videos WHERE (play_status=1) AND (encoded=1) AND (TRIM(comedian)='".$this->db->escape_str($comedian)."')";
-					
-					$order = " ORDER BY video_title";
-				
-					$sql=$this->getdata_model->GetPaginationUrl($page,$rowcount,$sql,$order);
-					
-					$query = $this->db->query($sql);
-		#$file = fopen('aaa.txt',"w"); fwrite($file,$sql); fclose($file);				
-					if ($query->num_rows() > 0 )
-					{
-						$data['ComedianVideos']=$query->result();
-						
-						$data['Network']=$this->getdata_model->GetNetwork();
-						$data['Phone']=$this->getdata_model->GetMSISDN();
-							
-						$_SESSION['Network']=$data['Network'];
-						$_SESSION['Phone']=$data['Phone'];
-						
-						$data['subscriptionstatus'] = '<span style="color:#9E0911;">Not Active</span>';
-						
-						$result=$this->getdata_model->GetSubscriptionDate($data['subscriber_email'],$data['Phone']);
-										
-						if (is_array($result))
-						{
-							$td=date('Y-m-d H:i:s');
-							
-							foreach($result as $row)
-							{
-								if ($row->subscribe_date) $dt = date('F d, Y',strtotime($row->subscribe_date));
-								
-								$data['subscribe_date'] = $dt;
-								
-								if ($row->exp_date) $edt = date('F d, Y',strtotime($row->exp_date));
-								$data['exp_date'] = $edt;
-								
-								if ($td > date('Y-m-d H:i:s',strtotime($row->exp_date)))
-								{
-									if ($row->subscriptionstatus==1)
-									{
-										#Update Subscription Date
-										$this->getdata_model->UpdateSubscriptionStatus($data['subscriber_email'],$data['Phone'],'0');
-									}
-								}else
-								{
-									if (!$row->subscriptionstatus)
-									{
-										$this->getdata_model->UpdateSubscriptionStatus($data['subscriber_email'],$data['Phone'],'1');
-										$data['subscriptionstatus'] = '<span style="color:#099E11;">Active</span>';
-									}else
-									{
-										$data['subscriptionstatus'] = '<span style="color:#099E11;">Active</span>';
-									}
-								}
-			
-								break;
-							}
-						}
-						
-						$data['page']=urldecode($page);
-						$data['ActiveAdverts']=$this->getdata_model->GetActiveAdverts();
-						$data['Categories']=$this->getdata_model->GetCategories();
-						$data['Comedian']=urldecode($comedian);
-						$data['ComedianId']=$id;
-						
-						if ($_SESSION['thumbs_bucket']) $data['thumbs_bucket'] = $_SESSION['thumbs_bucket'];
-						$this->load->view('comedian_view',$data);
-						
-					}else
-					{
-						$data['ComedianVideos']=$query->result();
-						
-						$data['Network']=$this->getdata_model->GetNetwork();
-						$data['Phone']=$this->getdata_model->GetMSISDN();					
-						
-						$data['page']=urldecode($page);
-						$data['ActiveAdverts']=$this->getdata_model->GetActiveAdverts();
-						$data['Comedian']=urldecode($comedian);
-						$data['ComedianId']=$id;
-						$data['subscriptionstatus'] = '<span style="color:#9E0911;">Not Active</span>';
-						
-						$result=$this->getdata_model->GetSubscriptionDate($data['subscriber_email'],$data['Phone']);
-										
-						if (is_array($result))
-						{
-							$td=date('Y-m-d H:i:s');
-							
-							foreach($result as $row)
-							{
-								if ($row->subscribe_date) $dt = date('F d, Y',strtotime($row->subscribe_date));
-								
-								$data['subscribe_date'] = $dt;
-								
-								if ($row->exp_date) $edt = date('F d, Y',strtotime($row->exp_date));
-								$data['exp_date'] = $edt;
-								
-								if ($td > date('Y-m-d H:i:s',strtotime($row->exp_date)))
-								{
-									if ($row->subscriptionstatus==1)
-									{
-										#Update Subscription Date
-										$this->getdata_model->UpdateSubscriptionStatus($data['subscriber_email'],$data['Phone'],'0');
-									}
-								}else
-								{
-									if (!$row->subscriptionstatus)
-									{
-										$this->getdata_model->UpdateSubscriptionStatus($data['subscriber_email'],$data['Phone'],'1');
-										$data['subscriptionstatus'] = '<span style="color:#099E11;">Active</span>';
-									}else
-									{
-										$data['subscriptionstatus'] = '<span style="color:#099E11;">Active</span>';
-									}
-								}
-			
-								break;
-							}
-						}
-							
-						$_SESSION['Network']=$data['Network'];
-						$_SESSION['Phone']=$data['Phone'];
-						
-						$data['Categories']=$this->getdata_model->GetCategories();
-						$data['Comedians']=$this->getdata_model->GetComedians();
-						$data['ComedianId']=$id;
-						$this->load->view('comedian_view',$data);
-					}	
-				}
-				
-			}			
+                $data['subscriber_email']=$_SESSION['subscriber_email'];
+
+                #Get comedian videos
+                $sql = "SELECT * FROM videos WHERE (play_status=1) AND (encoded=1) AND (TRIM(comedian)='".$this->db->escape_str($comedian)."')";
+
+                $order = " ORDER BY video_title";
+
+                $sql=$this->getdata_model->GetPaginationUrl($page,$rowcount,$sql,$order);
+
+                $query = $this->db->query($sql);
+                #$file = fopen('aaa.txt',"w"); fwrite($file,$sql); fclose($file);
+                if ($query->num_rows() > 0 )
+                {
+                    $data['ComedianVideos']=$query->result();
+
+                    $data['Network']=$this->getdata_model->GetNetwork();
+                    $data['Phone']=$this->getdata_model->GetMSISDN();
+
+                    $_SESSION['Network']=$data['Network'];
+                    $_SESSION['Phone']=$data['Phone'];
+
+                    $data['subscriptionstatus'] = '<span style="color:#9E0911;">Not Active</span>';
+
+                    $result=$this->getdata_model->GetSubscriptionDate($data['subscriber_email'],$data['Phone']);
+
+                    if (is_array($result))
+                    {
+                        $td=date('Y-m-d H:i:s');
+
+                        foreach($result as $row)
+                        {
+                            if ($row->subscribe_date) $dt = date('F d, Y',strtotime($row->subscribe_date));
+
+                            $data['subscribe_date'] = $dt;
+
+                            if ($row->exp_date) $edt = date('F d, Y',strtotime($row->exp_date));
+                            $data['exp_date'] = $edt;
+
+                            if ($td > date('Y-m-d H:i:s',strtotime($row->exp_date)))
+                            {
+                                if ($row->subscriptionstatus==1)
+                                {
+                                    #Update Subscription Date
+                                    $this->getdata_model->UpdateSubscriptionStatus($data['subscriber_email'],$data['Phone'],'0');
+                                }
+                            }else
+                            {
+                                if (!$row->subscriptionstatus)
+                                {
+                                    $this->getdata_model->UpdateSubscriptionStatus($data['subscriber_email'],$data['Phone'],'1');
+                                    $data['subscriptionstatus'] = '<span style="color:#099E11;">Active</span>';
+                                }else
+                                {
+                                    $data['subscriptionstatus'] = '<span style="color:#099E11;">Active</span>';
+                                }
+                            }
+
+                            break;
+                        }
+                    }
+
+                    $data['page']=urldecode($page);
+                    $data['ActiveAdverts']=$this->getdata_model->GetActiveAdverts();
+                    $data['Categories']=$this->getdata_model->GetCategories();
+                    $data['Comedian']=urldecode($comedian);
+                    $data['ComedianId']=$id;
+
+                    if ($_SESSION['thumbs_bucket']) $data['thumbs_bucket'] = $_SESSION['thumbs_bucket'];
+                    $this->load->view('comedian_view',$data);
+
+                }else
+                {
+                    $data['ComedianVideos']=$query->result();
+
+                    $data['Network']=$this->getdata_model->GetNetwork();
+                    $data['Phone']=$this->getdata_model->GetMSISDN();
+
+                    $data['page']=urldecode($page);
+                    $data['ActiveAdverts']=$this->getdata_model->GetActiveAdverts();
+                    $data['Comedian']=urldecode($comedian);
+                    $data['ComedianId']=$id;
+                    $data['subscriptionstatus'] = '<span style="color:#9E0911;">Not Active</span>';
+
+                    $result=$this->getdata_model->GetSubscriptionDate($data['subscriber_email'],$data['Phone']);
+
+                    if (is_array($result))
+                    {
+                        $td=date('Y-m-d H:i:s');
+
+                        foreach($result as $row)
+                        {
+                            if ($row->subscribe_date) $dt = date('F d, Y',strtotime($row->subscribe_date));
+
+                            $data['subscribe_date'] = $dt;
+
+                            if ($row->exp_date) $edt = date('F d, Y',strtotime($row->exp_date));
+                            $data['exp_date'] = $edt;
+
+                            if ($td > date('Y-m-d H:i:s',strtotime($row->exp_date)))
+                            {
+                                if ($row->subscriptionstatus==1)
+                                {
+                                    #Update Subscription Date
+                                    $this->getdata_model->UpdateSubscriptionStatus($data['subscriber_email'],$data['Phone'],'0');
+                                }
+                            }else
+                            {
+                                if (!$row->subscriptionstatus)
+                                {
+                                    $this->getdata_model->UpdateSubscriptionStatus($data['subscriber_email'],$data['Phone'],'1');
+                                    $data['subscriptionstatus'] = '<span style="color:#099E11;">Active</span>';
+                                }else
+                                {
+                                    $data['subscriptionstatus'] = '<span style="color:#099E11;">Active</span>';
+                                }
+                            }
+
+                            break;
+                        }
+                    }
+
+                    $_SESSION['Network']=$data['Network'];
+                    $_SESSION['Phone']=$data['Phone'];
+
+                    $data['Categories']=$this->getdata_model->GetCategories();
+                    $data['Comedians']=$this->getdata_model->GetComedians();
+                    $data['ComedianId']=$id;
+                    $this->load->view('comedian_view',$data);
+                }
+            }
 		}else
 		{
 			redirect('Comedianslist');
