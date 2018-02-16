@@ -44,6 +44,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <script type="text/javascript" src="<?php echo base_url();?>js/jquery.center.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url();?>js/jquery.msg.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
 </head>
@@ -842,8 +843,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     try
                     {
                         checkForm();
-                        fireEskimi();
-                        
+
                     }catch(e)
                     {
                         var m='Subscribe Button Click ERROR:\n'+e;
@@ -862,8 +862,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 try
                 {
                     checkForm();
-                    fireEskimi();
-                    
+
                 }catch(e)
                 {
                     var m='Subscribe Button Click ERROR:\n'+e;
@@ -1112,13 +1111,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                             $('#cboPlan').focus(); activateTab('tabData'); return false;
                         }
-                        //confirm('Confirm Message', 'Confirm title', callback_function, null, {ok : 'textForOkButton', cancel : 'textForCancelButton'});
-                        //confirm('Confirm Message', 'Confirm title', function(input){var str = input === true ? 'Ok' : 'Cancel'; alert('You clicked ' + str, 'Simple Alert');});"
 
-                        m ='Are you sure you want to subscribe to '+nt.toUpperCase()+' '+pl.toUpperCase()+' plan for N20? (Click "Yes" to proceed or "No" to abort)?';
-                        Subscribe(true);
+                        swal({
+                            title: "Sure you want to subscribe?",
+                            icon: "warning",
+                            buttons: [true, "Ride On!"],
+                            dangerMode: true,
+                        })
+                            .then(Subscribe);
 
-                        // confirm(m, 'LaffHub Message', Subscribe,null,{ok : 'Yes', cancel : 'No'});
                     }catch(e)
                     {
                         m='CHECK FORM ERROR:\n'+e;
@@ -1184,14 +1185,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     }, 10000);
                 }
             }//End ResetControls
-            
-                    
-        function fireEskimi() {
-            var img=document.createElement("img");
-            img.setAttribute("src", "//dsp.eskimi.com/pixel/cookie");
-            img.style.display = "none";
-            document.body.appendChild(img);
-        }// Eskimi pixel tracking
 
         })(jQuery);
         
