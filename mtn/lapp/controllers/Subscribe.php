@@ -202,7 +202,7 @@ class Subscribe extends CI_Controller {
 
         $this->getdata_model->LoadSubscriberSession($data['Phone']);
 
-        if ($_SESSION['subscriber_email']) $data['subscriber_email']=$_SESSION['subscriber_email'];
+        if ($_SESSION['subscriber_email']) $data['subscriber_email'];
         if ($_SESSION['subscriber_name']) $data['subscriber_name'] = $_SESSION['subscriber_name'];
         if ($_SESSION['datecreated']) $data['datecreated'] = $_SESSION['datecreated'];
         if ($_SESSION['subscriber_status']) $data['subscriber_status'] = $_SESSION['subscriber_status'];
@@ -295,7 +295,7 @@ class Subscribe extends CI_Controller {
                 redirect('http://localhost:8888/laffhub/public_html/Home', 'refresh');
             }else
             {
-                redirect('https://laffhub.com/Home', 'refresh');
+                redirect('https://laffhub.com/Subscriberhome', 'refresh');
             }
         }else
         {
@@ -304,7 +304,7 @@ class Subscribe extends CI_Controller {
                 redirect('http://localhost:8888/laffhub/public_html/Home', 'refresh');
             }else
             {
-                redirect('https://laffhub.com/Home', 'refresh');
+                redirect('https://laffhub.com/Subscriberhome', 'refresh');
             }
         }
     }

@@ -239,7 +239,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         {
             var plan;
 
-            if(Network === 'mtn') {
+            if(Network.toLowerCase() === 'mtn') {
+
                 plan = $('#cboPlan').val("Weekly");
             }
 
@@ -253,9 +254,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 document.getElementById('buttonSubscribe').disabled=true;
 
                 var nt= $('#lblNetwork').val();
-
-                console.log (nt);
-
+                
                 var pl= $('#cboPlan').val();
 
                 if (nt && pl) LoadPlanDetails(nt,pl);
@@ -1139,7 +1138,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <!--                               <label for="lblEmail" class="col-sm-2 control-label" title="Subscriber Email">Email</label>-->
                 
                                   <div class="col-sm-3" title="Subscriber Email" > 
-                                     <input type="hidden" id="lblEmail" class="form-control nobold"><?php echo $subscriber_email; ?></input>
+                                     <input type="hidden" id="lblEmail" class="form-control nobold">
                                   </div>
 
                             <!--Enable Auto-Billing/Email-->
