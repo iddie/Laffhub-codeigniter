@@ -666,3 +666,4 @@ class Subscribe extends CI_Controller {
 
 
 }
+
