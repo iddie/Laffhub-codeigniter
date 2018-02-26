@@ -628,13 +628,24 @@ $file = fopen('aaa.txt',"w"); fwrite($file, $sql); fclose($file);
 	 
 	public function GetNetwork()
 	{
-		$ip=$_SERVER['REMOTE_ADDR'];
-		
+
+        $ip='';
+
+        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+
+        }else{
+
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
 		$ret='WIFI';
 		
 		if (trim($ip)<>'::1')
 		{
-			$curl = curl_init();
+
+		    $curl = curl_init();
 			
 			curl_setopt_array($curl, array(
 				CURLOPT_RETURNTRANSFER => 1,

@@ -240,9 +240,19 @@ class Getdata_model extends CI_Model
 	
 	public function GetNetwork()
 	{
-		//return 'Airtel'; #REMOVE LATER
-		
-		$ip=$_SERVER['REMOTE_ADDR'];
+        //return 'Airtel'; #REMOVE LATER
+
+        $ip='';
+
+        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+
+        }else{
+
+            $ip = $_SERVER['REMOTE_ADDR'];
+
+        }
 		
 		$ret='WIFI';
 		
