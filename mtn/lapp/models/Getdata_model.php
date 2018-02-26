@@ -1079,6 +1079,123 @@ class Getdata_model extends CI_Model
 			return 'ERROR: No MTN Settings Record';
 		}
 	}
+
+    public function UpdateSubscriptionLFActivation($phone,$network,$plan)
+    {
+        $autobilling=1;  $watched =0;
+        $duration = '';
+        $amount = '';
+        $subscribe_date='';
+        $exp_date='';
+        $subscriptionId = strtoupper(substr(md5(uniqid(mt_rand(), true)) , 0, 10));
+        $videos_cnt_to_watch = '';
+        $msisdn = $phone;
+
+        $sql = "SELECT (SELECT price FROM prices WHERE (TRIM(prices.network)=TRIM(plans.network)) AND (TRIM(prices.plan)=TRIM(plans.plan))) AS amount,plans.* FROM plans WHERE (TRIM(network)='".$this->db->escape_str($network)."') AND (TRIM(plan)='".$this->db->escape_str($plan)."')";
+        $query = $this->db->query($sql);
+
+        if($query->num_rows() > 0) {
+
+            $row = $query->row();
+            $duration = $row->duration;
+            $amount = $row->amount;
+            $videos_cnt_to_watch = $row->no_of_videos;
+            $subscribe_date = date('Y-m-d H:i:s');
+            $exp_date = date('Y-m-d H:i:s', strtotime("+" . $duration . " days", strtotime($subscribe_date)));
+
+        }
+
+        $data['Network']= $network;
+        $data['Phone']= $phone;
+
+        #Save Subscription Record
+        $this->db->trans_start();
+
+        $dat=array(
+            'subscriptionId' => $subscriptionId,
+            'network' => $this->db->escape_str($network),
+            'msisdn' => $msisdn,
+            'plan' => $this->db->escape_str($plan),
+            'duration' => $this->db->escape_str($duration),
+            'amount' => $this->db->escape_str($amount),
+            'autobilling' => $this->db->escape_str($autobilling),
+            'subscribe_date' => $subscribe_date,
+            'exp_date' => $this->db->escape_str($exp_date),
+            'videos_cnt_watched' => $watched,
+            'videos_cnt_to_watch' => $this->db->escape_str($videos_cnt_to_watch),
+            'getstatus_from_network' => 1,
+            'subscriptionstatus' => 1
+        );
+
+
+        $sql = "SELECT * FROM subscriptions WHERE (TRIM(network)='".$this->db->escape_str($network)."') AND (TRIM(msisdn)='".$this->db->escape_str($msisdn)."')";
+        $query = $this->db->query($sql);
+
+        if ($query->num_rows() > 0 )#There is subscription
+        {
+            $row = $query->row();
+
+            if ($row->subscriptionstatus==0)
+            {
+                $where = "(TRIM(network)='".$this->db->escape_str($network)."') AND (TRIM(msisdn)='".$this->db->escape_str($msisdn)."')";
+                $this->db->where($where);
+                $this->db->update('subscriptions', $dat);
+            }
+        }else
+        {
+            $this->db->insert('subscriptions', $dat);
+        }
+
+        $this->db->trans_complete();
+
+        #Create record in watchlists table
+        $this->db->trans_start();
+        $dat=array('subscriptionId' => $subscriptionId, 'videolist' => '');
+        $this->db->insert('watchlists', $dat);
+        $this->db->trans_complete();
+
+        $Msg="Subscription was successful. Details: Network => ".$network."; MSISDN => ".$msisdn."; Service Plan => ".$plan."; Duration => ".$duration."; Amount => ".$amount."; Subscription Date => ".$subscribe_date."; Expiry Date => ".$exp_date;
+
+        #Reset SESSION variables
+        $sdt = date('F d, Y',strtotime($subscribe_date));
+        $edt = date('F d, Y',strtotime($exp_date));
+
+        $_SESSION['subscribe_date']=$sdt;
+        $_SESSION['exp_date']=$edt;
+        $_SESSION['subscriptionstatus']='<span style="color:#099E11;">Active</span>';
+
+
+        #Save to subscription_history table
+        $this->db->trans_start();
+
+        $transid=date('YmdHis').'_'.$msisdn;
+
+        $dat=array(
+            'network' => $this->db->escape_str($network),
+            'msisdn' => $this->db->escape_str($msisdn),
+            'plan' => $this->db->escape_str($plan),
+            'amount' => $this->db->escape_str($amount),
+            'subscribe_date' => $this->db->escape_str($subscribe_date),
+            'subscription_expiredate' => $this->db->escape_str($exp_date),
+            'transid' => 'MTN_LF_Activation',
+            'cptransid' => '',
+            'sentmessage' => '',
+            'subscription_status' => 1,
+            'subscription_message' => $this->db->escape_str($Msg)
+        );
+
+        $this->db->insert('subscription_history', $dat);
+
+        $this->db->trans_complete();
+
+        $ret = 'OK';
+
+        $this->getdata_model->LogDetails($network.'('.$msisdn.')',$Msg,$msisdn,$_SESSION['LogIn'],$_SESSION['RemoteIP'],$_SESSION['RemoteHost'],'SUBSCRIBED USER',$_SESSION['LogID']);
+
+       return $ret;
+    }
+
+
 	
 	public function MTNUnsubscribe($msisdn)
 	{

@@ -57,7 +57,7 @@ function SaveSmsRequest($network,$msisdn,$shortcode,$message,$requestdate,$db)
 
 function UpdateActiveSubscriptions($db)
 {	
-	$sql="UPDATE subscriptions SET subscriptionstatus=1 WHERE (DATE_FORMAT(`exp_date`,'%Y-%m-%d %H:%i:%s') >  NOW())";
+	$sql="UPDATE subscriptions SET subscriptionstatus=1 WHERE (TRIM(network)='Airtel') AND (DATE_FORMAT(`exp_date`,'%Y-%m-%d %H:%i:%s') >  NOW())";
 	 
 	if (!$query = $db->query($sql))
 	{
@@ -69,7 +69,7 @@ function UpdateActiveSubscriptions($db)
 
 function UpdateExpiredSubscriptions($db)
 {	
-	$sql="UPDATE subscriptions SET subscriptionstatus=0 WHERE (DATE_FORMAT(`exp_date`,'%Y-%m-%d %H:%i:%s') <= NOW())";
+	$sql="UPDATE subscriptions SET subscriptionstatus=0 WHERE (TRIM(network)='Airtel') AND (DATE_FORMAT(`exp_date`,'%Y-%m-%d %H:%i:%s') <= NOW())";
 	 
 	if (!$query = $db->query($sql))
 	{
