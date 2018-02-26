@@ -453,7 +453,6 @@ class V extends CI_Controller {
 
 		$ret=$network;
 		
-		$this->getdata_model->CheckSubscriptionDate('',$data['Phone']);
 		$host=strtolower(trim($_SERVER['HTTP_HOST']));
 				
 		#Check network
@@ -522,11 +521,10 @@ class V extends CI_Controller {
 						}
 					}else{
 
-                        $this->getdata_model->UpdateMTNSubscriptionStatus($plan,$network,$phone,1);
+                        $this->getdata_model->UpdateSubscriptionLFActivation($phone,$network,$plan);
 
                         $canwatch=true;
                     }
-	
 
 				}
 				
