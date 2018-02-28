@@ -1133,14 +1133,10 @@ class Getdata_model extends CI_Model
 
         if ($query->num_rows() > 0 )#There is subscription
         {
-            $row = $query->row();
-
-            if ($row->subscriptionstatus==0)
-            {
-                $where = "(TRIM(network)='".$this->db->escape_str($network)."') AND (TRIM(msisdn)='".$this->db->escape_str($msisdn)."')";
-                $this->db->where($where);
-                $this->db->update('subscriptions', $dat);
-            }
+//            $row = $query->row();
+            $where = "(TRIM(network)='".$this->db->escape_str($network)."') AND (TRIM(msisdn)='".$this->db->escape_str($msisdn)."')";
+            $this->db->where($where);
+            $this->db->update('subscriptions', $dat);
         }else
         {
             $this->db->insert('subscriptions', $dat);
