@@ -334,15 +334,10 @@ function CheckForBlackList($network,$phone,$db)
 	if ($query->num_rows > 0)
 	{
 		return true;
-	}else
-	{
-		$sql = "SELECT * FROM optouts WHERE (TRIM(network)='".$db->escape_string($network)."') AND (TRIM(msisdn)='".$db->escape_string($phone)."')";	
-	
-		if (!$query = $db->query($sql)) die('There was an error running the query ['.$db->error.']');			
-	
-		if ($query->num_rows > 0) return true; else return false;
-	};
+	}
+    return true;
 }
+
 
 #MAIN AIRTEL SUBSCRIPTION MODULE
 function SubscribeAirtelUser($email,$network,$msisdn,$plan,$subscriptiondays,$amount,$autobilling,$subscribe_date,$exp_date,$watched,$videos_cnt_to_watch,$subscriptionstatus,$transid,$cptransid,$subscription_message,$errorCode,$errorMessage,$subscription_status,$subscriptionId,$db)
