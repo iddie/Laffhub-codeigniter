@@ -334,8 +334,11 @@ function CheckForBlackList($network,$phone,$db)
 	if ($query->num_rows > 0)
 	{
 		return true;
-	}
-    return true;
+
+	}else{
+
+	    return false;
+    }
 }
 
 
