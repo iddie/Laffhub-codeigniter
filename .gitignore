@@ -24,4 +24,5 @@ error_log
 /mtn/.env.production
 /mtn/.env.testing
 .idea/
-
+SE_lowbalance_notification.txt
+SE_renewal_success.txt
