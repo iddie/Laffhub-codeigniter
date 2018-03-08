@@ -347,15 +347,15 @@ function CheckForBlackList($network,$phone,$db)
 #MAIN AIRTEL SUBSCRIPTION MODULE
 function SubscribeAirtelUser($email,$network,$msisdn,$plan,$subscriptiondays,$amount,$autobilling,$subscribe_date,$exp_date,$watched,$videos_cnt_to_watch,$subscriptionstatus,$transid,$cptransid,$subscription_message,$errorCode,$errorMessage,$subscription_status,$subscriptionId,$db)
 {
-	$duration=$subscriptiondays; $Msg=''; $dt=date('Y-m-d H:i');
+	$duration=$subscriptiondays; $Msg=''; $dt=date('Y-m-d H:i'); $ret='';
 	
 	$sentmessage='';
+
 	$eventType='Subscription Purchase'; #ReSubscription
 				
 	if (trim(strtoupper($subscription_status))=='OK')
-	{#- array('Status' => 'OK','errorCode' => '','errorMessage' =>'', 'TransId' => $transid,'cpTransId' => $cptransid);
-		#Create Subscription Record
-				
+	{
+
 		$sql = "SELECT * FROM subscriptions WHERE (TRIM(network)='".$db->escape_string($network)."') AND (TRIM(msisdn)='".$db->escape_string($msisdn)."')";
 		
 		if(!$query = $db->query($sql)) die('There was an error running the query ['.$db->error.']');
@@ -364,7 +364,7 @@ function SubscribeAirtelUser($email,$network,$msisdn,$plan,$subscriptiondays,$am
 		{
 			$row = $query->fetch_assoc();
 			
-			if ($row['subscriptionstatus']==0)
+			if (($row['subscriptionstatus']==0) || ($row['subscriptionstatus']==1))
 			{
 				$db->autocommit(FALSE);
 				
@@ -391,9 +391,7 @@ function SubscribeAirtelUser($email,$network,$msisdn,$plan,$subscriptiondays,$am
 			$db->commit();
 		}
 
-		
-		
-		
+
 		#Create record in watchlists table			
 		$db->autocommit(FALSE);
 		
@@ -407,10 +405,7 @@ function SubscribeAirtelUser($email,$network,$msisdn,$plan,$subscriptiondays,$am
 		}
 			
 		$db->commit();
-		
-		
-					
-		
+
 		$Msg="Subscription was successful. Details: Network => ".$network."; MSISDN => ".$msisdn."; Service Plan => ".$plan."; Duration => ".$subscriptiondays."; Amount => ".$amount."; Subscription Date => ".$subscribe_date."; Expiry Date => ".$exp_date;
 		
 		$ret='OK';
@@ -437,7 +432,7 @@ function SubscribeAirtelUser($email,$network,$msisdn,$plan,$subscriptiondays,$am
 		#Send Message - Success
 		 $result_msg=SendAirtelSms($msisdn,$sentmessage,$db);
 		 
-#$file = fopen('aaa_SUB.txt',"a"); fwrite($file, "\n\nSUCCESS\nSent Message=".$sentmessage."\nMSISDN=".$msisdn."\nMsg Status=".$result_msg['Status']); fclose($file);				 
+#$file = fopen('aaa_SUB.txt',"a"); fwrite($file, "\n\nSUCCESS\nSent Message=".$sentmessage."\nMSISDN=".$msisdn."\nMsg Status=".$result_msg['Status']); fclose($file);
 		 
 		 if (strtoupper(trim($result_msg['Status']))<>'OK')
 		 {
@@ -445,7 +440,7 @@ function SubscribeAirtelUser($email,$network,$msisdn,$plan,$subscriptiondays,$am
 			 
 			 $Msg="Subscription was successful. Details: Network => ".$network."; MSISDN => ".$msisdn."; Service Plan => ".$plan."; Duration => ".$duration."; Amount => ".$amount."; Subscription Date => ".$subscribe_date."; Expiry Date => ".$exp_date;
 		 }				 
-	}elseif (trim(strtoupper($billing_status))=='FAILED')#Subscription Failed
+	}elseif (trim(strtoupper($subscription_status))=='FAILED')#Subscription Failed
 	{#- array('Status' => 'FAILED','errorCode' => $errorcode,'errorMessage' =>$errormsg, 'TransId' => $transid,'cpTransId' => $cptransid);
 											
 		#Send Message
@@ -517,7 +512,45 @@ function SubscribeAirtelUser($email,$network,$msisdn,$plan,$subscriptiondays,$am
 				 $Msg="Subscription was successful. Details: Network => ".$network."; MSISDN => ".$msisdn."; Service Plan => ".$plan."; Duration => ".$duration."; Amount => ".$amount."; Subscription Date => ".$subscribe_date."; Expiry Date => ".$exp_date."; Error Code => ".$result['errorCode']."; Error Message => ".$result['errorMessage'];
 			 }
 		}
-	}
+	}elseif(trim(strtoupper($subscription_status))=='FAILED RENEWAL')
+    {
+	    $phone = $msisdn;
+
+        $sql="SELECT * FROM subscriptions WHERE (TRIM(msisdn)='".$db->escape_string($phone)."')";
+
+        if (!$query = $db->query($sql)) die('There was an error running the query ['.$db->error.']');
+
+        if ( $query->num_rows> 0 )
+        {
+            UpdateSubscriptionStatus($network,$phone,'0',$db);
+
+            $sql = "SELECT insufficent_balance FROM subscriber_messages WHERE (TRIM(network)='".$db->escape_string($network)."') AND (TRIM(plan)='".$db->escape_string($plan)."') ";
+
+            if(!$query = $db->query($sql)) die('There was an error running the query ['.$db->error.']');
+
+            if ($query->num_rows > 0 )
+            {
+                $row = $query->fetch_assoc();
+
+                if ($row['insufficent_balance']) $sentmessage=$row['insufficent_balance'];
+            }
+
+            #Get Keyword
+            $key='';
+
+            if (strtolower(trim($plan))=='monthly') $key='MONTH';
+            if (strtolower(trim($plan))=='weekly') $key='YES';
+            if (strtolower(trim($plan))=='daily') $key='DAY';
+            if (strtolower(trim($plan))=='unlimited') $key='UNLIMITED';
+
+            if (!$sentmessage) $sentmessage='Laffhub '.trim($plan).' subscription service could not be activated due to insufficient airtime.Recharge & SMS '.$key.' to 2001.Service cost N'.trim($amount).'/'.$subscriptiondays.'days.';
+
+            SendAirtelSms($msisdn,$sentmessage,$db);
+
+            $ret = 'FAILED';
+        }
+    }
+
 	
 	#Save to subscription_history table			
 	$db->autocommit(FALSE);
