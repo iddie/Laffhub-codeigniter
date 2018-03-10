@@ -744,4 +744,93 @@ function BillAirtelSubscriber($msisdn,$amount,$subscriptiondays,$eventType,$db)
 		return array('Status' => 'FAILED','errorCode' => 'FFF','errorMessage' => $e->getMessage());
 	}
 }
+
+function SubscriptionEngineSubscribe($msisdn, $productId)
+{
+
+    try
+    {
+        $location='http://10.0.0.120/subscriptionservice/BillingModule.php';
+
+        $options=array(
+            'uri'=>'http://efluxz.com/billingservice',
+            'location' => $location
+        );
+
+        $client=new SoapClient(NULL,$options);
+
+        $param=array(
+            'msisdn'			=> $msisdn,
+            'productId'			=> $productId
+        );
+
+        $result=$client->BillAirtelUser($param);
+
+        return $result;
+
+    } catch(Exception $e)
+    {
+        return array('Status' => 'FAILED','errorCode' => 'FFF','errorMessage' => $e->getMessage());
+    }
+
+}
+
+function UnSubscriberUser($msisdn, $network, $db)
+{
+
+    $sql = "SELECT * FROM subscriptions WHERE (TRIM(network)='" . $db->escape_string($network) . "') AND (TRIM(msisdn)='" . $msisdn . "')";
+
+    if (!$query = $db->query($sql)) die('There was an error running the query [' . $db->error . ']');
+
+    if ($query->num_rows > 0) {
+        $row = $query->fetch_assoc();
+
+        $subscriptionId = $row['subscriptionstatus'];
+        $lastplan = $row['plan'];
+
+        $dt = date('Y-m-d H:i:s');
+
+        #Opt out
+        $sql = "DELETE FROM subscriptions WHERE (TRIM(network)='" . $db->escape_string($network) . "') AND (TRIM(msisdn)='" . $msisdn . "')";
+
+        if ($db->query($sql) === TRUE) {
+            #CANCELLED
+            $cancelled = '0';
+
+            $Msg = 'Subscriber with MSISDN, ' . $msisdn . ', has opted out of Laffhub service successfully.';
+            $message = "Dear customer, you have unsubscribed from Laffhub service successfully. Text YES to 2001 to activate 7dys/15 videos. Service costs N100. NO DATA COST.";
+
+            #Remove watchlist entry
+            $sql = "DELETE FROM watchlists WHERE (TRIM(subscriptionId)='" . $db->escape_string($subscriptionId) . "')";
+            $db->query($sql);
+
+            #INSERT INTO optouts table
+            $db->autocommit(FALSE);
+
+            $sql = 'INSERT INTO optouts (network,msisdn,lastplan,optout_date) VALUES (?,?,?,?)';
+
+            $nt = $db->escape_string($network);
+            $ph = $db->escape_string($msisdn);
+            $pl = $db->escape_string($lastplan);
+
+            $stmt = $db->prepare($sql);/* Prepare statement */
+
+            if ($stmt === false) trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $db->error, E_USER_ERROR);
+
+            /* Bind parameters. TYpes: s = string, i = integer, d = double,  b = blob */
+            $stmt->bind_param('ssss', $nt, $ph, $pl, $dt);
+
+            $stmt->execute();/* Execute statement */
+
+            $db->commit();
+
+            $ret = SendAirtelSms($msisdn, $message, $db);
+        } else {
+
+            $Msg = 'Unsubscription of ' . $msisdn . ' failed. ' . $db->error;
+        }
+    }
+}
+
+
 ?>
