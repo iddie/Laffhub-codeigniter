@@ -1756,6 +1756,40 @@
 			return array('Status' => 'FAILED','errorCode' => 'FFF','errorMessage' => $e->getMessage());
 		}
 	}
+
+
+function SESubscribe($msisdn, $productId)
+{
+
+    $cpTid=date('YmdHis').'_'.$msisdn;
+
+    try
+    {
+        $location='http://10.0.0.120/subscriptionservice/BillingModule.php';
+
+        $options=array(
+            'uri'=>'http://efluxz.com/billingservice',
+            'location' => $location
+        );
+
+        $client=new SoapClient(NULL,$options);
+
+        $param=array(
+            'msisdn'			=> $msisdn,
+            'productId'			=> $productId
+        );
+
+        $result=$client->BillAirtelUser($param);
+
+        return $result;
+
+    } catch(Exception $e)
+    {
+        return array('Status' => 'FAILED','errorCode' => 'FFF','errorMessage' => $e->getMessage());
+    }
+
+}
+
 	
 	function SendAirtelSms($msisdn,$message,$db)
 	{

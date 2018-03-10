@@ -147,7 +147,7 @@ if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["reqType"])) && (isset($_RE
                 $subscribe_date = date('Y-m-d H:i:s');
                 $exp_date=date('Y-m-d H:i:s',strtotime("+".$subscriptiondays." days",strtotime($subscribe_date)));
 
-                $eventType='Subscription Purchase'; #ReSubscription
+                $eventType='Subscription Purchase'; #Subscription
 
                 ##################### GET TOTAL VIDEOS TO WATCH
                 $sql="SELECT no_of_videos FROM plans WHERE (TRIM(network)='".$db->escape_string($network)."') AND (TRIM(plan)='".$plan."')";
@@ -164,7 +164,7 @@ if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["reqType"])) && (isset($_RE
                 $transid=''; $cptransid=''; $subscription_message=''; $errorCode='';
                 $errorMessage=''; $subscription_status=''; $billing_status='';
 
-                $ret=BillAirtelSubscriber($msisdn,$amount,$subscriptiondays,$eventType,$db);
+                $ret= SubscriptionEngineSubscribe($msisdn,$productID);
 
                 if ($ret['TransId']) $transid=$ret['TransId'];
                 if ($ret['cpTransId']) $cptransid=$ret['cpTransId'];
@@ -172,6 +172,7 @@ if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["reqType"])) && (isset($_RE
                 if ($ret['errorMessage'])
                 {
                     $subscription_message=$ret['errorMessage'];
+
                 }else
                 {
                     if (trim(strtoupper($ret['Status']))=='OK') $subscription_message='Successful';
@@ -182,7 +183,7 @@ if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["reqType"])) && (isset($_RE
 
                 $status = '';
 
-                if (trim(strtoupper($subscription_status))=='OK')
+                if((trim(strtoupper($subscription_status))=='OK') && ($errorCode == '1000'))
                 {
                     $status = 'SUB';
                     #Add entry to accounts table
@@ -229,14 +230,13 @@ if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["reqType"])) && (isset($_RE
 
                     $status="ERROR";
 
-                    if (trim(strtoupper($ret['errorCode']))=='OL404')
+                    if (($ret['errorCode']) =='3404')
                     {
                         $response = $status;
                         $bal=floatval(str_replace('Insufficient Balance.#~#','',$ret['errorMessage']));
-                        $ussd_response="Laffhub DAILY subscription was not successful due to insufficient airtime. Recharge & SMS DAY to 2001. Service costs N20/Day. NO DATA COST. Bal: N".$bal;
                         $ret=SendAirtelSms($msisdn,$insufficent_balance_msg,$db);
 
-                    }else
+                    }elseif (($ret['errorCode']) =='3003')
                     {
                         $response = $status;
                         $ussd_response='Laffhub '.trim($plan).' subscription was not successful. ERROR: '.$ret['errorMessage'];
@@ -247,6 +247,7 @@ if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["reqType"])) && (isset($_RE
 
         }
     }
+
     echo $response;
 
 } else
