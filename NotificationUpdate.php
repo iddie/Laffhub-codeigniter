@@ -10,33 +10,30 @@ include('common.php');
 
 $network='Airtel';
 
-$msisdn='';
 
-
-if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["productID"])) && (isset($_REQUEST["statusCode"])))
+if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["productID"])) && (isset($_REQUEST["errorCode"])))
 {
+
     $msisdn = trim($_REQUEST["msisdn"]);
     $productID = trim($_REQUEST["productID"]);
-    $status = trim($_REQUEST["status"]);
+    $status = trim($_REQUEST["errorMsg"]);
     $transid =trim($_REQUEST["transid"]);
-    $errorCode = trim($_REQUEST["statusCode"]);
+    $errorCode = trim($_REQUEST["errorCode"]);
     $cpId = trim($_REQUEST["cpId"]);
     $subscribe_date = urldecode(($_REQUEST["subscribe_date"]));
     $lowBalance = trim($_REQUEST["low_balance"]);
     $amountCharged = trim($_REQUEST["amountCharged"]);
 
 
-    $cptransid=date('YmdHis').'_'.$msisdn;
+    $cptransid=date('YmdHis').'_'.$msisdn; $result='';
 
     $subscriptionstatus=''; $subscription_status=''; $errorMessage = $status; $subscription_message = '';
-
 
     $subscriptionId = strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 10));
 
     $amount=''; $plan=''; $email=''; $watched=0; $videos_cnt_to_watch=''; $exp_date=''; $duration=''; $subscriptiondays=''; $autobilling=1;
 
     $passed=''; $failed =''; $response='';
-
 
     if(($productID == '6300') || ($productID == '6302') || ($productID == '6305') || ($productID == '6308')){
 
@@ -57,9 +54,9 @@ if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["productID"])) && (isset($_
 
     }
 
-    if( $errorCode == '1000'){
+    if(( $errorCode == '1000') && (trim(strtolower($status =='success')))){
 
-        $subscription_status='OK'; $subscription_message = $status; $subscriptionstatus='1';
+        $subscription_status='OK'; $subscription_message=$status; $subscriptionstatus='1';
 
         $sql = "SELECT plan,duration,no_of_videos FROM plans WHERE (TRIM(network)='" . $db->escape_string($network) . "') AND (TRIM(plan)='" . $db->escape_string($plan) . "')";
 
@@ -95,6 +92,8 @@ if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["productID"])) && (isset($_
 
         $passed++;
 
+        $result = SubscribeAirtelUser($email, $network, $msisdn, $plan, $subscriptiondays, $amount, $autobilling, $subscribe_date, $exp_date, $watched, $videos_cnt_to_watch, $subscriptionstatus, $transid, $cptransid, $subscription_message, $errorCode, $errorMessage, $subscription_status, $subscriptionId, $db);
+
         $Msg = "Renewal was successful. Details: Network => " . $network . "; MSISDN => " . $msisdn . "; Service Plan => " . $plan . "; Duration => " . $subscriptiondays . "; Amount => " . $amount . "; Subscription Date => " . $subscribe_date . "; Expiry Date => " . $exp_date;
 
         #Log
@@ -110,13 +109,18 @@ if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["productID"])) && (isset($_
 
         $failed++;
 
+        $result = SubscribeAirtelUser($email, $network, $msisdn, $plan, $subscriptiondays, $amount, $autobilling, $subscribe_date, $exp_date, $watched, $videos_cnt_to_watch, $subscriptionstatus, $transid, $cptransid, $subscription_message, $errorCode, $errorMessage, $subscription_status, $subscriptionId, $db);
+
         #Log
         $file = fopen('SE_lowbalance_notification.txt', "a");
         fwrite($file, date('Y-m-d H:i:s') . ",MSISDN: " . $msisdn . ",Plan: " . $plan . ",Status: " . $status . ",Trans. Id: " . $transid . ",CP Trans. Id: " . $cptransid . "," . $failed . PHP_EOL);
         fclose($file);
+
+    }elseif(($errorCode == '1001') && (strpos($status, 'Start/Stop Initiated De-Subscription') !== false))  //Stop notification from Airtel Start/Stop
+    {
+         UnSubscriberUser($msisdn, $network, $db);
     }
 
-    $result = SubscribeAirtelUser($email, $network, $msisdn, $plan, $subscriptiondays, $amount, $autobilling, $subscribe_date, $exp_date, $watched, $videos_cnt_to_watch, $subscriptionstatus, $transid, $cptransid, $subscription_message, $errorCode, $errorMessage, $subscription_status, $subscriptionId, $db);
 
     if($result == 'OK') {
 
@@ -136,6 +140,7 @@ if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["productID"])) && (isset($_
     LogDetails($network . '(' . $msisdn . ')', $Msg, $msisdn, date('Y-m-d H:i:s'), $remote_ip, $remote_host, 'SUBSCRIPTION RENEWAL', 'System', $db);
 
     echo $response;
+
 
 } else
 {

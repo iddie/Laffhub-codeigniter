@@ -783,9 +783,10 @@ function UnSubscriberUser($msisdn, $network, $db)
     if (!$query = $db->query($sql)) die('There was an error running the query [' . $db->error . ']');
 
     if ($query->num_rows > 0) {
+
         $row = $query->fetch_assoc();
 
-        $subscriptionId = $row['subscriptionstatus'];
+        $subscriptionId = $row['subscriptionId'];
         $lastplan = $row['plan'];
 
         $dt = date('Y-m-d H:i:s');
@@ -825,6 +826,7 @@ function UnSubscriberUser($msisdn, $network, $db)
             $db->commit();
 
             $ret = SendAirtelSms($msisdn, $message, $db);
+
         } else {
 
             $Msg = 'Unsubscription of ' . $msisdn . ' failed. ' . $db->error;
