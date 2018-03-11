@@ -9,10 +9,8 @@
 	$msisdn=''; $message=''; $shortcode='';
 	
 	#$db = new mysqli('localhost', 'root', '', 'laffhubdb');
-	$db = new mysqli('localhost', 'laffhub_laffuser', 'vUzm6Nh^^y*v', 'laffhub_laffhubdb');
+	$db = new mysqli('127.0.0.1', 'laffhub_laffuser', 'vUzm6Nh^^y*v', 'laffhub_laffhubdb');
 
-#MSISDN=2348023351689 => SHORTCODE=2001 => Network=Airtel => Date=2017-09-29 15:59:14 => MESSAGE=lol
-	
 	try
 	{
 		if ((isset($_GET["msisdn"])) and (isset($_GET["message"])) and (isset($_GET["shortcode"]))) 
@@ -992,7 +990,7 @@
 
 
                                     #Save to subscriptions table
-                                    $result=SubscribeAirtelUser($email,$network,$msisdn,$plan,$subscriptiondays,$amount,$autobilling,$subscribe_date,$exp_date,$watched,$videos_cnt_to_watch,$subscriptionstatus,$transid,$cptransid,$subscription_message,$errorCode,$errorMessage,$subscription_status,$subscriptionId,$db);
+                                    $result=SubscribeAirtelUser($email,$network,$msisdn,$test_plan,$subscriptiondays,$amount,$autobilling,$subscribe_date,$exp_date,$watched,$videos_cnt_to_watch,$subscriptionstatus,$transid,$cptransid,$subscription_message,$errorCode,$errorMessage,$subscription_status,$subscriptionId,$db);
 
                                     #$file = fopen('aaa_SUB.txt',"a"); fwrite($file, "\n\nSUCCESS\nStatus=".$ret['Status']."\nResult=".$result."MSISDN=".$msisdn."\nPlan=".$plan."\nAmount=".$amount.PHP_EOL); fclose($file);
 
@@ -1112,8 +1110,10 @@
 
                     $response = UnSubscribeFromSE($msisdn, $productId);
 
+                    $new_status= $response['Status'];
+
                     #Check if subscriber has active subscription
-                    if(strtolower($response['Status'] == 'ok')){
+                    if(strtolower( $new_status == 'ok')){
 
                         $sql="SELECT * FROM subscriptions WHERE (TRIM(network)='".$db->escape_string($network)."') AND (TRIM(msisdn)='".$msisdn."')";
 
