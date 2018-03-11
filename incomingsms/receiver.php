@@ -853,7 +853,166 @@
 								}	
 							}
 					  	}
-				   	}else#No request
+				   	}elseif (($shortcode=='2001') and (strtoupper($plan)=='TRY'))#N20/Daily
+                    {#DAY
+                        $subscription_msg=''; $amount=''; $insufficent_balance_msg=''; $wrong_keyword_msg='';
+                        $subscriptiondays=''; $amount=''; $autobilling='1'; $videos_cnt_to_watch=''; $email='';
+                        $subscriptionstatus='1'; $watched='0';
+
+                        CheckSubscriptionDate($msisdn,$db);
+                        $subscriptionId=strtoupper(substr(md5(uniqid(mt_rand(), true)) , 0, 10));
+
+                        $test_plan='Daily'; $productId = '6300';
+
+                        //Check if record exists
+                        $sql = "SELECT * FROM subscriptions WHERE (TRIM(network)='".$db->escape_string($network)."') AND (subscriptionstatus=1) AND (TRIM(msisdn)='".$db->escape_string($msisdn)."')";
+
+                        if(!$query = $db->query($sql)) die('There was an error running the query ['.$db->error.']');
+
+                        $ret=''; $watched=0; $maxwatch=0; $expdt=''; $activeplan=''; $flag=false; $ex='';
+
+                        #There is active subscription
+                        if ($query->num_rows > 0 )
+                        {
+                            $row = $query->fetch_assoc();
+
+                            if ($row['exp_date'])
+                            {
+                                $expdt=date('d M Y @ H:i',strtotime($row['exp_date']));
+                                $ex=date('Y-m-d H:i',strtotime($row['exp_date']));
+                            }
+
+                            if ($row['plan']) $activeplan=trim($row['plan']);
+                            if ($row['videos_cnt_watched']) $watched=intval($row['videos_cnt_watched']);
+                            if ($row['videos_cnt_to_watch']) $maxwatch=$row['videos_cnt_to_watch'];
+
+                            $ret="You currently have an active subscription to this service which will expire on ".$expdt.". Visit www.laffhub.com to enjoy your videos.";
+
+                            $Msg="Subscription was not successful. Subscriber has an active subscription running. Current Subscription Details: Network => ".$network."; MSISDN => ".$msisdn."; Service Plan => ".$activeplan."; Expiry Date => ".$expdt;
+
+                            #There is active subscription
+                            $ret=SendAirtelSms($msisdn,$ret,$db);
+                        }else
+                        {
+                            #Subscribe
+                            #Get amount and duration
+                            $sql="SELECT price,duration FROM prices WHERE (TRIM(network)='".$db->escape_string($network)."') AND (TRIM(plan)='".$test_plan."')";
+
+                            if(!$query = $db->query($sql)) die('There was an error running the query [' . $db->error . ']');
+
+                            if ( $query->num_rows > 0 )
+                            {
+                                $row = $query->fetch_assoc();
+
+                                if ($row['price']) $amount = $row['price'];
+                                if ($row['duration']) $subscriptiondays = $row['duration'];
+                            }
+
+                            #Get Messages
+                            $sql="SELECT * FROM subscriber_messages WHERE (TRIM(network)='".$db->escape_string($network)."') AND (TRIM(plan)='".$test_plan."')";
+
+                            if(!$query = $db->query($sql)) die('There was an error running the query [' . $db->error . ']');
+
+                            if ( $query->num_rows > 0 )
+                            {
+                                $row = $query->fetch_assoc();
+
+                                if ($row['subscription']) $subscription_msg = $row['subscription'];
+                                if ($row['insufficent_balance']) $insufficent_balance_msg = $row['insufficent_balance'];
+                                if ($row['wrong_keyword']) $wrong_keyword_msg = $row['wrong_keyword'];
+                            }
+
+                            $subscribe_date = date('Y-m-d H:i:s');
+                            $exp_date=date('Y-m-d H:i:s',strtotime("+".$subscriptiondays." days",strtotime($subscribe_date)));
+
+                            $eventType='Subscription Purchase'; #ReSubscription
+
+                            ##################### GET TOTAL VIDEOS TO WATCH
+                            $sql="SELECT no_of_videos FROM plans WHERE (TRIM(network)='".$db->escape_string($network)."') AND (TRIM(plan)='".$test_plan."')";
+
+                            if(!$query = $db->query($sql)) die('There was an error running the query [' . $db->error . ']');
+
+                            if ( $query->num_rows > 0 )
+                            {
+                                $row = $query->fetch_assoc();
+
+                                if ($row['no_of_videos']) $videos_cnt_to_watch = $row['no_of_videos'];
+                            }
+
+                            $transid=''; $cptransid=''; $subscription_message=''; $errorCode='';
+                            $errorMessage=''; $subscription_status=''; $billing_status='';
+
+                            $ret=SESubscribe($msisdn, $productId);
+
+                            if ($ret['TransId']) $transid=$ret['TransId'];
+                            if ($ret['cpTransId']) $cptransid=$ret['cpTransId'];
+
+                            if ($ret['errorMessage'])
+                            {
+                                $subscription_message=$ret['errorMessage'];
+                            }else
+                            {
+                                if (trim(strtoupper($ret['Status']))=='OK') $subscription_message='Successful';
+                            }
+
+                            if ($ret['errorCode']) $errorCode=$ret['errorCode'];
+                            if ($ret['Status']) $subscription_status=$ret['Status'];
+
+                            if (trim(strtoupper($subscription_status))=='OK')
+                            {
+                                #Add entry to accounts table
+                                $db->autocommit(FALSE);
+
+                                $sql='INSERT INTO accounts (email,network,msisdn,plan,duration,amount,paymentdate,subscriptionId) VALUES (?,?,?,?,?,?,?,?)';
+
+                                $em=$db->escape_string($email);
+                                $nt=$db->escape_string($network);
+                                $ph=$db->escape_string($msisdn);
+                                $pl=$db->escape_string($test_plan);
+                                $du=$db->escape_string($subscriptiondays);#duration
+                                $amt=$db->escape_string($amount);
+                                $pdt=$db->escape_string($subscribe_date);
+                                $sid=$db->escape_string($subscriptionId);
+
+                                $stmt = $db->prepare($sql);/* Prepare statement */
+
+                                if ($stmt === false) trigger_error('Wrong SQL: '.$sql.' Error: '.$db->error, E_USER_ERROR);
+
+                                /* Bind parameters. TYpes: s = string, i = integer, d = double,  b = blob */
+                                $stmt->bind_param('ssssidss',$em,$nt,$ph,$pl,$du,$amt,$pdt,$sid);
+
+                                $stmt->execute();/* Execute statement */
+
+                                $db->commit();
+
+
+                                #Save to subscriptions table
+                                $result=SubscribeAirtelUser($email,$network,$msisdn,$plan,$subscriptiondays,$amount,$autobilling,$subscribe_date,$exp_date,$watched,$videos_cnt_to_watch,$subscriptionstatus,$transid,$cptransid,$subscription_message,$errorCode,$errorMessage,$subscription_status,$subscriptionId,$db);
+
+                                #$file = fopen('aaa_SUB.txt',"a"); fwrite($file, "\n\nSUCCESS\nStatus=".$ret['Status']."\nResult=".$result."MSISDN=".$msisdn."\nPlan=".$plan."\nAmount=".$amount.PHP_EOL); fclose($file);
+
+                                #Send Message - Success
+                                if (trim(strtoupper($result))=='OK')
+                                {
+                                    #$ret=SendAirtelSms($msisdn,$subscription_msg,$db);
+                                }else
+                                {
+                                    #$ret=SendAirtelSms($msisdn,$ret,$db);
+                                }
+                            }elseif (trim(strtoupper($ret['Status']))=='FAILED')
+                            {#Send Message
+                                if (trim(strtoupper($ret['errorCode']))=='OL404')
+                                {
+                                    $bal=floatval(str_replace('Insufficient Balance.#~#','',$ret['errorMessage']));
+
+                                    $ret=SendAirtelSms($msisdn,$insufficent_balance_msg,$db);
+                                }else
+                                {
+                                    $ret=SendAirtelSms($msisdn,$ret['errorMessage'],$db);
+                                }
+                            }
+                        }
+                    } else#No request
 					{
 						$subscription_msg='Text DAY to 2001 for Daily Plan, COMEDY to 2001 for Weekly plan, MONTH to 2001 for Monthly Plan, UNLIMITED to 2001 for unlimited Plan,OUT to 2001 to unsubscribe';
 							  
@@ -938,7 +1097,88 @@
 					$subscription_msg='Text DAY to 2001 for Daily Plan, COMEDY to 2001 for Weekly plan, MONTH to 2001 for Monthly Plan, UNLIMITED to 2001 for unlimited Plan,OUT to 2001 to unsubscribe';
 							  
 			  		$ret=SendAirtelSms($msisdn,$subscription_msg,$db);
-				}else#Create subscription request
+
+				}elseif (trim(strtolower($requestplan))=='leave')
+                {
+                    #Unsubscribe subscriber
+                    $productId = '6300';
+
+                    $response = UnSubscribeFromSE($msisdn, $productId);
+
+                    #Check if subscriber has active subscription
+                    if(strtolower($response['Status'] == 'ok')){
+
+                        $sql="SELECT * FROM subscriptions WHERE (TRIM(network)='".$db->escape_string($network)."') AND (TRIM(msisdn)='".$msisdn."')";
+
+                        if(!$query = $db->query($sql)) die('There was an error running the query [' . $db->error . ']');
+
+                        if ( $query->num_rows > 0 )
+                        {
+                            $row = $query->fetch_assoc();
+
+                            $subscriptionId=$row['subscriptionstatus'];
+                            $lastplan=$row['plan'];
+
+                            $dt=date('Y-m-d H:i:s');
+
+                            #Opt out
+                            $sql = "DELETE FROM subscriptions WHERE (TRIM(network)='".$db->escape_string($network)."') AND (TRIM(msisdn)='".$msisdn."')";
+
+                            if ($db->query($sql) === TRUE)
+                            {
+                                #CANCELLED
+                                $cancelled='0';
+
+                                $Msg='Subscriber with MSISDN, '.$msisdn.', has opted out of Laffhub service successfully.';
+                                $message = "Dear customer, you have unsubscribed from Laffhub service successfully. Text YES to 2001 to activate 7dys/15 videos. Service costs N100. NO DATA COST.";
+
+                                #Remove watchlist entry
+                                $sql = "DELETE FROM watchlists WHERE (TRIM(subscriptionId)='".$db->escape_string($subscriptionId)."')";
+                                $db->query($sql);
+
+                                #INSERT INTO optouts table
+                                $db->autocommit(FALSE);
+
+                                $sql='INSERT INTO optouts (network,msisdn,lastplan,optout_date) VALUES (?,?,?,?)';
+
+                                $nt=$db->escape_string($network);
+                                $ph=$db->escape_string($msisdn);
+                                $pl=$db->escape_string($lastplan);
+
+                                $stmt = $db->prepare($sql);/* Prepare statement */
+
+                                if ($stmt === false) trigger_error('Wrong SQL: '.$sql.' Error: '.$db->error, E_USER_ERROR);
+
+                                /* Bind parameters. TYpes: s = string, i = integer, d = double,  b = blob */
+                                $stmt->bind_param('ssss',$nt,$ph,$pl,$dt);
+
+                                $stmt->execute();/* Execute statement */
+
+                                $db->commit();
+
+                                $ret=SendAirtelSms($msisdn,$message,$db);
+                            } else
+                            {
+                                $Msg='Unsubscription of '.$msisdn.' failed. '.$db->error;
+                            }
+
+                            $remote_ip=getRealIpAddr(); #$_SERVER['REMOTE_ADDR'];
+
+                            #$host = $_SERVER['REMOTE_HOST'];
+                            $remote_host='';
+                            if ($remote_ip) $remote_host=gethostbyaddr($remote_ip);
+
+                            #LogDetails($Name,$Activity,$Username,$logdate,$ip,$host,$Operation,$LogID,$db)
+                            LogDetails($network.' LaffHub',$Msg,$msisdn,date('Y-m-d H:i:s'),$remote_ip,$remote_host,'OPTED OUT OF '.strtoupper($network).' LAFFHUB','System',$db);
+                        }else
+                        {
+                            $message = "Your attempt to opt out from Laffhub failed. You have no subscription on Laffhub service. Text YES to 2001 to activate 7days/15 videos. Service costs N100.";
+
+                            $ret=SendAirtelSms($msisdn,$message,$db);
+                        }
+                    }
+                }
+				else#Create subscription request
 				{
 					#check if there is active request
 					$res=CheckIfThereisExistingRequest($network,$msisdn,$requestplan,$shortcode,$db);
@@ -1044,7 +1284,7 @@
 		if ((trim($shortcode)=='2001') and ($m=='LOL'))
 		{
 			return 'LOL';
-		}elseif ((trim($shortcode)=='2001') and (($m=='COMEDY') or ($m=='YES') or ($m=='OKAY') or ($m=='OK') or ($m=='DAY') or ($m=='MONTH') or ($m=='UNLIMITED')))
+		}elseif ((trim($shortcode)=='2001') and (($m=='COMEDY') or ($m=='YES') or ($m=='OKAY') or ($m=='OK') or ($m=='DAY') or ($m=='MONTH') or ($m=='UNLIMITED') or ($m=='TRY')))
 		{
 			if ($m=='DAY')
 			{
@@ -1058,17 +1298,27 @@
 			}elseif ($m=='UNLIMITED')
 			{
 				return 'Unlimited';
-			}			
-		}elseif ((trim($shortcode)=='2001') and ($m=='1'))
+
+			}elseif ($m=='TRY')
+            {
+                return 'Try';
+            }
+
+        }elseif ((trim($shortcode)=='2001') and ($m=='1'))
 		{
 			return 'Confirm';
 		}elseif ((trim($shortcode)=='2001') and ($m=='HELP'))
 		{
 			return 'Help';
-		}elseif ((trim($shortcode)=='2001') and (($m=='OUT') or ($m=='STOP')))
+		}elseif ((trim($shortcode)=='2001') and (($m=='OUT') or ($m=='STOP') or ($m=='STOP')))
 		{
 			return 'Out';
-		}else
+
+		}elseif((trim($shortcode)=='2001') && ($m=='LEAVE')) {
+
+		    return 'Leave';
+        }
+        else
 		{
 			return '';
 		}
@@ -1761,8 +2011,6 @@
 function SESubscribe($msisdn, $productId)
 {
 
-    $cpTid=date('YmdHis').'_'.$msisdn;
-
     try
     {
         $location='http://10.0.0.120/subscriptionservice/BillingModule.php';
@@ -1789,6 +2037,98 @@ function SESubscribe($msisdn, $productId)
     }
 
 }
+
+function UnSubscribeFromSE($msisdn, $productId)
+{
+
+    try
+    {
+        $location='http://10.0.0.120/subscriptionservice/BillingModule.php';
+
+        $options=array(
+            'uri'=>'http://efluxz.com/billingservice',
+            'location' => $location
+        );
+
+        $client=new SoapClient(NULL,$options);
+
+        $param=array(
+            'msisdn'			=> $msisdn,
+            'productId'			=> $productId
+        );
+
+        $result=$client->UnsubscribeAirtelUser($param);
+
+        return $result;
+
+    } catch(Exception $e)
+    {
+        return array('Status' => 'FAILED','errorCode' => 'FFF','errorMessage' => $e->getMessage());
+    }
+
+}
+
+
+function UnSubscriberUserfromDB($msisdn, $network, $db)
+{
+
+    $sql = "SELECT * FROM subscriptions WHERE (TRIM(network)='" . $db->escape_string($network) . "') AND (TRIM(msisdn)='" . $msisdn . "')";
+
+    if (!$query = $db->query($sql)) die('There was an error running the query [' . $db->error . ']');
+
+    if ($query->num_rows > 0) {
+
+        $row = $query->fetch_assoc();
+
+        $subscriptionId = $row['subscriptionId'];
+        $lastplan = $row['plan'];
+
+        $dt = date('Y-m-d H:i:s');
+
+        #Opt out
+        $sql = "DELETE FROM subscriptions WHERE (TRIM(network)='" . $db->escape_string($network) . "') AND (TRIM(msisdn)='" . $msisdn . "')";
+
+        if ($db->query($sql) === TRUE) {
+            #CANCELLED
+            $cancelled = '0';
+
+            $Msg = 'Subscriber with MSISDN, ' . $msisdn . ', has opted out of Laffhub service successfully.';
+            $message = "Dear customer, you have unsubscribed from Laffhub service successfully. Text YES to 2001 to activate 7dys/15 videos. Service costs N100. NO DATA COST.";
+
+            #Remove watchlist entry
+            $sql = "DELETE FROM watchlists WHERE (TRIM(subscriptionId)='" . $db->escape_string($subscriptionId) . "')";
+            $db->query($sql);
+
+            #INSERT INTO optouts table
+            $db->autocommit(FALSE);
+
+            $sql = 'INSERT INTO optouts (network,msisdn,lastplan,optout_date) VALUES (?,?,?,?)';
+
+            $nt = $db->escape_string($network);
+            $ph = $db->escape_string($msisdn);
+            $pl = $db->escape_string($lastplan);
+
+            $stmt = $db->prepare($sql);/* Prepare statement */
+
+            if ($stmt === false) trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $db->error, E_USER_ERROR);
+
+            /* Bind parameters. TYpes: s = string, i = integer, d = double,  b = blob */
+            $stmt->bind_param('ssss', $nt, $ph, $pl, $dt);
+
+            $stmt->execute();/* Execute statement */
+
+            $db->commit();
+
+            $ret = SendAirtelSms($msisdn, $message, $db);
+
+        } else {
+
+            $Msg = 'Unsubscription of ' . $msisdn . ' failed. ' . $db->error;
+        }
+    }
+}
+
+
 
 	
 	function SendAirtelSms($msisdn,$message,$db)
