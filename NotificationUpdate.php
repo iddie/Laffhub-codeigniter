@@ -132,13 +132,7 @@ if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["productID"])) && (isset($_
     }
 
     $remote_ip = getRealIpAddr(); #$_SERVER['REMOTE_ADDR'];
-
-    #$host = $_SERVER['REMOTE_HOST'];
-    $remote_host = '';
-    if ($remote_ip) $remote_host = gethostbyaddr($remote_ip);
-
-    LogDetails($network . '(' . $msisdn . ')', $Msg, $msisdn, date('Y-m-d H:i:s'), $remote_ip, $remote_host, 'SUBSCRIPTION RENEWAL', 'System', $db);
-
+    
     echo $response;
 
 
