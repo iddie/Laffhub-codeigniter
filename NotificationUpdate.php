@@ -116,11 +116,10 @@ if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["productID"])) && (isset($_
         fwrite($file, date('Y-m-d H:i:s') . ",MSISDN: " . $msisdn . ",Plan: " . $plan . ",Status: " . $status . ",Trans. Id: " . $transid . ",CP Trans. Id: " . $cptransid . "," . $failed . PHP_EOL);
         fclose($file);
 
-    }elseif(($errorCode == '1001') && (strpos($status, 'Start/Stop Initiated De-Subscription') !== false))  //Stop notification from Airtel Start/Stop
+    }elseif($errorCode == '1001')  //Stop notification from Airtel Start/Stop
     {
-         UnSubscriberUser($msisdn, $network, $db);
+         $response = UnSubscriberUser($msisdn, $network, $db);
     }
-
 
     if($result == 'OK') {
 
@@ -135,7 +134,6 @@ if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["productID"])) && (isset($_
     
     echo $response;
 
-
 } else
 {
     $message='Invalid Request From '.getRealIpAddr();
@@ -144,6 +142,5 @@ if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["productID"])) && (isset($_
 
     $file = fopen('ussd_messages_bad.txt',"a"); fwrite($file, $message.PHP_EOL); fclose($file);
 }
-
 
 ?>

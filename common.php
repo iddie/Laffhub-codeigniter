@@ -782,6 +782,8 @@ function UnSubscriberUser($msisdn, $network, $db)
 
     if (!$query = $db->query($sql)) die('There was an error running the query [' . $db->error . ']');
 
+    $response='';
+
     if ($query->num_rows > 0) {
 
         $row = $query->fetch_assoc();
@@ -797,6 +799,8 @@ function UnSubscriberUser($msisdn, $network, $db)
         if ($db->query($sql) === TRUE) {
             #CANCELLED
             $cancelled = '0';
+
+            $response = 'DELETED';
 
             $Msg = 'Subscriber with MSISDN, ' . $msisdn . ', has opted out of Laffhub service successfully.';
             $message = "Dear customer, you have unsubscribed from Laffhub service successfully. Text YES to 2001 to activate 7dys/15 videos. Service costs N100. NO DATA COST.";
@@ -832,7 +836,7 @@ function UnSubscriberUser($msisdn, $network, $db)
             $Msg = 'Unsubscription of ' . $msisdn . ' failed. ' . $db->error;
         }
     }
+    echo $response;
 }
-
 
 ?>
