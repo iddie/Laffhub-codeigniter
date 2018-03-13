@@ -11,11 +11,11 @@ include('common.php');
 $network='Airtel';
 
 
-if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["productID"])) && (isset($_REQUEST["errorCode"])))
+if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["productId"])) && (isset($_REQUEST["errorCode"])))
 {
 
     $msisdn = trim($_REQUEST["msisdn"]);
-    $productID = trim($_REQUEST["productID"]);
+    $productID = trim($_REQUEST["productId"]);
     $status = trim($_REQUEST["errorMsg"]);
     $transid =trim($_REQUEST["transid"]);
     $errorCode = trim($_REQUEST["errorCode"]);
@@ -118,7 +118,7 @@ if ((isset($_REQUEST["msisdn"])) && (isset($_REQUEST["productID"])) && (isset($_
 
     }elseif($errorCode == '1001')  //Stop notification from Airtel Start/Stop
     {
-         $response = UnSubscriberUser($msisdn, $network, $db);
+        UnSubscriberUser($msisdn, $network, $db);
     }
 
     if($result == 'OK') {
