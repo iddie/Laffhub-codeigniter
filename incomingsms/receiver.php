@@ -1110,80 +1110,76 @@
 
                     $response = UnSubscribeFromSE($msisdn, $productId);
 
-                    $new_status= $response['Status'];
+                    $sql="SELECT * FROM subscriptions WHERE (TRIM(network)='".$db->escape_string($network)."') AND (TRIM(msisdn)='".$msisdn."')";
 
-                    #Check if subscriber has active subscription
-                    if(strtolower( $new_status == 'ok')){
+                    if(!$query = $db->query($sql)) die('There was an error running the query [' . $db->error . ']');
 
-                        $sql="SELECT * FROM subscriptions WHERE (TRIM(network)='".$db->escape_string($network)."') AND (TRIM(msisdn)='".$msisdn."')";
+                    if ( $query->num_rows > 0 )
+                    {
+                        $row = $query->fetch_assoc();
 
-                        if(!$query = $db->query($sql)) die('There was an error running the query [' . $db->error . ']');
+                        $subscriptionId=$row['subscriptionstatus'];
+                        $lastplan=$row['plan'];
 
-                        if ( $query->num_rows > 0 )
+                        $dt=date('Y-m-d H:i:s');
+
+                        #Opt out
+                        $sql = "DELETE FROM subscriptions WHERE (TRIM(network)='".$db->escape_string($network)."') AND (TRIM(msisdn)='".$msisdn."')";
+
+                        if ($db->query($sql) === TRUE)
                         {
-                            $row = $query->fetch_assoc();
+                            #CANCELLED
+                            $cancelled='0';
 
-                            $subscriptionId=$row['subscriptionstatus'];
-                            $lastplan=$row['plan'];
+                            $Msg='Subscriber with MSISDN, '.$msisdn.', has opted out of Laffhub service successfully.';
+                            $message = "Dear customer, you have unsubscribed from Laffhub service successfully. Text YES to 2001 to activate 7dys/15 videos. Service costs N100. NO DATA COST.";
 
-                            $dt=date('Y-m-d H:i:s');
+                            #Remove watchlist entry
+                            $sql = "DELETE FROM watchlists WHERE (TRIM(subscriptionId)='".$db->escape_string($subscriptionId)."')";
+                            $db->query($sql);
 
-                            #Opt out
-                            $sql = "DELETE FROM subscriptions WHERE (TRIM(network)='".$db->escape_string($network)."') AND (TRIM(msisdn)='".$msisdn."')";
+                            #INSERT INTO optouts table
+                            $db->autocommit(FALSE);
 
-                            if ($db->query($sql) === TRUE)
-                            {
-                                #CANCELLED
-                                $cancelled='0';
+                            $sql='INSERT INTO optouts (network,msisdn,lastplan,optout_date) VALUES (?,?,?,?)';
 
-                                $Msg='Subscriber with MSISDN, '.$msisdn.', has opted out of Laffhub service successfully.';
-                                $message = "Dear customer, you have unsubscribed from Laffhub service successfully. Text YES to 2001 to activate 7dys/15 videos. Service costs N100. NO DATA COST.";
+                            $nt=$db->escape_string($network);
+                            $ph=$db->escape_string($msisdn);
+                            $pl=$db->escape_string($lastplan);
 
-                                #Remove watchlist entry
-                                $sql = "DELETE FROM watchlists WHERE (TRIM(subscriptionId)='".$db->escape_string($subscriptionId)."')";
-                                $db->query($sql);
+                            $stmt = $db->prepare($sql);/* Prepare statement */
 
-                                #INSERT INTO optouts table
-                                $db->autocommit(FALSE);
+                            if ($stmt === false) trigger_error('Wrong SQL: '.$sql.' Error: '.$db->error, E_USER_ERROR);
 
-                                $sql='INSERT INTO optouts (network,msisdn,lastplan,optout_date) VALUES (?,?,?,?)';
+                            /* Bind parameters. TYpes: s = string, i = integer, d = double,  b = blob */
+                            $stmt->bind_param('ssss',$nt,$ph,$pl,$dt);
 
-                                $nt=$db->escape_string($network);
-                                $ph=$db->escape_string($msisdn);
-                                $pl=$db->escape_string($lastplan);
+                            $stmt->execute();/* Execute statement */
 
-                                $stmt = $db->prepare($sql);/* Prepare statement */
-
-                                if ($stmt === false) trigger_error('Wrong SQL: '.$sql.' Error: '.$db->error, E_USER_ERROR);
-
-                                /* Bind parameters. TYpes: s = string, i = integer, d = double,  b = blob */
-                                $stmt->bind_param('ssss',$nt,$ph,$pl,$dt);
-
-                                $stmt->execute();/* Execute statement */
-
-                                $db->commit();
-
-                                $ret=SendAirtelSms($msisdn,$message,$db);
-                            } else
-                            {
-                                $Msg='Unsubscription of '.$msisdn.' failed. '.$db->error;
-                            }
-
-                            $remote_ip=getRealIpAddr(); #$_SERVER['REMOTE_ADDR'];
-
-                            #$host = $_SERVER['REMOTE_HOST'];
-                            $remote_host='';
-                            if ($remote_ip) $remote_host=gethostbyaddr($remote_ip);
-
-                            #LogDetails($Name,$Activity,$Username,$logdate,$ip,$host,$Operation,$LogID,$db)
-                            LogDetails($network.' LaffHub',$Msg,$msisdn,date('Y-m-d H:i:s'),$remote_ip,$remote_host,'OPTED OUT OF '.strtoupper($network).' LAFFHUB','System',$db);
-                        }else
-                        {
-                            $message = "Your attempt to opt out from Laffhub failed. You have no subscription on Laffhub service. Text YES to 2001 to activate 7days/15 videos. Service costs N100.";
+                            $db->commit();
 
                             $ret=SendAirtelSms($msisdn,$message,$db);
+
+                        } else
+                        {
+                            $Msg='Unsubscription of '.$msisdn.' failed. '.$db->error;
                         }
+
+                        $remote_ip=getRealIpAddr(); #$_SERVER['REMOTE_ADDR'];
+
+                        #$host = $_SERVER['REMOTE_HOST'];
+                        $remote_host='';
+                        if ($remote_ip) $remote_host=gethostbyaddr($remote_ip);
+
+                        #LogDetails($Name,$Activity,$Username,$logdate,$ip,$host,$Operation,$LogID,$db)
+                        LogDetails($network.' LaffHub',$Msg,$msisdn,date('Y-m-d H:i:s'),$remote_ip,$remote_host,'OPTED OUT OF '.strtoupper($network).' LAFFHUB','System',$db);
+                    }else
+                    {
+                        $message = "Your attempt to opt out from Laffhub failed. You have no subscription on Laffhub service. Text YES to 2001 to activate 7days/15 videos. Service costs N100.";
+
+                        $ret=SendAirtelSms($msisdn,$message,$db);
                     }
+                    
                 }elseif (trim(strtolower($requestplan))=='status')
                 {
                     $sql = "SELECT * FROM subscriptions WHERE (TRIM(network)='".$db->escape_string($network)."') AND (subscriptionstatus=1) AND (TRIM(msisdn)='".$db->escape_string($msisdn)."')";
