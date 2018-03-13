@@ -1184,6 +1184,41 @@
                             $ret=SendAirtelSms($msisdn,$message,$db);
                         }
                     }
+                }elseif (trim(strtolower($requestplan))=='status')
+                {
+                    $sql = "SELECT * FROM subscriptions WHERE (TRIM(network)='".$db->escape_string($network)."') AND (subscriptionstatus=1) AND (TRIM(msisdn)='".$db->escape_string($msisdn)."')";
+
+                    if(!$query = $db->query($sql)) die('There was an error running the query ['.$db->error.']');
+
+                    $ret=''; $watched=0; $maxwatch=0; $expdt=''; $activeplan=''; $flag=false; $ex='';
+
+                    #There is active subscription
+                    if ($query->num_rows > 0 ) {
+                        $row = $query->fetch_assoc();
+
+                        if ($row['exp_date']) {
+                            $expdt = date('d M Y @ H:i', strtotime($row['exp_date']));
+                            $ex = date('Y-m-d H:i', strtotime($row['exp_date']));
+                        }
+
+                        if ($row['plan']) $activeplan = trim($row['plan']);
+                        if ($row['videos_cnt_watched']) $watched = intval($row['videos_cnt_watched']);
+                        if ($row['videos_cnt_to_watch']) $maxwatch = $row['videos_cnt_to_watch'];
+
+                        $ret = "You currently have an active subscription to this service which will expire on " . $expdt . ". Visit www.laffhub.com to enjoy your videos.";
+
+                        $Msg = "Subscription was not successful. Subscriber has an active subscription running. Current Subscription Details: Network => " . $network . "; MSISDN => " . $msisdn . "; Service Plan => " . $activeplan . "; Expiry Date => " . $expdt;
+
+                        #There is active subscription
+                        $ret = SendAirtelSms($msisdn, $ret, $db);
+
+                    }else {
+
+                        $Msg = "You do not have an active subscription plan. Text HELP to 2001 to see available plans.";
+
+                        $ret = SendAirtelSms($msisdn, $Msg, $db);
+
+                    }
                 }
 				else#Create subscription request
 				{
@@ -1324,6 +1359,10 @@
 		}elseif((trim($shortcode)=='2001') && ($m=='LEAVE')) {
 
 		    return 'Leave';
+
+        }elseif((trim($shortcode)=='2001') && ($m=='STATUS')) {
+
+            return 'Status';
         }
         else
 		{
