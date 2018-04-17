@@ -839,4 +839,18 @@ function UnSubscriberUser($msisdn, $network, $db)
     echo $response;
 }
 
+function UpdateNotificationDB($msisdn,$notificationdb) {
+
+	$notificationdb->autocommit(FALSE);
+								
+	$sql="UPDATE notifications SET updated=1 WHERE msisdn='" .$msisdn. "' AND updated=0";
+									
+	if (!$query = $notificationdb->query($sql))
+	{
+		$file = fopen('mysqli_error_log.txt',"a"); fwrite($file, date('Y-m-d H:i:s').",common.php,LogDetails,ERROR=>".$notificationdb->error."\n"); fclose($file);
+	}
+
+	$notificationdb->commit();
+}
+
 ?>
