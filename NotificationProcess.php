@@ -18,7 +18,7 @@ function ProcessSubscriptions($network,$notificationdb,$db)
 
     $portionSize = 100;
 
-    $sql = "SELECT COUNT(msisdn) AS TotalRecords FROM notifications WHERE (updated=0))";
+    $sql = "SELECT COUNT(msisdn) AS TotalRecords FROM notifications WHERE (updated=0)";
 
     if (!$query = $notificationdb->query($sql)) die('There was an error running the query [' . $notificationdb->error . ']');
 
@@ -57,7 +57,7 @@ function ProcessSubscriptions($network,$notificationdb,$db)
             if ($srow['requesttype']) $requesttype = trim($srow['requesttype']);
             if ($srow['chargingtime']) $subscribe_date = trim($srow['chargingtime']);
             if ($srow['updated']) $processed = trim($srow['updated']);
-            if ($srow['errorcode']) $erroCode = trim($srow['errorcode']);
+            if ($srow['errorcode']) $errorCode = trim($srow['errorcode']);
 
             if(($productid == '6300') || ($productid == '6302') || ($productid == '6305') || ($productid == '6308')){
 
