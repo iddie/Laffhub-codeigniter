@@ -181,7 +181,15 @@
 					{
 						echo ' <li><a href="'.site_url("Activatevideo").'"><i class="fa fa-dot-circle-o"></i> <span>Activate Video</span></a></li>';
 					}	
-					
+					#Deactivate Videos
+					if ($CurrentPage=='content/deactivate') 
+					{
+						echo ' <li class="active"><a href="'.site_url("content/deactivate").'"><i class="fa fa-dot-circle-o"></i> <span>Deactivate Video</span></a></li>';
+					}else
+					{
+						echo ' <li><a href="'.site_url("content/deactivate").'"><i class="fa fa-dot-circle-o"></i> <span>Deactivate Video</span></a></li>';
+					}
+
 					if ($CurrentPage=='Editvideodetails') 
 					{
 						echo ' <li class="active"><a href="'.site_url("Editvideodetails").'"><i class="fa fa-dot-circle-o"></i> <span>Edit Video Details</span></a></li>';

@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = 'http://localhost/laffhub-codeigniter';
+$config['base_url'] = 'http://localhost/laffhub-codeigniter/';
 // $config['base_url'] =  ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ?  "https" : "http");  
 // $config['base_url'] .=  "://".$_SERVER['HTTP_HOST'];  
 // $config['base_url'] .=  str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']); 
@@ -210,7 +210,7 @@ $config['directory_trigger'] = 'd';
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+$config['log_threshold'] = 2;
 
 /*
 |--------------------------------------------------------------------------
@@ -307,15 +307,16 @@ $config['cache_query_string'] = FALSE;
 |
 | If you use the Encryption class, you must set an encryption key.
 | See the user guide for more info.
-|
+
 | http://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = '';
+$config['encryption_key'] = 'laffh-23-1230xlazh19';
+$config['api-secure'] = 'x-$20-secure-api-12()$$#*api';
 
 /*
 |--------------------------------------------------------------------------
-| Session Variables
+$config['encryption_key'] = hex2bin($key);
 |--------------------------------------------------------------------------
 |
 | 'sess_driver'
