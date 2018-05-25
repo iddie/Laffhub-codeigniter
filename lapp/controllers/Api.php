@@ -20,6 +20,7 @@ class Api extends CI_Controller
         parent::__construct();
         $this->load->library('encryption');
         $this->load->model('video');
+        $this->load->helper('api');
         //assign token received from request to variable
         $token = ($this->input->post('api_token')) ? 
         $this->input->post('api_token') 
@@ -39,11 +40,16 @@ class Api extends CI_Controller
     {
         if ($this->validToken) 
         {
+            //perform any custom action
+            $response = content_deactivate_actions($this);
+            //retrieve objects
             $retrieved_data = $this->video->get_videos();
             $data['draw'] = $this->input->post('draw');
             $data['data'] = $retrieved_data['query_data'];
             $data['recordsTotal'] = $retrieved_data['records_total'];
             $data['recordsFiltered'] = $retrieved_data['records_filtered'];
+            //merge response from custom action with objects
+            $data = merge($data, $response);
         }
         else
         {

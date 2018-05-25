@@ -248,9 +248,9 @@ var Datatable = function() {
         getSelectedRows: function() {
             var rows = [];
             $('tbody > tr > td:nth-child(1) input[type="checkbox"]:checked', table).each(function() {
-                rows.push($(this).val());
+                var id = $(this).closest('td').next().html();
+                rows.push(id);
             });
-
             return rows;
         },
 
