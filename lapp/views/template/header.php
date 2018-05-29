@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <link rel="stylesheet" href="css/ionicons.min.css">
   <link rel="stylesheet" href="css/general.css">
-
+  <link rel="stylesheet" href="css/jquery.dialog.css" />
   <link rel="stylesheet" href="css/skins/_all-skins.min.css">
   <link rel="stylesheet" href="iconfont/material-icons.css">
   <link rel="stylesheet" href="css/components.min.css">
