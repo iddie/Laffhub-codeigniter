@@ -1,4 +1,5 @@
-<?php session_start();
+<?php
+ session_start();
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Userhome extends CI_Controller {
@@ -287,7 +288,6 @@ class Userhome extends CI_Controller {
 			if ($_SESSION['origin']) $data['origin'] = $_SESSION['origin'];
 
 			$data['CategoryData'] = $this->getdata_model->GetVideoCategories();	
-			
 			$this->load->view('userhome_view',$data);
 		}else
 		{

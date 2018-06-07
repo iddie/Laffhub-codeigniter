@@ -1,6 +1,6 @@
 <?php
 
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 
 
@@ -144,49 +144,50 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $active_group = 'default';
 
-$query_builder = TRUE;
+$query_builder = true;
 
 
 
 $db['default'] = array(
 
-	'dsn'	=> '',
+    'dsn'	=> '',
 
-	'hostname' => '127.0.0.1',
+    'hostname' => '127.0.0.1',
 
-	'username' => 'laffhub_laffuser',
+    'username' => 'root',
+    //'username' => 'laffhub_laffuser',
 
-	'password' => 'vUzm6Nh^^y*v',
+    'password' => 'omega95',
+    //'password' => 'vUzm6Nh^^y*v',
 
-	'database' => 'laffhub_laffhubdb',
+    'database' => 'laffhub_laffhubdb',
 
-	'dbdriver' => 'mysqli',
+    'dbdriver' => 'mysqli',
 
-	'dbprefix' => '',
+    'dbprefix' => '',
 
-	'pconnect' => FALSE,
+    'pconnect' => false,
 
-	'db_debug' => (ENVIRONMENT !== 'production'),
+    'db_debug' =>(ENVIRONMENT !== 'production'),
 
-	'cache_on' => FALSE,
+    'cache_on' => false,
 
-	'cachedir' => '',
+    'cachedir' => '',
 
-	'char_set' => 'utf8',
+    'char_set' => 'utf8',
 
-	'dbcollat' => 'utf8_general_ci',
+    'dbcollat' => 'utf8_general_ci',
 
-	'swap_pre' => '',
+    'swap_pre' => '',
 
-	'encrypt' => FALSE,
+    'encrypt' => false,
 
-	'compress' => FALSE,
+    'compress' => false,
 
-	'stricton' => FALSE,
+    'stricton' => false,
 
-	'failover' => array(),
+    'failover' => array(),
 
-	'save_queries' => TRUE
+    'save_queries' => true
 
 );
-
