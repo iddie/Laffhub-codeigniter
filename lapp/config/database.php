@@ -168,7 +168,7 @@ $db['default'] = array(
 
     'pconnect' => false,
 
-    'db_debug' => (ENVIRONMENT !== 'production'),
+    'db_debug' =>(ENVIRONMENT !== 'production'),
 
     'cache_on' => false,
 

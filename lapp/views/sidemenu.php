@@ -1,42 +1,42 @@
 <?php $CurrentPage=uri_string(); ?>
 
 <aside class="main-sidebar">
-	<!-- sidebar: style can be found in sidebar.less -->
-	<section class="sidebar">
-		<!-- Sidebar user panel -->
-		<div class="user-panel">
-			<div class="pull-left label" style="font-size:14px;">
-				<span class="label label-danger left size-14">
-					<a id="ancMenuSignOut" href="#" style="color:#F2DEDE;">&nbsp;&nbsp;&nbsp&nbsp;Sign Out&nbsp;&nbsp;&nbsp&nbsp;</a>
-				</span>
-			</div>
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left label" style="font-size:14px;">
+                <span class="label label-danger left size-14">
+                    <a id="ancMenuSignOut" href="#" style="color:#F2DEDE;">&nbsp;&nbsp;&nbsp&nbsp;Sign Out&nbsp;&nbsp;&nbsp&nbsp;</a>
+                </span>
+            </div>
 
-			<div class="pull-left label yellowtext" style="font-size:14px; margin-top:10px;" title="Username">
-				<span class="pull-left">
-					Username:&nbsp;
-				</span>&nbsp;&nbsp;
-				<span class="label " style="color:#F2DEDE;">
-					<?php echo $username; ?>
-				</span>
-			</div>
+            <div class="pull-left label yellowtext" style="font-size:14px; margin-top:10px;" title="Username">
+                <span class="pull-left">
+                    Username:&nbsp;
+                </span>&nbsp;&nbsp;
+                <span class="label " style="color:#F2DEDE;">
+                    <?php echo $username; ?>
+                </span>
+            </div>
 
-			<div class="pull-left label" style="font-size:14px; margin-top:5px;">
-				<a href="<?php echo site_url(" Userhome "); ?>">
-					<?php
+            <div class="pull-left label" style="font-size:14px; margin-top:5px;">
+                <a href="<?php echo site_url(" Userhome "); ?>">
+                    <?php
                            if ($CurrentPage=='Userhome') {
                                echo '<i class="fa fa-dashboard active" style="color:#fff; margin-top:10px;"></i> <span style="color:#fff;">Dashboard</span>';
                            } else {
                                echo '<i class="fa fa-dashboard"></i> <span>Dashboard</span>';
                            }
                    ?>
-				</a>
-			</div>
-		</div>
+                </a>
+            </div>
+        </div>
 
-		<!-- sidebar menu: : style can be found in sidebar.less -->
-		<ul class="sidebar-menu">
-			<li class="header">PROFILE UPDATE</li>
-			<?php 
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+            <li class="header">PROFILE UPDATE</li>
+            <?php 
                     if (($CurrentPage=='Editprofile') || ($CurrentPage=='Editpassword')) {
                         echo '<li class="treeview active">';
                     } else {
@@ -44,14 +44,14 @@
                     }
                 ?>
 
-			<a href="#" title="Click to expand activities">
-				<i class="fa fa-edit"></i>
-				<span> Edit User Information</span>
-				<i class="fa fa-angle-left pull-right"></i>
-			</a>
+            <a href="#" title="Click to expand activities">
+                <i class="fa fa-edit"></i>
+                <span> Edit User Information</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
 
-			<ul class="treeview-menu">
-				<?php
+            <ul class="treeview-menu">
+                <?php
                         if ($CurrentPage=='Editprofile') {
                             echo '<li class="active"><a href="'.site_url("Editprofile").'"><i class="fa fa-dot-circle-o"></i> <span>Edit Profile</span></a></li>';
                         } else {
@@ -64,12 +64,12 @@
                             echo ' <li><a href="'.site_url("Editpassword").'"><i class="fa fa-dot-circle-o"></i> <span>Change Password</span></a></li>';
                         }
                    ?>
-			</ul>
-			</li>
+            </ul>
+            </li>
 
 
-			<li class="header">PORTAL ADMIN</li>
-			<?php 
+            <li class="header">PORTAL ADMIN</li>
+            <?php 
                #Unsubscribe User
                 if ($AddMobileOperator==1) {
                     if ($CurrentPage=='Removeuser') {
@@ -80,8 +80,8 @@
                 }
            ?>
 
-			<!--Blacklist Users-->
-			<?php 
+            <!--Blacklist Users-->
+            <?php 
                #Blacklist MSISDN
                 if ($AddMobileOperator==1) {
                     if ($CurrentPage=='Blacklist') {
@@ -92,8 +92,8 @@
                 }
            ?>
 
-			<!--Airtel Reports-->
-			<?php	
+            <!--Airtel Reports-->
+            <?php	
             ############## AIRTEL REPORTS        #######################################
             
             if (($CurrentPage=='Dailyrevenue') or ($CurrentPage=='Subscribersdailyrevenue')) {
@@ -131,8 +131,8 @@
         
         ?>
 
-			<!--Contents Group-->
-			<?php
+            <!--Contents Group-->
+            <?php
                 if (($CurrentPage=='Activatevideo') or ($CurrentPage=='Publishers') or ($CurrentPage=='Previewvideo') or ($CurrentPage=='Createthumbnails') or ($CurrentPage=='Editvideodetails')) {
                     echo '<li class="treeview active">';
                 } else {
@@ -195,7 +195,31 @@
                 
            ?>
 
-			<?php 
+            <!--Report Recipients -->
+            <?php 
+                if ($CurrentPage=='report/recipients') {
+                    echo '<li class="treeview active">';
+                } else {
+                    echo '<li class="treeview">';
+                }
+
+                echo '<a href="#" title="Click to expand activities">
+                    <i class="fa fa-users"></i> <span>Report Recipients</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>';
+
+                echo '<ul class="treeview-menu">';
+                #Preview Videos
+                if ($CurrentPage=='report/recipients') {
+                    echo ' <li title="Report Recipients" class="active"><a href="'.site_url('report/recipients').'"><i class="fa fa-dot-circle-o"></i> <span>Show All</span></a></li>';
+                } else {
+                    echo ' <li title="Report Recipients"><a href="'.site_url('report/recipients').'"><i class="fa fa-dot-circle-o"></i> <span>Show All</span></a></li>';
+                }
+                echo '    
+                </ul>
+                </li>';
+            ?>
+
+            <?php 
            #Capture Adverts
             if ($AddBanners==1) {
                 if ($CurrentPage=='Ads') {
@@ -206,7 +230,7 @@
             }
            ?>
 
-			<?php 
+            <?php 
            #Capture Events
             if ($CreateEvents==1) {
                 if ($CurrentPage=='Captureevents') {
@@ -217,7 +241,7 @@
             }
            ?>
 
-			<?php
+            <?php
            ####################### VIDEO SETTINGS     ################################
                 #Video Setting
                 if (($CurrentPage=='Videocat') or ($CurrentPage=='Distribution') or ($CurrentPage=='Comedians')) {
@@ -261,8 +285,8 @@
             ?>
 
 
-			<!--Network Settings-->
-			<?php
+            <!--Network Settings-->
+            <?php
             #prices,messages, airtel settings
            ####################### NETWORK SETTINGS     ################################
                 #Video Setting
@@ -318,8 +342,8 @@
            ####################### END NETWORK SETTINGS ################################
             ?>
 
-			<!--Payment Settings-->
-			<?php
+            <!--Payment Settings-->
+            <?php
             #Paystack
            ####################### PAYMENT SETTINGS     ################################
                 #Video Setting
@@ -347,8 +371,8 @@
            ####################### END NETWORK SETTINGS ################################
             ?>
 
-			<!--System Settings-->
-			<?php	
+            <!--System Settings-->
+            <?php	
                 #System Setting
                 if (($CurrentPage=='Settings') or ($CurrentPage=='Users')) {
                     echo '<li class="treeview active">';
@@ -385,9 +409,9 @@
                      
             ?>
 
-			<!--REPORTS-->
-			<li class="header">REPORTS</li>
-			<?php	
+            <!--REPORTS-->
+            <li class="header">REPORTS</li>
+            <?php	
             ############## REPORTS        #######################################
             
             if (($CurrentPage=='Logreport') or ($CurrentPage=='Newsubscription') or ($CurrentPage=='Unsubscription') or ($CurrentPage=='Blacklistrep') or ($CurrentPage=='Failedactivations') or ($CurrentPage=='Failedchargings') or ($CurrentPage=='Greyareas') or ($CurrentPage=='Revenuerep') or ($CurrentPage=='Successchargings')) {
@@ -473,7 +497,7 @@
         
         ?>
 
-			<?php
+            <?php
             ######################################################################
             if (($CurrentPage=='Htmlhelp') || ($CurrentPage=='Pdfhelp')) {
                 echo '<li class="treeview active">';
@@ -507,7 +531,7 @@
           echo '    </ul>
 				 </li>';
            ?>
-		</ul>
-	</section>
-	<!-- /.sidebar -->
+        </ul>
+    </section>
+    <!-- /.sidebar -->
 </aside>
