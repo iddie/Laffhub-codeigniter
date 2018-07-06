@@ -27,6 +27,7 @@
                                 <option value="activate">Activate</option>
                                 <option value="feature">Feature</option>
                                 <option value="undo_feature">Undo feature</option>
+                                <option value="destroy_videos">Delete</option>
                             </select>
                             <button class="btn btn-sm green table-group-action-submit">
                                 <i class="fa fa-check"></i> Submit</button>

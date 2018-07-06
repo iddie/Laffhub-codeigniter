@@ -976,7 +976,7 @@ class Getdata_model extends CI_Model
 	}
 		
 	public function MTNCheckStatus($msisdn)
-	{
+	{i
 		$channel = ''; $apiurl = ''; $svcid=''; $spid='';
 		
 		$sql="SELECT * FROM mtn_settings";		

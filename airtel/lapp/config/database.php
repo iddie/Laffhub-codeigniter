@@ -154,9 +154,9 @@ $db['default'] = array(
 
 	'hostname' => '127.0.0.1',
 
-	'username' => 'laffhub_laffuser',
+	'username' => 'root',
 
-	'password' => 'vUzm6Nh^^y*v',
+	'password' => 'omega95',
 
 	'database' => 'laffhub_laffhubdb',
 
