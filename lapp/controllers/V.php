@@ -427,7 +427,27 @@ class V extends CI_Controller {
 		
 		echo $ret;
 	}
+    public function DemoPlay()
+    {
+        if ($this->uri->segment(1)) {
+            $videocode=trim(str_replace('x-', '', $this->uri->segment(1)));
+            $data['videocode'] = $videocode;
+            $data['url'] = 'https://laffhub.com/c-'.$videocode;
+            //get video data
+            $query = $this->db->get_where('videos', ['video_code'=>$videocode]);
+            $video = $query->row();
+            $data['title'] = $video->video_title;
+            $data['description'] = $video->description;
+            $data['thumbnail'] = sprintf("https://s3-us-west-2.amazonaws.com/laffhub-thumbs/%s/%s",
+             $video->category, trim($video->thumbnail));
 
+            $this->load->view('demo_view',$data);
+        }
+        else{
+            redirect('https://laffhub.com');
+        }
+       
+    }
     public function PlayVideo()
     {
 
@@ -444,7 +464,13 @@ class V extends CI_Controller {
         $ret=$network;
 
         $host=strtolower(trim($_SERVER['HTTP_HOST']));
-
+        $redirect_videocode = null;
+        if ($this->uri->segment(1)) {
+            $redirect_videocode=trim($this->uri->segment(1));
+        }
+        else{
+            $redirect_videocode = 'Subscriberhome';
+        }
         #Check network
         if (strtolower(trim($ret))=='airtel')
         {
@@ -453,7 +479,7 @@ class V extends CI_Controller {
                 redirect('http://localhost/airtellaffhub/Subscriberhome', 'refresh');
             }else
             {
-                redirect('http://airtel.laffhub.com/Subscriberhome', 'refresh');
+                redirect('http://airtel.laffhub.com/'.$redirect_videocode);
             }
         }elseif (strtolower(trim($ret))=='mtn')
         {
@@ -462,7 +488,7 @@ class V extends CI_Controller {
                 redirect('http://localhost/mtnlaffhub/Subscriberhome', 'refresh');
             }else
             {
-                redirect('http://mtn.laffhub.com/Subscriberhome', 'refresh');
+                redirect('http://mtn.laffhub.com/'.$redirect_videocode);
             }
         }elseif (strtolower(trim($ret))=='etisalat')
         {

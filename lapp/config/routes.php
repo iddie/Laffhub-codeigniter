@@ -55,3 +55,4 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 $route['c-:any'] = 'V/PlayVideo';
+$route['x-:any'] = 'V/DemoPlay';

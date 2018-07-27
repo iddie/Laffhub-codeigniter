@@ -3,10 +3,9 @@
     function content_deactivate_actions($instance)
     {
         $data = null;
-        if($instance->input->post('customActionName'))
-        {
+        if ($instance->input->post('customActionName')) {
             $custion_action_name = $instance->input->post('customActionName');
-            switch($custion_action_name){
+            switch ($custion_action_name) {
                 case 'deactivate':
                     $id_array = $instance->input->post('id');
                     $data = ['play_status'=>false];
@@ -39,6 +38,13 @@
                     $data['customActionMessage'] = 'Feature Undo successfully';
                     $data['customActionStatus']  = 'OK';
                     break;
+                case 'destroy_videos':
+                    $id_array = $instance->input->post('id');
+                    $instance->db->where_in('id', $id_array);
+                    $instance->db->delete('videos');
+                    $data['customActionMessage'] = 'Videos deleted successfully';
+                    $data['customActionStatus']  = 'OK';
+                    break;
                 default:
                     break;
             }
@@ -54,5 +60,3 @@
         }
         return $base;
     }
-
-?>
