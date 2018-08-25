@@ -15,6 +15,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <link rel="manifest" href="<?php echo base_url(); ?>lcss/favicons/manifest.json">
   <link rel="mask-icon" href="<?php echo base_url(); ?>lcss/favicons/safari-pinned-tab.svg" color="#ff0000">
   <meta name="theme-color" content="#ffffff">
+  <meta property="og:site_name" content="LaffHub">
+  <meta property="og:title" content="<?=$title?>">
+  <meta property="og:image" content="<?=$fb_thumbnail?>">
+  <meta property="og:description" content="<?=$description?>">
+  <meta property="og:url" content="<?=current_url()?>">
+  <meta property="og:type" content="video.other">
   <!--/FAVICON-->
 
   <!--CSS CRITICAL-->
@@ -161,9 +167,8 @@ $(document).ready(function(e) {
 			fadeOut : 200,
 			timeOut : 1000,
 			afterBlock : function() {self = this;/* store 'this' for other scope to use*/},
-			klass : 'mtn-custom-theme',
 			bgPath : '<?php echo base_url();?>images/',
-			content: '<center><img src="<?php echo base_url();?>images/loader.gif" /><p style="color:#fff; font-size:20px; margin-top:10px;"><b>Loading Video. Please Wait...</b></p></center>'
+            content: '<span class="gifloading"> <span></span> <span></span> <span></span> <span></span> </span>'
 		}
 	);
 
@@ -270,9 +275,9 @@ $(document).ready(function(e) {
 	
 	if (parseInt(SubscriptionStatus,10) != 1)
 	{		
-		m='Your LaffHub subscription is currently not active.You can only view 30 seconds of the video. Subscribe or renew your subscription to view the full video. Click <a style="position:inherit;" href="<?php echo site_url('Subscribe'); ?>">Here</a> to subscribe.';
+		m='You currently do not have an active subscription.You can only view 30 seconds of the video. Subscribe or renew your subscription to view the full video. Click <a style="position:inherit;" href="<?php echo site_url('Subscribe'); ?>">Here</a> to subscribe.';
 		
-		var m1='Your LaffHub subscription is currently not active.You can only view 30 seconds of the video.<br>Subscribe or renew your subscription to view the full video. Click <a style="position:inherit;" href="<?php echo site_url('Subscribe'); ?>">Here</a> to subscribe.';
+		var m1='You currently do not have an active subscription.You can only view 30 seconds of the video.<br>Subscribe or renew your subscription to view the full video. Click <a style="position:inherit;" href="<?php echo site_url('Subscribe'); ?>">Here</a> to subscribe.';
 		
 		
 		jwplayer("player").onTime(function() {
@@ -960,7 +965,7 @@ $(document).ready(function(e) {
 			
 			var mydata={email:'<?php echo $subscriber_email; ?>', phone:Phone, videocode:cd, videotitle:vt};
 				 				  
-						
+
 			$.ajax({
 				type: "POST",
 				dataType: 'text',
@@ -1027,7 +1032,7 @@ $(document).ready(function(e) {
 					if ($(data).length > 0)
 					{
 						var cnt=0;
-//pos,parentid,commentid,author,comment,datecreated,likes												
+                    //pos,parentid,commentid,author,comment,datecreated,likes
 						$.each($(data), function(i,e)
 						{							
 							if (e.commentid && e.author)

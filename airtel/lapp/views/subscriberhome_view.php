@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <base href="<?=base_url()?>"/>
     <title>LaffHub</title>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -25,7 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
       body {
         background: #000;
-        opacity: 0;
+        opacity: 1;
       }
     </style>
     <!--/CSS CRITICAL-->
@@ -40,7 +41,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?php echo base_url();?>js/modernAlert.js"></script>
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.center.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url();?>js/jquery.msg.js"></script>
-    
+    <link rel="stylesheet" href="acss/css/main.patch.css"><!--CSS MAIN-->
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src=<?php echo base_url();?>js/html5shiv.min.js"></script>

@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <base href="<?=base_url()?>"/>
     <title>LaffHub</title>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -15,6 +16,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="icon" type="image/png" href="<?php echo base_url(); ?>acss/favicons/icon.png" sizes="16x16">
     <link rel="manifest" href="<?php echo base_url(); ?>acss/favicons/manifest.json">
     <link rel="mask-icon" href="<?php echo base_url(); ?>acss/favicons/safari-pinned-tab.svg" color="#ff0000">
+    <link rel="stylesheet" href="acss/css/main.patch.css">
     <meta name="theme-color" content="#ffffff">
     <!--/FAVICON-->
     <!--CSS CRITICAL-->

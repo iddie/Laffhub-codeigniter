@@ -1059,7 +1059,12 @@ class V extends CI_Controller {
                 $sql = "SELECT * FROM videos WHERE (play_status=1) AND (encoded=1) AND (TRIM(video_code)='".$this->db->escape_str($videocode)."')";
 
                 $query = $this->db->query($sql);
-
+                if($query->num_rows()==0){
+                    $this->db->order_by('id', 'RANDOM');
+                    $this->db->where(['play_status'=>1,'encoded'=>1]);
+                    $this->db->limit(1);
+                    $query = $this->db->get('videos');
+                }
                 if ($query->num_rows() > 0 )
                 {
                     $row = $query->row();
@@ -1068,6 +1073,7 @@ class V extends CI_Controller {
 
                     if ($row->filename) $data['filename']=$row->filename;
                     if ($row->video_title) $data['title']=$row->video_title;
+                  
                     if ($row->description) $data['description']=$row->description;
                     if ($row->category) $data['category']=$row->category;
                     if ($row->thumbnail) $data['thumbnail']=$row->thumbnail;
@@ -1274,6 +1280,7 @@ class V extends CI_Controller {
                 $fn=str_replace('.'.$ext,'',basename($data['filename']));
 
                 $preview_img='https://s3-us-west-2.amazonaws.com/'.$ThumbBucket.'/'.$data['category'].'/'.$data['thumbnail'];
+                $preview_img_fb='https://s3-us-west-2.amazonaws.com/laffhub-thumbs/'.$data['category'].'/'.$data['thumbnail'];
                 $data['videocode'] = $videocode;
                 $data['thumbs_bucket'] = $ThumbBucket;
                 $data['preview_img']=$preview_img;
@@ -1282,8 +1289,8 @@ class V extends CI_Controller {
                 $data['Categories']=$this->getdata_model->GetCategories();
                 $data['ActiveAdverts']=$this->getdata_model->GetActiveAdverts();
                 $data['RandomlyRelatedVideos']=$this->getdata_model->GetRandomlyRelatedVideos($data['category'],$videocode,$data['comedian']);
-
-                $this->load->view('v_view',$data);
+                $data['fb_thumbnail'] = $preview_img_fb;
+                $this->load->view('v_view', $data);
             }
         } else
         {

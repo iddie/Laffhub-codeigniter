@@ -1,0 +1,11 @@
+@media (max-width: 738px) {
+    .row--flex > div {
+      width: 50% !important;
+    }
+  }
+  @media (max-width: 738px) {
+    .video-preview .video-preview__descr {
+      font-size: 12px !important;
+      /* line-height: 1.5; */
+    }
+  }

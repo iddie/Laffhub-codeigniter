@@ -75,7 +75,7 @@ class Browsingsource extends CI_Controller {
 		if (strtolower(trim($ret))=='airtel')
 		{
 			$this->LoadSession();
-	#$file = fopen('aaa.txt',"a"); fwrite($file,$host); fclose($file);
+			#$file = fopen('aaa.txt',"a"); fwrite($file,$host); fclose($file);
 			if ($host=='localhost')
 			{
 				redirect('http://localhost/airtellaffhub/Subscriberhome', 'refresh');
@@ -101,7 +101,7 @@ class Browsingsource extends CI_Controller {
 		{
 			if ($host=='localhost')
 			{
-				redirect('http://localhost/laffhub/Home', 'refresh');
+				redirect('http://localhost/laffhub.com/Home', 'refresh');
 			}else
 			{
 				redirect('https://laffhub.com/Home', 'refresh');
@@ -110,7 +110,7 @@ class Browsingsource extends CI_Controller {
 		{
 			if ($host=='localhost')
 			{
-				redirect('http://localhost/laffhub/Home', 'refresh');
+				redirect('http://localhost/laffhub.com/Home', 'refresh');
 			}else
 			{
 				redirect('https://laffhub.com/Home', 'refresh');

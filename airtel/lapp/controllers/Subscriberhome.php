@@ -110,38 +110,38 @@ class Subscriberhome extends CI_Controller {
 			$host=strtolower(trim($_SERVER['HTTP_HOST']));
 	
 	#$file = fopen('aaa.txt',"a"); fwrite($file, "Base URL=".base_url()); fclose($file);				
-	
-			if (strtolower(trim($ret))=='airtel')
-			{			
-				$this->load->view('subscriberhome_view',$data);			
-			}elseif (strtolower(trim($ret))=='mtn')
-			{
-				if ($host=='localhost')
-				{
-					redirect('http://localhost/mtnlaffhub/Subscriberhome', 'refresh');
-				}else
-				{
-					redirect('http://mtn.laffhub.com/Subscriberhome', 'refresh');
-				}
-			}elseif (strtolower(trim($ret))=='wifi')
-			{
-				if ($host=='localhost')
-				{
-					redirect('http://localhost/laffhub/Home', 'refresh');
-				}else
-				{
-					redirect('https://laffhub.com/Home', 'refresh');
-				}				
-			}else
-			{
-				if ($host=='localhost')
-				{
-					redirect('http://localhost/laffhub/Home', 'refresh');
-				}else
-				{
-					redirect('https://laffhub.com/Home', 'refresh');
-				}
-			}	
+			$this->load->view('subscriberhome_view',$data);
+			// if (strtolower(trim($ret))=='airtel')
+			// {			
+			// 	$this->load->view('subscriberhome_view',$data);			
+			// }elseif (strtolower(trim($ret))=='mtn')
+			// {
+			// 	if ($host=='localhost')
+			// 	{
+			// 		redirect('http://localhost/mtnlaffhub/Subscriberhome', 'refresh');
+			// 	}else
+			// 	{
+			// 		redirect('http://mtn.laffhub.com/Subscriberhome', 'refresh');
+			// 	}
+			// }elseif (strtolower(trim($ret))=='wifi')
+			// {
+			// 	if ($host=='localhost')
+			// 	{
+			// 		redirect('http://localhost/laffhub/Home', 'refresh');
+			// 	}else
+			// 	{
+			// 		redirect('https://laffhub.com/Home', 'refresh');
+			// 	}				
+			// }else
+			// {
+			// 	if ($host=='localhost')
+			// 	{
+			// 		redirect('http://localhost/laffhub/Home', 'refresh');
+			// 	}else
+			// 	{
+			// 		redirect('https://laffhub.com/Home', 'refresh');
+			// 	}
+			// }	
 		}
 	}
 }
